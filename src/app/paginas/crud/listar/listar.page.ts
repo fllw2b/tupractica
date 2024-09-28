@@ -7,6 +7,8 @@ import { CrudService } from "../../../servicios/crud.service"
 import { UsuarioService } from "../../../servicios/usuario.service"
 import { UsuarioConID } from "../../../modelos/usuario"
 
+import { obtenerDatosUsuario } from 'src/app/utilidades/usuario';
+
 
 @Component({
   selector: 'app-listar',
@@ -16,7 +18,6 @@ import { UsuarioConID } from "../../../modelos/usuario"
 export class ListarPage implements OnInit {
   // cosas de filtrar usuario
     public UsuarioLogeado:UsuarioConID;
-    public esAdmin:boolean=false;
 
     public productos: Array<ProductoConID> = [];
     constructor(
@@ -31,47 +32,17 @@ export class ListarPage implements OnInit {
     }
     // cosas de filtrar usuario
     ionViewDidEnter(){
-      this.obtenerDatosUsuario();
+      obtenerDatosUsuario();
     }
-    public obtenerDatosUsuario(){
-      const usuario= localStorage.getItem('nombreusuario')
-      if(!usuario){
-        this.router.navigate(['']);
-        }
-        else
-        {
-          this.apiUsuario.buscarPorID(+usuario)
-          .subscribe(usuarioactivo => {
-            if(usuarioactivo){
-              this.UsuarioLogeado = usuarioactivo;
-              //this.esAdmin=this.UsuarioLogeado.isAdmin;
-            }else{
-              localStorage.removeItem('nombreusuario');
-              this.router.navigate(['']);
-            }
-          })
-      }
-    }
-    public soyadmin(){
-      if(this.esAdmin){
-        return true;
-      }
-      else{
-        return null;
-      }
-    }
+    
+
     public cerrarSession(){
       const usuario= localStorage.getItem('nombreusuario')
-      if(!usuario){
-        this.router.navigate(['']);
+      if(usuario){
+        localStorage.removeItem('nombreusuario');
         }
-        else
-        {
-            localStorage.removeItem('nombreusuario');
-            this.router.navigate(['']);
-        }
+      this.router.navigate(['']);
       }
-
 
 
     ionViewWillEnter(){

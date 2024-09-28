@@ -9,6 +9,8 @@ import { CarritoService } from "../../servicios/carrito.service"
 import { UsuarioService } from "./../../servicios/usuario.service"
 import { UsuarioConID } from "./../../modelos/usuario"
 
+import { obtenerDatosUsuario } from 'src/app/utilidades/usuario';
+
 @Component({
   selector: 'app-carrito',
   templateUrl: './carrito.page.html',
@@ -17,7 +19,6 @@ import { UsuarioConID } from "./../../modelos/usuario"
 export class CarritoPage implements OnInit {
   // cosas de filtrar usuario
     public UsuarioLogeado:UsuarioConID;
-    public esAdmin:boolean = false;
     public idActiva = 0;
     public carrito:Carrito;
     public total:number=0;
@@ -73,26 +74,7 @@ export class CarritoPage implements OnInit {
 
     // cosas de filtrar usuario
       ionViewDidEnter(){
-        this.obtenerDatosUsuario();
-      }
-      public obtenerDatosUsuario(){
-        const usuario= localStorage.getItem('usuario')
-        if(!usuario){
-          this.router.navigate(['']);
-          }
-          else
-          {
-            this.apiUsuario.buscarPorID(+usuario)
-            .subscribe(usuarioactivo => {
-              if(usuarioactivo){
-                this.UsuarioLogeado = usuarioactivo;
-                //this.esAdmin=this.UsuarioLogeado.isAdmin;
-              }else{
-                localStorage.removeItem('usuario');
-                this.router.navigate(['']);
-              }
-            })
-        }
+        obtenerDatosUsuario();
       }
 }
 

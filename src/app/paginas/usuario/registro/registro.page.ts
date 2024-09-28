@@ -38,7 +38,6 @@ export class RegistroPage implements OnInit {
         Validators.minLength(4),
         Validators.maxLength(20)
       ]],
-      isAdmin: [false],
     });
   }
 

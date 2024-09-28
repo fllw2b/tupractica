@@ -3,6 +3,7 @@ import { Router, ActivatedRoute} from '@angular/router';
 import { ProductoConID } from "../../../modelos/producto";
 import { CrudService } from "../../../servicios/crud.service"
 import { productoConCantidad } from 'src/app/modelos/carrito';
+import { obtenerDatosUsuario } from 'src/app/utilidades/usuario';
 
 import { CarritoService } from "../../../servicios/carrito.service"
 // cosas de filtrar usuario
@@ -19,8 +20,6 @@ export class InfoProductoPage implements OnInit {
   public productoActivo!: ProductoConID;
   public productoCarrito: productoConCantidad;
   // cosas de filtrar usuario
-  public UsuarioLogeado:UsuarioConID;
-  public esAdmin:boolean=false;
   constructor(
 
   // cosas de filtrar usuario
@@ -91,26 +90,8 @@ export class InfoProductoPage implements OnInit {
 
 // cosas de filtrar usuario
   ionViewDidEnter(){
-    this.obtenerDatosUsuario();
+    obtenerDatosUsuario();
   }
-  public obtenerDatosUsuario(){
-    const usuario= localStorage.getItem('usuario')
-    if(!usuario){
-      this.router.navigate(['']);
-      }
-      else
-      {
-        this.apiUsuario.buscarPorID(+usuario)
-        .subscribe(usuarioactivo => {
-          if(usuarioactivo){
-            this.UsuarioLogeado = usuarioactivo;
-            //this.esAdmin=this.UsuarioLogeado.isAdmin;
-          }else{
-            localStorage.removeItem('usuario');
-            this.router.navigate(['']);
-          }
-        })
-    }
-  }
+
 
 }

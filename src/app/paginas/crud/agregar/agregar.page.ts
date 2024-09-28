@@ -6,6 +6,8 @@ import { CrudService } from "./../../../servicios/crud.service"
 import { UsuarioService } from "../../../servicios/usuario.service"
 import { UsuarioConID } from "../../../modelos/usuario"
 
+import { obtenerDatosUsuario } from 'src/app/utilidades/usuario';
+
 @Component({
   selector: 'app-agregar',
   templateUrl: './agregar.page.html',
@@ -15,7 +17,6 @@ export class AgregarPage implements OnInit {
 
   // cosas de filtrar usuario
     public UsuarioLogeado:UsuarioConID;
-    public esAdmin:boolean=false;
 
   public ram: Array<number> = [
     4,
@@ -135,47 +136,7 @@ export class AgregarPage implements OnInit {
   ngOnInit() {
   }
 
-  // cosas de filtrar usuario (unico pa admin)
   ionViewDidEnter() {
-    this.obtenerDatosUsuario();
+    obtenerDatosUsuario();
   }
-    public obtenerDatosUsuario(){
-      const usuario= localStorage.getItem('usuario')
-      if(!usuario){
-        this.router.navigate(['']);
-        }
-        else
-        {
-          this.apiUsuario.buscarPorID(+usuario)
-          .subscribe(usuarioactivo => {
-            if(usuarioactivo){
-              this.UsuarioLogeado = usuarioactivo;
-              //this.esAdmin=this.UsuarioLogeado.isAdmin;
-              this.pestaniaAdministrativa();
-            }else{
-              localStorage.removeItem('usuario');
-              this.router.navigate(['']);
-            }
-          })
-      }
-    }
-    public soyadmin(){
-      if(this.esAdmin){
-        return true;
-      }
-      else{
-        return null;
-      }
-    }
-    public pestaniaAdministrativa(){
-      if(this.esAdmin){
-        return true;
-      }
-      else{
-        localStorage.removeItem('usuario');
-        this.router.navigate(['']);
-      }
-    }
-
-
 }
