@@ -1,0 +1,82 @@
+<!-- MENÚ  -->
+<ion-menu contentId="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>
+        Menú</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-item [routerLink]="['/carrito']">
+        <ion-icon name="cart-outline"></ion-icon>
+        Carrito
+      </ion-item>
+      <ion-item (click)="cerrarSession()" [routerLink]="[]">
+        <ion-icon name="exit-outline"></ion-icon>
+        Cerrar Sesión
+      </ion-item>
+      <!-- ADMIN  -->
+      <div *ngIf="soyadmin()">
+        <ion-item [routerLink]="['../agregar']">
+          <ion-icon name="add-outline"></ion-icon>
+          Agregar Producto
+        </ion-item>
+      </div>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+
+<!-- HEADER (toolbar) -->
+<div class="ion-page" id="main-content">
+  <ion-header>
+    <ion-toolbar color="tertiary">
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title>Inicio</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+
+  <!-- menu con opcion admin: agregar, cerrar sesion -->
+  <!-- menu con opcion usuario:Carrito, cerrar sesion -->
+
+  <ion-content>
+    <!-- refrecher vacio -->
+    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-card [routerLink]="['../info-producto/', producto.id]" *ngFor="let producto of productos" role="article">
+            <ion-img style="width: 250px; height: 250px;" [src]="producto.foto"> </ion-img>
+
+            <ion-card-header>
+              <ion-card-title> {{ producto.nombre }}</ion-card-title>
+              <ion-card-subtitle style="color: green;">CLP$ {{ producto.precio }}</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              {{ producto.descripcion }}
+            </ion-card-content>
+
+            <!-- parte usuario -->
+
+            <!-- parte admin -->
+
+            <div style="display: flex;justify-content: space-between; margin: 10px;" *ngIf="soyadmin()">
+              <ion-button color="tertiary" [routerLink]="['../modificar',producto.id]">Modificar</ion-button>
+              <ion-button color="danger" [routerLink]="['../eliminar',producto.id]">Eliminar</ion-button>
+            </div>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-infinite-scroll threshold="10px" (ionInfinite)="loadData($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Buscando mas datos...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+  </ion-content>

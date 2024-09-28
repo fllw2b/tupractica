@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-title class="ion-text-center">Carrito</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngFor="let item of productosenelcarro; let inde = index" role="article">
+      <ion-grid [fixed]="true">
+        <ion-row>
+          <ion-col size="8">
+            <h5 style="font-weight: bold; color: black;" [routerLink]="['../info-producto/', item.producto.id]"> {{ item.producto.nombre }}
+            </h5>
+            <ion-card-subtitle style="color: green;">CLP$ {{ item.producto.precio }}</ion-card-subtitle>
+          </ion-col>
+          <ion-col size="4">
+            <ion-img style="width: 70px; height: 70px;" [src]="item.producto.foto"> </ion-img>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+    <div class="ion-text-center">
+      <h4> Cantidad: {{ item.cantidad}} </h4>
+      <ion-button shape="round" color="tertiary" (click)="productoMas(inde,-1)" [disabled]="cooldown">-</ion-button>
+      <ion-button shape="round" color="tertiary" (click)="productoMas(inde,1)" [disabled]="cooldown">+</ion-button>
+    </div>
+    <br>
+  </ion-card>
+
+  <h1 class="ion-text-center">Total: ${{ total }}</h1>
+  <ion-grid [fixed]="true">
+    <ion-row>
+      <ion-col size="12">
+        <ion-button expand="block" color="danger" (click)="vaciarCarrito()"> Vaciar Carrito</ion-button>
+      </ion-col>
+      <ion-col size="12">
+        <ion-button expand="block" color="tertiary" [routerLink]="['../listar']">
+          <ion-icon name="arrow-back-circle-outline"></ion-icon> Volver
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-title class="ion-text-center">Registro</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <br>
+  <form [formGroup]="formulario" (ngSubmit)="guardarUsuario()">
+    <ion-item>
+      <ion-label position="floating"> Usuario </ion-label>
+      <ion-input type="text" formControlName="nombreusuario"></ion-input>
+      <ion-note slot="error"
+        *ngIf="campo('nombreusuario').invalid && errores('nombreusuario') && errores('nombreusuario').required && esTocado('nombreusuario')">
+        Este campo es requerido </ion-note>
+      <ion-note slot="error"
+        *ngIf="campo('nombreusuario').invalid && errores('nombreusuario') && errores('nombreusuario').minlength && esTocado('nombreusuario')">
+        El largo minimo es 3 carácteres </ion-note>
+      <ion-note slot="error"
+        *ngIf="campo('nombreusuario').invalid && errores('nombreusuario') && errores('nombreusuario').maxlength && esTocado('nombreusuario')">El
+        largo maximo es 15 carácteres</ion-note>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input 
+          type="email" 
+          formControlName="email" 
+          pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" 
+          required>
+      </ion-input>
+      <ion-note slot="error" *ngIf="campo('email').invalid && esTocado('email')">
+          <ng-container *ngIf="errores('email')?.required">Este campo es requerido</ng-container>
+          <ng-container *ngIf="errores('email')?.email">Email no válido</ng-container>
+          <ng-container *ngIf="errores('email')?.minlength">El largo mínimo es 3 caracteres</ng-container>
+          <ng-container *ngIf="errores('email')?.maxlength">El largo máximo es 20 caracteres</ng-container>
+          <ng-container *ngIf="campo('email').hasError('pattern')">El email debe tener un dominio válido (ejemplo: .com, .cl)</ng-container>
+      </ion-note>
+  </ion-item>
+
+    <ion-item>
+      <ion-label position="floating"> Contraseña </ion-label>
+      <ion-input type="password" formControlName="contrasena"></ion-input>
+      <ion-note slot="error"
+        *ngIf="campo('contrasena').invalid && errores('contrasena') && errores('contrasena').required && esTocado('contrasena')">
+        Este campo es requerido </ion-note>
+      <ion-note slot="error"
+        *ngIf="campo('contrasena').invalid && errores('contrasena') && errores('contrasena').minlength && esTocado('contrasena')">
+        El largo minimo es 4 carácteres </ion-note>
+      <ion-note slot="error"
+        *ngIf="campo('contrasena').invalid && errores('contrasena') && errores('contrasena').maxlength && esTocado('contrasena')">
+        El largo maximo es 20 carácteres</ion-note>
+    </ion-item>
+    <br>
+    <ion-grid [fixed]="true">
+      <ion-row>
+        <ion-col>
+          <ion-button color="tertiary" expand="block" role="submit" type="submit" > Registrarse </ion-button>
+        </ion-col>
+        <ion-col >
+          <ion-button expand="block" color="medium" [routerLink]="['']"> Ir a Iniciar Sesión </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

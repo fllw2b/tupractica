@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-title>Eliminar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-content>
+    <ion-card *ngIf="productoActivo">
+      <ion-img [src]="productoActivo.foto"></ion-img>
+      <ion-card-header>
+        <div style="font-weight: bold;">
+          ESPECIFICACIONES:
+        </div>
+        <br>
+        <div>
+          Codigo Producto: {{productoActivo.id}}
+        </div>
+        <br>
+        <div>
+          CPU: {{productoActivo.cpu}}
+        </div>
+        <br>
+        <div>
+          GPU: {{productoActivo.gpu}}
+        </div>
+        <br>
+        <div>
+          Ram: {{productoActivo.ram}} gb
+        </div>
+        <br>
+        <div>
+          Almacenamiento: {{productoActivo.almacenamiento}} gb
+        </div>
+        <br>
+        <div>
+          Fuente poder: {{productoActivo.fuentePoder}} watts
+        </div>
+        <br>
+        <div style="font-weight: bold;" *ngIf="productoActivo.perifericos.toString()=='true'">
+          Incluye perifericos.
+        </div>
+        <br>
+        <div style="font-weight: bold;" *ngIf="productoActivo.perifericos.toString()=='false'">
+          No incluye perifericos.
+        </div>
+      </ion-card-header>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            <ion-button expand="block" color='medium' [routerLink]="['/listar']">
+              <ion-icon name="caret-back-outline"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col size="6">
+            <ion-button expand="block" color="danger" (click)="borrar()">
+              <ion-icon name="trash-outline"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+
+    <div *ngIf="!productoActivo">
+      <h1>Lo sentimos, ha ocurrido un error.</h1>
+      <ion-button [routerLink]="['/listar']">
+        volver
+      </ion-button>
+    </div>
+
+  </ion-content>

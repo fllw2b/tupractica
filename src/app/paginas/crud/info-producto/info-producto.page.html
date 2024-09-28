@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-title>Producto</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-grid [fixed]="true">
+    <ion-row>
+      <ion-col *ngIf="productoActivo">
+        <ion-img [src]="productoActivo.foto"></ion-img>
+        <br>
+
+        <h1 class="ion-text-center" style="font-weight: bold;">
+          {{ productoActivo.nombre}}</h1>
+        <div class="ion-text-center" style="font-style: italic;">
+          {{productoActivo.descripcion}}
+        </div>
+        <br>
+
+        <div style="font-weight: bold;">ESPECIFICACIONES:</div>
+        <br>
+        <div>
+          Codigo Producto: {{productoActivo.id}}
+        </div>
+        <br>
+        <div>
+          CPU: {{productoActivo.cpu}}
+        </div>
+        <br>
+        <div>
+          GPU: {{productoActivo.gpu}}
+        </div>
+        <br>
+        <div>
+          Ram: {{productoActivo.ram}} gb
+        </div>
+        <br>
+        <div>
+          Almacenamiento: {{productoActivo.almacenamiento}} gb
+        </div>
+        <br>
+        <div>
+          Fuente poder: {{productoActivo.fuentePoder}} watts
+        </div>
+        <br>
+        <div style="font-weight: bold;" *ngIf="productoActivo.perifericos.toString()=='true'">
+          Incluye perifericos.
+        </div>
+        <br>
+        <div style="font-weight: bold;" *ngIf="productoActivo.perifericos.toString()=='false'">
+          No incluye perifericos.
+        </div>
+        <br>
+        <h3 class="ion-text-center" style="color: green; font-weight: bold;">CLP$ {{ productoActivo.precio }}</h3>
+        <br>
+      </ion-col>
+      <ion-col size="12">
+        <ion-button expand="block" color="tertiary"(click)="anadirCarrito()">Agregar al Carrito</ion-button>
+        <br>
+        <ion-button expand="block" color="medium" [routerLink]="['/listar']">Volver al inicio</ion-button>
+      </ion-col>
+      <div *ngIf="!productoActivo">
+        <h1>Lo sentimos, ha ocurrido un error.</h1>
+        <ion-button [routerLink]="['/listar']">
+          volver
+        </ion-button>
+      </div>
+    </ion-row>
+  </ion-grid>
+</ion-content>
