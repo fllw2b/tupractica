@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indice</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .content {
+      flex: 1;
+    }
+    h1, h3 {
+      color: white;
+      border: 2px solid black;
+      background-color: #28a745;
+      padding: 10px;
+      text-align: center;
+    }
+    h3 {
+      text-align: left;
+      padding-left: 10px;
+    }
+    table {
+      margin-top: 20px;
+    }
+    th, td {
+      border: 2px solid black;
+      color: white;
+      text-align: center;
+      padding: 10px;
+    }
+    th {
+      background-color: #28a745;
+    }
+    tfoot {
+      background-color: #218838;
+      color: white;
+      font-weight: bold;
+      padding: 10px;
+    }
+    footer {
+      background-color: #218838;
+      color: white;
+      text-align: center;
+      padding: 10px;
+    }
+    tbody td:first-child {
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <div class="container">
+      <h1>A.I</h1>
+      <table class="table table-bordered" id="miTabla">
+        <thead>
+          <tr>
+            <th>Tabla</th>
+            <th>Enlace</th>
+          </tr>
+        </thead>
+        <tbody id="tablaCuerpo">
+        </tbody>
+      </table>
+      <script>
+        function generarTabla(elementos) {
+          var tablaCuerpo = document.getElementById('tablaCuerpo');
+          tablaCuerpo.innerHTML = '';
+          elementos.forEach(function(elemento) {
+            var fila = document.createElement('tr');
+            var celdaTabla = document.createElement('td');
+            celdaTabla.textContent = elemento;
+            fila.appendChild(celdaTabla);
+            var celdaEnlace = document.createElement('td');
+            var enlace = document.createElement('a');
+            enlace.href = elemento.toUpperCase() + '/';
+            enlace.textContent = 'Enlace';
+            celdaEnlace.appendChild(enlace);
+            fila.appendChild(celdaEnlace);
+            tablaCuerpo.appendChild(fila);
+          });
+        }
+        var miLista = ['Usuario', 'Region','Provincia','Comuna', 'Empresa'];
+        generarTabla(miLista);
+      </script>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="container">
+      <h3>A.I</h3>
+    </div>
+  </footer>
+</body>
+</html>
