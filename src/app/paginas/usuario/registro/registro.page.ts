@@ -71,26 +71,21 @@ export class RegistroPage implements OnInit {
         )
           .subscribe(dato => {
             if (dato) {
-//              this.carrito.usuario=dato;
-//              this.carritoServicio.crearCarrito(this.carrito).subscribe()
               alert("Usuario registrado correctamente.");
               this.formulario.reset();
               this.formulario.updateValueAndValidity();
               this.router.navigate(['']);
             }
           }, err => {
-            // Verifica el código de estado y muestra el alert correspondiente
             if (err.status === 422) {
                 alert("Formato de Email Incorrecto");
             } else {
                 alert("Error: " + JSON.stringify(err));
-                // Puedes manejar otros errores aquí si es necesario
             }
         });
     }
 }, err => {  
-    alert("Error al obtener usuarios: " + JSON.stringify(err)); 
-    //alert("Nuestros servicios no se encuentran disponibles.")
+    alert("Error al obtener usuarios: " + JSON.stringify(err));   
 });
 }
 

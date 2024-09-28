@@ -1,3 +1,10 @@
+import * as CryptoJS from 'crypto-js';
+
+export function Encriptar(texto: string): string {
+  const hash = CryptoJS.SHA256(texto);
+  return hash.toString(CryptoJS.enc.Hex);
+}
+
 export function obtenerDatosUsuario(){
     const usuario= localStorage.getItem('nombreusuario')
     if(!usuario){

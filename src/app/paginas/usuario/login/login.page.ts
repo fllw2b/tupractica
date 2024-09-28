@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
+import { Encriptar } from 'src/app/utilidades/usuario';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -25,7 +27,7 @@ export class LoginPage implements OnInit {
 
   logearse() {
     const nombreUsuario = this.login.value.nombreusuario;
-    const contrasena = this.login.value.contrasena;
+    const contrasena =Encriptar(this.login.value.contrasena);
   
     // Construir la URL con el nombre de usuario y la contraseña
     const url = `http://localhost:8000/USUARIOC/${nombreUsuario}/${contrasena}/`;
@@ -33,11 +35,9 @@ export class LoginPage implements OnInit {
     this.http.get<any>(url)
       .subscribe(
         res => {
-          // Verifica si el usuario existe y si la contraseña es correcta
           if (res && res.contrasena === true) {
-            // Aquí puedes procesar el usuario
             this.login.reset();
-            localStorage.setItem('nombreusuario', res.nombreusuario); // Ajusta según la estructura de la respuesta
+            localStorage.setItem('nombreusuario', res.nombreusuario); 
             this.router.navigate(["listar"]);
           } else {
             alert("Usuario y/o contraseña incorrectos.");
@@ -50,9 +50,6 @@ export class LoginPage implements OnInit {
       );
   }
   
-
-
-
   ngOnInit() {
     const usuario= localStorage.getItem('nombreusuario')
       if(usuario){

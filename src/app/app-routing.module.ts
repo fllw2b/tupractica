@@ -27,12 +27,8 @@ const routes: Routes = [
     loadChildren: () => import('./paginas/usuario/registro/registro.module').then( m => m.RegistroPageModule)
   },
   {
-    path: 'info-producto/:id',
-    loadChildren: () => import('./paginas/crud/info-producto/info-producto.module').then( m => m.InfoProductoPageModule)
-  },
-  {
-    path: 'carrito',
-    loadChildren: () => import('./paginas/carrito/carrito.module').then( m => m.CarritoPageModule)
+    path: 'info-anuncio/:id',
+    loadChildren: () => import('./paginas/crud/info-anuncio/info-anuncio.module').then( m => m.InfoAnuncioPageModule)
   },
 ];
 
