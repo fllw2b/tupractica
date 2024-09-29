@@ -35,3 +35,13 @@ class EMPRESA(models.Model):
      def __str__(self):
         return self.nombreEmpresa
      
+class ANUNCIO(models.Model):
+        titulo= models.CharField(max_length=100)
+        descripcion = models.CharField(max_length=200)
+        modalidad= models.CharField(max_length=100)
+        ubicacion= models.CharField(max_length=100)
+        requisitos= models.CharField(max_length=200)
+        remunerado=models.BooleanField(default=False)
+        id_empresa=models.ForeignKey(EMPRESA, on_delete=models.CASCADE)
+        def __str__(self):
+                return self.titulo

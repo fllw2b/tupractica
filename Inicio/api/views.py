@@ -58,13 +58,8 @@ def usuario_detail_view(request,pk=None):
 @api_view(['GET'])
 def usuarioc(request, nombreusuario, contrasena):
     try:
-        # Buscar el usuario por nombre de usuario
         usuario = USUARIO.objects.get(nombreusuario=nombreusuario)
-
-        # Verificar la contraseña
         is_password_correct = bcrypt.checkpw(contrasena.encode('utf-8'), usuario.contrasena.encode('utf-8'))
-
-        # Preparar la respuesta
         response_data = {
             'id': usuario.id,
             'nombreusuario': usuario.nombreusuario,
@@ -187,6 +182,41 @@ def empresac(request, pk, contrasena):
     else:
         return Response('Metodo no permitido')
     
+
+# ------------------------------------------------------------------------
+@api_view(['GET','POST'])
+def anuncio_api_view(request):
+    if request.method == 'GET':
+        anuncios = ANUNCIO.objects.all()
+        anuncios_serializer = ANUNCIOSerializer(anuncios,many = True)
+        return Response(anuncios_serializer.data)
+    elif request.method == 'POST':
+        anuncios_serializer = anuncios_serializer(data = request.data)
+        if anuncios_serializer.is_valid():
+            anuncios_serializer.save()
+            return Response(anuncios_serializer.data)
+        return Response(anuncios_serializer.errors)
+    else:
+        return Response('Metodo no permitido') 
+@api_view(['GET','PUT','DELETE'])
+def anuncio_detail_view(request,pk=None):
+    if request.method == 'GET':
+        anuncios = ANUNCIO.objects.filter(id = pk).first()
+        anuncios_serializer = anuncios_serializer(anuncios)
+        return Response(anuncios_serializer.data)
+    elif request.method == 'PUT' or request.method == 'PATCH':
+            anuncio = ANUNCIO.objects.filter(id = pk).first()
+            anuncio_serializar = anuncios_serializer(anuncio,data = request.data)
+            if anuncio_serializar.is_valid():
+                anuncio_serializar.save()
+                return Response(anuncio_serializar.errors)
+    elif request.method == 'DELETE':
+        anuncio = ANUNCIO.objects.filter(id = pk).first()
+        anuncio.delete()
+        return Response('Eliminado')
+    else:
+        return Response('Metodo no permitido')
+
 
 # ------------------------------------------------------------------------
 

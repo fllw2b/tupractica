@@ -20,6 +20,9 @@ urlpatterns = [
     path('EMPRESA/',empresa_api_view, name= 'empresa api'),
     path('EMPRESA/<int:pk>/',empresa_detail_view, name = 'empresa api detalle' ),
     path('EMPRESAC/<int:pk>/<str:contrasena>/', empresac, name='empresa_contrasena'),
+
+    path('ANUNCIO/',anuncio_api_view, name= 'anuncio api'),
+    path('ANUNCIO/<int:pk>/',anuncio_detail_view, name = 'anuncio api detalle' ),
 ]
 
 

@@ -25,3 +25,15 @@ class EMPRESASerializer(ModelSerializer):
     class Meta:
         model=EMPRESA
         fields=['id','nombreEmpresa', 'direccionEMP', 'telefonoEMP', 'email','id_comuna','contrasenaEMP','rutEmpresa']
+
+class ANUNCIOSerializer(ModelSerializer):
+    class Meta:
+        model=ANUNCIO
+        fields=['id','titulo', 'descripcion', 'modalidad', 'ubicacion','requisitos','remunerado','id_empresa']
+
+        
+        
+        
+        
+        
+        
