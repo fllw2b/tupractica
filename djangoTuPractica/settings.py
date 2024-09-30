@@ -138,8 +138,9 @@ FIXTURE_DIRS = [
     join(BASE_DIR, 'fixtures')
 ]
 
-cred = credentials.Certificate(
-    "F:\Portafolio\djangoTuPractica\djangotupractica-55519e0256b7.json")
+directorio_credenciales = BASE_DIR / 'djangotupractica-55519e0256b7.json'
+
+cred = credentials.Certificate(str(directorio_credenciales))
 firebase_admin.initialize_app(cred)
 
 # LOGIN_URL = '/'
