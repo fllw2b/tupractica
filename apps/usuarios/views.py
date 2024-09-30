@@ -75,7 +75,7 @@ def registro_empresa(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         nombre_empresa = request.POST.get('nombre_empresa')
-        rut = request.POST.get('rut')
+        rut = request.POST.get('rut_empresa')
         direccion = request.POST.get('direccion')
 
         try:
@@ -106,6 +106,7 @@ def registro_empresa(request):
 
         except Exception as e:
             messages.error(request, f'Error al registrar empresa: {str(e)}')
+            return
 
     return render(request, 'usuario/registro_empresa.html')
 
