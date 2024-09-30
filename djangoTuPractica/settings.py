@@ -139,7 +139,7 @@ FIXTURE_DIRS = [
 ]
 
 cred = credentials.Certificate(
-    "F:\Portafolio\djangoTuPractica\djangotupractica-firebase-adminsdk-us9q7-2153b537e8.json")
+    "F:\Portafolio\djangoTuPractica\djangotupractica-55519e0256b7.json")
 firebase_admin.initialize_app(cred)
 
 # LOGIN_URL = '/'
