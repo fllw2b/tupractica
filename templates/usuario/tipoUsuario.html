@@ -1,0 +1,19 @@
+{% extends 'base/base.html' %}
+
+{% block contenido %}
+
+<body style="color: black;">
+    <form method="post" style="text-align: center; margin-top: 100px;">
+        {% csrf_token %}
+        <div>
+            <input type="radio" id="tipo_estudiante" name="tipo_usuario" value="estudiante">
+            <label for="tipo_estudiante">Soy estudiante</label>
+        </div>
+        <div>
+            <input type="radio" id="tipo_empresa" name="tipo_usuario" value="empresa">
+            <label for="tipo_empresa">Soy empresa</label>
+        </div>
+        <button type="submit">Siguiente</button>
+    </form>
+</body>
+{% endblock %}

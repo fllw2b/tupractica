@@ -1,0 +1,66 @@
+{% extends 'base/base.html' %}
+{% block contenido %}
+<form method="POST">
+    {% csrf_token %}
+    <div id="form_estudiante">
+        <label for="email">Correo Electrónico</label>
+        <input type="email" name="email" required>
+
+        <label for="password">Contraseña</label>
+        <input type="password" name="password" required>
+        <label for="nombres">Nombres</label>
+        <input type="text" name="nombres" required>
+
+        <label for="apellidos">Apellidos</label>
+        <input type="text" name="apellidos" required>
+
+        <label for="rut">RUT</label>
+        <input type="text" name="rut" required>
+
+        <label for="region">Región</label>
+        <select name="region" id="region-selector">
+            <option value="">Selecciona una región</option>
+            {% for region in regiones %}
+            <option value="{{ region.id }}">{{ region.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="comuna">Comuna</label>
+        <select name="comuna" id="comuna-selector">
+            <option value="">Selecciona una comuna</option>
+        </select>
+
+        <label for="carrera">Carrera</label>
+        <select name="carrera">
+            {% for carrera in carreras %}
+            <option value="{{ carrera.id }}">{{ carrera.nombre }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit">Registrarse</button>
+</form>
+
+<script>
+    document.getElementById('region-selector').addEventListener('change', function () {
+        var regionId = this.value;
+        if (regionId) {
+            fetch(`/get-comunas/${regionId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    var comunaSelector = document.getElementById('comuna-selector');
+                    comunaSelector.innerHTML = ''; //limpiar seleccion
+                    data.forEach(function (comuna) {
+                        var option = document.createElement('option');
+                        option.value = comuna.id;
+                        option.text = comuna.nombre;
+                        comunaSelector.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al obtener comunas:', error);
+                });
+        }
+    });
+</script>
+
+{% endblock %}
