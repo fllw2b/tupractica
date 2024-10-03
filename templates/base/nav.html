@@ -16,9 +16,12 @@
                 </li>
             </ul>
             <div class="d-flex">
-                <a href="{% url 'login' %}" class="btn btn-outline-primary me-2 btn-login">Iniciar sesión</a>
-                <a href="{% url 'seleccionar_tipo_usuario' %}"
-                    class="btn btn-outline-primary me-2 btn-registro">Registrarse</a>
+                <button class="btn-pro"><a href="{% url 'login' %}" style="text-decoration: none;">
+                        Ingresar</a>
+                </button>
+                <button class="btn-pro"><a href="{% url 'seleccionar_tipo_usuario' %}" style="text-decoration: none;">
+                        Registrarse</a>
+                </button>
             </div>
         </div>
     </div>

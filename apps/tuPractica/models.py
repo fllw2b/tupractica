@@ -25,3 +25,10 @@ class Carrera(models.Model):
 
     def __str__(self):
         return self.nombre
+
+
+class Sector(models.Model):
+    nombre = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.nombre
