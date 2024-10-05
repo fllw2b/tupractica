@@ -1,15 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from firebase_admin import auth
-from apps.tuPractica.models import Region, Comuna, Carrera, Sector
-from .models import Usuario, Estudiante, Empresa
-import firebase_admin
+from .models import Usuario, Estudiante, Empresa, Region, Comuna, Carrera, Sector
+from django.utils import timezone
 from django.http import JsonResponse
-import re
-
-
-if not firebase_admin._apps:
-    firebase_admin.initialize_app()
+from django.contrib.auth import authenticate, login
+from django.contrib.auth import logout
 
 
 def registro_estudiante(request):
@@ -23,48 +18,39 @@ def registro_estudiante(request):
         nombres = request.POST.get('nombres')
         apellidos = request.POST.get('apellidos')
         rut = request.POST.get('rut')
+        region_id = request.POST.get('region')
+        comuna_id = request.POST.get('comuna')
+        carrera_id = request.POST.get('carrera')
         fecha_nacimiento = request.POST.get('fecha_nacimiento')
         genero = request.POST.get('genero')
         direccion = request.POST.get('direccion')
         telefono = request.POST.get('telefono')
-        region_id = request.POST.get('region')
-        comuna_id = request.POST.get('comuna')
-        carrera_id = request.POST.get('carrera')
-        foto = request.FILES.get('foto')
 
         try:
-            # usuario firebase
-            user = auth.create_user(
+            # creamos el user en la mysql
+            usuario = Usuario.objects.create_user(
                 email=email,
-                password=password
+                password=password,
+                es_estudiante=True,
+                fecha_registro=timezone.now()
             )
-
-            # usuario mysql
-            usuario = Usuario.objects.create(
-                uid=user.uid,
-                email=email,
-                es_estudiante=True
-            )
-
-            # región, comuna y carrera
             region = Region.objects.get(id=region_id)
             comuna = Comuna.objects.get(id=comuna_id)
             carrera = Carrera.objects.get(id=carrera_id)
 
-            # se crea en la mysql
-            estudiante = Estudiante.objects.create(
+            # creamos el estudiante en la mysql
+            Estudiante.objects.create(
                 usuario=usuario,
                 nombres=nombres,
                 apellidos=apellidos,
                 rut=rut,
-                fecha_nacimiento=fecha_nacimiento,
-                genero=genero,
-                direccion=direccion,
-                telefono=telefono,
                 region=region,
                 comuna=comuna,
                 carrera=carrera,
-                foto=foto
+                fecha_nacimiento=fecha_nacimiento,
+                genero=genero,
+                direccion=direccion,
+                telefono=telefono
             )
 
             messages.success(request, 'Estudiante registrado correctamente.')
@@ -87,7 +73,7 @@ def registro_empresa(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         nombre_empresa = request.POST.get('nombre_empresa')
-        rut_empresa = request.POST.get('rut_empresa')
+        rut = request.POST.get('rut')
         direccion = request.POST.get('direccion')
         sector_id = request.POST.get('sector')
         pagina_web = request.POST.get('pagina_web')
@@ -95,27 +81,21 @@ def registro_empresa(request):
         redes_sociales = request.POST.get('redes_sociales')
 
         try:
-            # usuario firebase
-            user = auth.create_user(
+            # creamos el user en la mysql
+            usuario = Usuario.objects.create_user(
                 email=email,
-                password=password
+                password=password,
+                es_estudiante=False,
+                fecha_registro=timezone.now()
             )
 
-            # usuario mysql
-            usuario = Usuario.objects.create(
-                uid=user.uid,
-                email=email,
-                es_estudiante=False
-            )
-
-            # se obtienen los sectores
             sector = Sector.objects.get(id=sector_id)
 
-            # se  crea en la mysql
-            empresa = Empresa.objects.create(
+            # creamos la empresa en la mysql
+            Empresa.objects.create(
                 usuario=usuario,
                 nombre_empresa=nombre_empresa,
-                rut=rut_empresa,
+                rut=rut,
                 direccion=direccion,
                 sector=sector,
                 pagina_web=pagina_web,
@@ -134,6 +114,31 @@ def registro_empresa(request):
     })
 
 
+def login(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        usuario = authenticate(request, username=email, password=password)
+
+        if usuario is not None:
+            login(request, usuario)
+            if usuario.es_estudiante:
+                return redirect('home')
+            else:
+                return redirect('home')
+        else:
+            messages.error(
+                request, 'Correo electrónico o contraseña incorrectos.')
+
+    return render(request, 'usuario/login.html')
+
+
+def cerrar_sesion(request):
+    logout(request)
+    return redirect('home')
+
+
 def get_comunas(request, region_id):
     comunas = Comuna.objects.filter(region_id=region_id)
     comunas_list = list(comunas.values('id', 'nombre'))
@@ -148,7 +153,3 @@ def seleccionar_tipo_usuario(request):
         elif tipo_usuario == 'empresa':
             return redirect('registro_empresa')
     return render(request, 'usuario/tipoUsuario.html')
-
-
-def login(request):
-    return render(request, 'usuario/login.html')
