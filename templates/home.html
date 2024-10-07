@@ -1,4 +1,10 @@
 {% extends 'base/base.html' %}
 {% block contenido %}
 <h1>inicio</h1>
+{% if user.is_authenticated %}
+<p>Usuario autenticado: {{ user.email }}</p>
+{% else %}
+<p>No hay usuario autenticado.</p>
+{% endif %}
+
 {% endblock contenido %}

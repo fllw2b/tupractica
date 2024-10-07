@@ -61,13 +61,13 @@
     background-color: hsl(261deg 80% 48%);
     color: white !important;
     box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
-
 }
 
 .btn-pro a {
     color: inherit !important;
     /* para cambiar el color del link de los a*/
     text-decoration: none !important;
+
 }
 
 .btn-border {
