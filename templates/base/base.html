@@ -12,7 +12,7 @@
         {% endblock titulo %}
     </title>
 
-    <!-- Firebase -->
+    <!-- SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Bootrstrap -->
@@ -22,27 +22,6 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../../static/css/style.css">
 
-    <!-- Firebase -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-analytics.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBRayT10WyWqcRzHuU2MSWCigidfIK8fK0",
-            authDomain: "djangotupractica.firebaseapp.com",
-            projectId: "djangotupractica",
-            storageBucket: "djangotupractica.appspot.com",
-            messagingSenderId: "464191195944",
-            appId: "1:464191195944:web:6d72d0de73995a4afa1e1d",
-            measurementId: "G-PVL5B5XLSW"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const auth = getAuth(app);
-
-    </script>
     {% block css %}
     {% endblock css %}
 </head>
