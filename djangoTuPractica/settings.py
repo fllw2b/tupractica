@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.usuarios',
     'apps.tuPractica',
+    'apps.anuncios',
 ]
 
 
@@ -139,10 +140,10 @@ FIXTURE_DIRS = [
     join(BASE_DIR, 'fixtures')
 ]
 
-directorio_credenciales = BASE_DIR / 'djangotupractica-55519e0256b7.json'
+# directorio_credenciales = BASE_DIR / 'djangotupractica-55519e0256b7.json'
 
-cred = credentials.Certificate(str(directorio_credenciales))
-firebase_admin.initialize_app(cred)
+# cred = credentials.Certificate(str(directorio_credenciales))
+# firebase_admin.initialize_app(cred)
 
 # LOGIN_URL = '/'
 

@@ -23,19 +23,28 @@
                     <button class="btn-pro"><a href="{% url 'home' %}" style="text-decoration: none;">
                             Mis Postulaciones </a>
                         {% else %}
-                        <button class="btn-pro"><a href="{% url 'home' %}" style="text-decoration: none;">
-                                Mis Anuncios </a>
-                            {% endif %}
-                            {% else %}
-                        </button>
-                        <button class="btn-pro"><a href="{% url 'login' %}" style="text-decoration: none;">
-                                Ingresar</a>
-                        </button>
-                        <button class="btn-pro"><a href="{% url 'seleccionar_tipo_usuario' %}"
-                                style="text-decoration: none;">
-                                Registrarse</a>
-                        </button>
-                        {% endif %}
+                        <button class="btn-pro"><a href="{% url 'crear_anuncio' %}" style="text-decoration: none;">
+                                Crear Anuncios </a>
+                            <button class="btn-pro"><a href="{% url 'crear_anuncio' %}" style="text-decoration: none;">
+                                    Modificar Anuncios </a>
+                                <button class="btn-pro"><a href="{% url 'crear_anuncio' %}"
+                                        style="text-decoration: none;">
+                                        Eliminar Anuncios </a>
+                                    <button class="btn-pro"><a href="{% url 'listar_anuncios' %}"
+                                            style="text-decoration: none;">
+                                            Mis Anuncios </a>
+
+                                        {% endif %}
+                                        {% else %}
+                                    </button>
+                                    <button class="btn-pro"><a href="{% url 'login' %}" style="text-decoration: none;">
+                                            Ingresar</a>
+                                    </button>
+                                    <button class="btn-pro"><a href="{% url 'seleccionar_tipo_usuario' %}"
+                                            style="text-decoration: none;">
+                                            Registrarse</a>
+                                    </button>
+                                    {% endif %}
             </div>
 
 

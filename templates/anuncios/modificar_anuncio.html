@@ -1,0 +1,12 @@
+{% extends 'base/base.html' %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <h2>Editar Anuncio de Práctica</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    </form>
+</div>
+{% endblock %}
