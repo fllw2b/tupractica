@@ -1,12 +1,14 @@
 {% extends 'base/base.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'anuncios/css/style.css' %}">
 
 {% block contenido %}
-<div class="container mt-5">
-    <h2>Editar Anuncio de Práctica</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-    </form>
-</div>
+<form method="POST" id="form-anuncio" class="needs-validation" novalidate>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="text-center">
+        <button type="submit" class="btn-pro btn-border">Modificar Anuncio</button>
+    </div>
+</form>
+
 {% endblock %}

@@ -1,5 +1,4 @@
 {% block navbar %}
-<!-- Navbar Minimalista con Bootstrap 5 -->
 <nav class="navbar navbar-expand-lg navbar-light fondo-navbar">
     <div class="container-fluid">
         <a class="navbar-brand" style="color: white; font-weight: bold; font-style: italic;" href="/">TuPráctica</a>
@@ -14,6 +13,9 @@
                 <li class="nav-item ">
                     <a class="nav-link texto-navbar" href="/" style="color: white;">Inicio</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" style="color: white;" href="{% url 'lista_anuncios' %}">Anuncios</a>
+                </li>
             </ul>
             <div class="d-flex">
                 {% if user.is_authenticated %}
@@ -25,26 +27,21 @@
                         {% else %}
                         <button class="btn-pro"><a href="{% url 'crear_anuncio' %}" style="text-decoration: none;">
                                 Crear Anuncios </a>
-                            <button class="btn-pro"><a href="{% url 'crear_anuncio' %}" style="text-decoration: none;">
-                                    Modificar Anuncios </a>
-                                <button class="btn-pro"><a href="{% url 'crear_anuncio' %}"
-                                        style="text-decoration: none;">
-                                        Eliminar Anuncios </a>
-                                    <button class="btn-pro"><a href="{% url 'listar_anuncios' %}"
-                                            style="text-decoration: none;">
-                                            Mis Anuncios </a>
+                            <button class="btn-pro"><a href="{% url 'mis_anuncios' %}"
+                                    style="text-decoration: none;">
+                                    Mis Anuncios </a>
 
-                                        {% endif %}
-                                        {% else %}
-                                    </button>
-                                    <button class="btn-pro"><a href="{% url 'login' %}" style="text-decoration: none;">
-                                            Ingresar</a>
-                                    </button>
-                                    <button class="btn-pro"><a href="{% url 'seleccionar_tipo_usuario' %}"
-                                            style="text-decoration: none;">
-                                            Registrarse</a>
-                                    </button>
-                                    {% endif %}
+                                {% endif %}
+                                {% else %}
+                            </button>
+                            <button class="btn-pro"><a href="{% url 'login' %}" style="text-decoration: none;">
+                                    Ingresar</a>
+                            </button>
+                            <button class="btn-pro"><a href="{% url 'seleccionar_tipo_usuario' %}"
+                                    style="text-decoration: none;">
+                                    Registrarse</a>
+                            </button>
+                            {% endif %}
             </div>
 
 

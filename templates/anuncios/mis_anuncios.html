@@ -23,8 +23,8 @@
                 <td>{{ anuncio.fecha_publicacion|date:"d/m/Y" }}</td>
                 <td>{{ anuncio.fecha_fin|date:"d/m/Y" }}</td>
                 <td>
-                    <a href="{% url 'modificar_anuncio' anuncio.id %}" class="btn btn-primary btn-sm">Modificar</a>
-                    <a href="{% url 'eliminar_anuncio' anuncio.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                    <a href="{% url 'modificar_anuncio' anuncio.id %}" class="btn-pro btn-border">Modificar</a>
+                    <a href="{% url 'eliminar_anuncio' anuncio.id %}" class="btn-pro btn-border">Eliminar</a>
                 </td>
             </tr>
             {% endfor %}
@@ -39,4 +39,7 @@
         <a href="{% url 'crear_anuncio' %}" class="btn-pro btn-border">Crear Nuevo Anuncio</a>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% endblock %}
