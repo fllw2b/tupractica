@@ -15,10 +15,11 @@
         <div class="card-footer bg-transparent border-top-0 d-flex justify-content-center">
             {% if user.is_authenticated %}
                 {% if user.es_estudiante %}
-                    <a href="/" class="btn btn-success">Postular</a>
+                <a href="{% url 'postular_anuncio' anuncio.id %}" class="btn btn-primary">Postular</a>
+
                 {% endif %}
             {% endif %}
-            <a href="{% url 'lista_anuncios' %}" class="btn btn-secondary">Volver</a>
+            <a href="{% url 'lista_anuncios' %}" class="btn-form">Volver</a>
         </div>
     </div>
 </div>

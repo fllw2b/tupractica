@@ -22,28 +22,29 @@
                 <button class="btn-pro"><a href="{% url 'cerrar_sesion' %}" style="text-decoration: none;">
                         Cerrar Sesión </a>
                     {% if user.es_estudiante %}
-                    <button class="btn-pro"><a href="{% url 'home' %}" style="text-decoration: none;">
+                    <button class="btn-pro"><a href="{% url 'historial_postulaciones' %}"
+                            style="text-decoration: none;">
                             Mis Postulaciones </a>
                         {% else %}
                         <button class="btn-pro"><a href="{% url 'crear_anuncio' %}" style="text-decoration: none;">
                                 Crear Anuncios </a>
-                            <button class="btn-pro"><a href="{% url 'mis_anuncios' %}"
-                                    style="text-decoration: none;">
+                            <button class="btn-pro"><a href="{% url 'mis_anuncios' %}" style="text-decoration: none;">
                                     Mis Anuncios </a>
-
+                                <button class="btn-pro"><a href="{% url 'postulaciones_empresa' %}"
+                                        style="text-decoration: none;">
+                                        Postulaciones </a>
+                                    {% endif %}
+                                    {% else %}
+                                </button>
+                                <button class="btn-pro"><a href="{% url 'login' %}" style="text-decoration: none;">
+                                        Ingresar</a>
+                                </button>
+                                <button class="btn-pro"><a href="{% url 'seleccionar_tipo_usuario' %}"
+                                        style="text-decoration: none;">
+                                        Registrarse</a>
+                                </button>
                                 {% endif %}
-                                {% else %}
-                            </button>
-                            <button class="btn-pro"><a href="{% url 'login' %}" style="text-decoration: none;">
-                                    Ingresar</a>
-                            </button>
-                            <button class="btn-pro"><a href="{% url 'seleccionar_tipo_usuario' %}"
-                                    style="text-decoration: none;">
-                                    Registrarse</a>
-                            </button>
-                            {% endif %}
             </div>
-
 
         </div>
     </div>

@@ -60,7 +60,7 @@ class Estudiante(models.Model):
     telefono = models.CharField(max_length=20, null=True)
     foto = models.ImageField(
         upload_to='fotos_estudiantes/', null=True, blank=True)  # Opcional
-
+    cv = models.FileField(upload_to='cvs/', null=True, blank=True)
     def __str__(self):
         return f"{self.nombres} {self.apellidos}"
 

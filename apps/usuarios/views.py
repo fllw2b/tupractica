@@ -26,10 +26,11 @@ def registro_estudiante(request):
         genero = request.POST.get('genero')
         direccion = request.POST.get('direccion')
         telefono = request.POST.get('telefono')
+        cv = request.FILES.get('cv')  # Obtener el archivo del CV
 
         try:
             with transaction.atomic():
-                # creamos el user en la mysql
+                # Crear el usuario en la base de datos
                 usuario = Usuario.objects.create_user(
                     email=email,
                     password=password,
@@ -40,7 +41,7 @@ def registro_estudiante(request):
                 comuna = Comuna.objects.get(id=comuna_id)
                 carrera = Carrera.objects.get(id=carrera_id)
 
-                # creamos el estudiante en la mysql
+                # Crear el estudiante en la base de datos y guardar el CV
                 Estudiante.objects.create(
                     usuario=usuario,
                     nombres=nombres,
@@ -52,7 +53,8 @@ def registro_estudiante(request):
                     fecha_nacimiento=fecha_nacimiento,
                     genero=genero,
                     direccion=direccion,
-                    telefono=telefono
+                    telefono=telefono,
+                    cv=cv  # Almacenar el archivo del CV
                 )
 
             messages.success(request, 'Estudiante registrado correctamente.')

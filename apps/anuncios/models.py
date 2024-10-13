@@ -3,8 +3,6 @@ from apps.usuarios.models import Empresa, Estudiante
 from apps.tuPractica.models import Region, Comuna
 
 # Create your models here.
-
-
 class AnuncioPractica(models.Model):
     empresa = models.ForeignKey(
         Empresa, on_delete=models.CASCADE, related_name='anuncios')

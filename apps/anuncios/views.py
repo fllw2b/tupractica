@@ -2,7 +2,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import AnuncioPractica
+from .models import AnuncioPractica, Postulacion
 from .forms import AnuncioPracticaForm
 from apps.tuPractica.models import Region, Comuna
 from django.utils import timezone
@@ -40,45 +40,35 @@ def crear_anuncio(request):
             print("Formulario inválido:", form.errors)
     else:
         form = AnuncioPracticaForm()
-    return render(request, 'anuncios/crear_anuncio.html', {
+    return render(request, 'empresas/crear_anuncio.html', {
         'form': form,
         'regiones': regiones,
         'comunas': comunas
     })
 
 
-@login_required
 def modificar_anuncio(request, anuncio_id):
-    try:
-        anuncio = AnuncioPractica.objects.get(id=anuncio_id, empresa=request.user.empresa)
-    except AnuncioPractica.DoesNotExist:
-        messages.error(request, "El anuncio no existe o no tienes permisos para modificarlo.")
-        return redirect('mis_anuncios')
-
+    anuncio = get_object_or_404(AnuncioPractica, id=anuncio_id, empresa=request.user.empresa)
+    
     if request.method == 'POST':
         form = AnuncioPracticaForm(request.POST, instance=anuncio)
         if form.is_valid():
-            anuncio = form.save(commit=False)
-            # Manejar los campos de región y comuna
-            anuncio.region = Region.objects.get(id=request.POST.get('region'))
-            anuncio.comuna = Comuna.objects.get(id=request.POST.get('comuna'))
-            anuncio.save()
+            form.save() 
             messages.success(request, "Anuncio modificado exitosamente.")
-            return redirect('mis_anuncios')
+            return redirect('mis_anuncios') 
         else:
-            print(form.errors)  # Esto imprimirá cualquier error de validación.
-            messages.error(request, "Por favor, revisa los campos del formulario.")
+            messages.error(request, "Hubo un error al modificar el anuncio. Por favor, revisa los datos ingresados.")
     else:
         form = AnuncioPracticaForm(instance=anuncio)
-
+    
+    # Cargar todas las regiones y comunas
     regiones = Region.objects.all()
     comunas = Comuna.objects.all()
-
-    return render(request, 'anuncios/modificar_anuncio.html', {
+    
+    return render(request, 'empresas/modificar_anuncio.html', {
         'form': form,
         'regiones': regiones,
         'comunas': comunas,
-        'anuncio': anuncio,  # Asegúrate de pasar el anuncio a la plantilla
     })
 
 
@@ -89,9 +79,9 @@ def eliminar_anuncio(request, anuncio_id):
     if request.method == 'POST':
         anuncio.delete()
         messages.success(request, "El anuncio ha sido eliminado exitosamente.")
-        return redirect('listar_anuncios')  # Redirige a la lista de anuncios del usuario
+        return redirect('listar_anuncios')
     else:
-        return render(request, 'anuncios/confirmar_eliminar.html', {'anuncio': anuncio})
+        return render(request, 'empresas/confirmar_eliminar.html', {'anuncio': anuncio})
 
 
 
@@ -106,7 +96,7 @@ def mis_anuncios(request):
 
     anuncios = AnuncioPractica.objects.filter(empresa=empresa)
 
-    return render(request, 'anuncios/mis_anuncios.html', {'anuncios': anuncios})
+    return render(request, 'empresas/mis_anuncios.html', {'anuncios': anuncios})
 
 def lista_anuncios(request):
     query = request.GET.get('q')
@@ -114,8 +104,6 @@ def lista_anuncios(request):
 
     if query:
         anuncios_list = anuncios_list.filter(titulo__icontains=query)
-
-    # Agrega filtros adicionales si es necesario
 
     paginator = Paginator(anuncios_list, 10)
     page_number = request.GET.get('page')
@@ -127,3 +115,47 @@ def lista_anuncios(request):
 def detalle_anuncio(request, anuncio_id):
     anuncio = get_object_or_404(AnuncioPractica, id=anuncio_id)
     return render(request, 'anuncios/detalle_anuncio.html', {'anuncio': anuncio})
+
+
+@login_required
+def postular_anuncio(request, anuncio_id):
+    # Asegurarse de que solo los estudiantes puedan postular
+    if not hasattr(request.user, 'estudiante'):
+        messages.error(request, "Solo los estudiantes pueden postular a un anuncio.")
+        return redirect('lista_anuncios')
+
+    anuncio = get_object_or_404(AnuncioPractica, id=anuncio_id)
+    estudiante = request.user.estudiante
+
+    # Verificar si ya existe una postulación para evitar duplicados
+    if Postulacion.objects.filter(estudiante=estudiante, anuncio=anuncio).exists():
+        messages.info(request, "Ya has postulado a este anuncio.")
+    else:
+        # Crear la postulación
+        Postulacion.objects.create(estudiante=estudiante, anuncio=anuncio)
+        messages.success(request, "Postulación realizada exitosamente.")
+
+    return redirect('lista_anuncios')
+
+@login_required
+def historial_postulaciones(request):
+    # Asegurarse de que el usuario es un estudiante
+    if not hasattr(request.user, 'estudiante'):
+        messages.error(request, "Solo los estudiantes pueden ver su historial de postulaciones.")
+        return redirect('lista_anuncios')
+
+    # Obtener todas las postulaciones del estudiante autenticado
+    postulaciones = Postulacion.objects.filter(estudiante=request.user.estudiante).select_related('anuncio')
+    
+    return render(request, 'estudiantes/historial_postulaciones.html', {'postulaciones': postulaciones})
+
+@login_required
+def postulaciones_empresa(request):
+    if not hasattr(request.user, 'empresa'):
+        messages.error(request, "Solo las empresas pueden acceder a esta sección.")
+        return redirect('lista_anuncios')
+
+    # Obtener todos los anuncios de la empresa y sus postulantes
+    anuncios = AnuncioPractica.objects.filter(empresa=request.user.empresa).prefetch_related('postulantes__estudiante__usuario')
+    
+    return render(request, 'empresas/postulaciones_empresa.html', {'anuncios': anuncios})

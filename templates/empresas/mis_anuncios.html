@@ -22,9 +22,9 @@
                 <td>{{ anuncio.get_modalidad_display }}</td>
                 <td>{{ anuncio.fecha_publicacion|date:"d/m/Y" }}</td>
                 <td>{{ anuncio.fecha_fin|date:"d/m/Y" }}</td>
-                <td>
-                    <a href="{% url 'modificar_anuncio' anuncio.id %}" class="btn-pro btn-border">Modificar</a>
-                    <a href="{% url 'eliminar_anuncio' anuncio.id %}" class="btn-pro btn-border">Eliminar</a>
+                <td class="text-center d-flex justify-content-center">
+                    <a href="{% url 'modificar_anuncio' anuncio.id %}" class="btn-form mx-1" style="text-decoration: none;">Modificar</a>
+                    <a href="{% url 'eliminar_anuncio' anuncio.id %}" class="btn-form mx-1" style="text-decoration: none;">Eliminar</a>
                 </td>
             </tr>
             {% endfor %}
@@ -36,7 +36,7 @@
         </tbody>
     </table>
     <div class="text-center">
-        <a href="{% url 'crear_anuncio' %}" class="btn-pro btn-border">Crear Nuevo Anuncio</a>
+        <a href="{% url 'crear_anuncio' %}" class="btn-pro btn-border" style="text-decoration: none;">Crear Nuevo Anuncio</a>
     </div>
 </div>
 
