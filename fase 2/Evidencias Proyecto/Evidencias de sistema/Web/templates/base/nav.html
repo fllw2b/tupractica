@@ -1,0 +1,53 @@
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light fondo-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" style="color: white; font-weight: bold; font-style: italic;" href="/">TuPráctica</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item ">
+                    <a class="nav-link texto-navbar" href="/" style="color: white;">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" style="color: white;" href="{% url 'lista_anuncios' %}">Anuncios</a>
+                </li>
+            </ul>
+            <div class="d-flex">
+                {% if user.is_authenticated %}
+                <button class="btn-pro"><a href="{% url 'cerrar_sesion' %}" style="text-decoration: none;">
+                        Cerrar Sesión </a>
+                    {% if user.es_estudiante %}
+                    <button class="btn-pro"><a href="{% url 'historial_postulaciones' %}"
+                            style="text-decoration: none;">
+                            Mis Postulaciones </a>
+                        {% else %}
+                        <button class="btn-pro"><a href="{% url 'crear_anuncio' %}" style="text-decoration: none;">
+                                Crear Anuncios </a>
+                            <button class="btn-pro"><a href="{% url 'mis_anuncios' %}" style="text-decoration: none;">
+                                    Mis Anuncios </a>
+                                <button class="btn-pro"><a href="{% url 'postulaciones_empresa' %}"
+                                        style="text-decoration: none;">
+                                        Postulaciones </a>
+                                    {% endif %}
+                                    {% else %}
+                                </button>
+                                <button class="btn-pro"><a href="{% url 'login' %}" style="text-decoration: none;">
+                                        Ingresar</a>
+                                </button>
+                                <button class="btn-pro"><a href="{% url 'seleccionar_tipo_usuario' %}"
+                                        style="text-decoration: none;">
+                                        Registrarse</a>
+                                </button>
+                                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+{% endblock navbar %}

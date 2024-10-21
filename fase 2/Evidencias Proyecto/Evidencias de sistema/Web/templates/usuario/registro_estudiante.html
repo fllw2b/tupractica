@@ -1,0 +1,147 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Registro de Estudiante</h2>
+    <form method="POST" enctype="multipart/form-data" onsubmit="return validarFormulario()">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="email" class="form-label">Correo Electrónico</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="nombre@ejemplo.com"
+                    required>
+                <div class="invalid-feedback">
+                    Por favor, ingresa un correo válido.
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" name="password" id="password" class="form-control" required>
+                <div class="invalid-feedback">
+                    Por favor, ingresa una contraseña.
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="nombres" class="form-label">Nombres</label>
+                <input type="text" name="nombres" id="nombres" class="form-control" required maxlength="20">
+                <div class="invalid-feedback">
+                    Los nombres no pueden estar vacíos y deben tener máximo 20 caracteres.
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label for="apellidos" class="form-label">Apellidos</label>
+                <input type="text" name="apellidos" id="apellidos" class="form-control" required maxlength="20">
+                <div class="invalid-feedback">
+                    Los apellidos no pueden estar vacíos y deben tener máximo 20 caracteres.
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="rut" class="form-label">RUT</label>
+            <input type="text" name="rut" id="rut" class="form-control" placeholder="12345678-9" required
+                maxlength="12">
+            <div class="invalid-feedback">
+                Por favor, ingresa un RUT válido.
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
+                <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control" required>
+                <div class="invalid-feedback">
+                    Por favor, ingresa tu fecha de nacimiento.
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label for="genero" class="form-label">Género</label>
+                <select name="genero" id="genero" class="form-select" required>
+                    <option value="M">Masculino</option>
+                    <option value="F">Femenino</option>
+                    <option value="O">Otro</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="direccion" class="form-label">Dirección</label>
+            <input type="text" name="direccion" id="direccion" class="form-control" required maxlength="50">
+            <div class="invalid-feedback">
+                La dirección no puede estar vacía y debe tener máximo 50 caracteres.
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="telefono" class="form-label">Número de Teléfono</label>
+            <input type="tel" name="telefono" id="telefono" class="form-control" required pattern="[0-9]{9}">
+            <div class="invalid-feedback">
+                Por favor, ingresa un número de teléfono válido (solo 9 dígitos).
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="foto" class="form-label">Subir Foto (opcional)</label>
+            <input type="file" name="foto" id="foto" class="form-control">
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="region" class="form-label">Región</label>
+                <select name="region" id="region-selector" class="form-select" required>
+                    <option value="">Selecciona una región</option>
+                    {% for region in regiones %}
+                    <option value="{{ region.id }}">{{ region.nombre }}</option>
+                    {% endfor %}
+                </select>
+                <div class="invalid-feedback">
+                    Por favor, selecciona una región.
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label for="comuna" class="form-label">Comuna</label>
+                <select name="comuna" id="comuna-selector" class="form-select" required>
+                    <option value="">Selecciona una comuna</option>
+                </select>
+                <div class="invalid-feedback">
+                    Por favor, selecciona una comuna.
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="carrera" class="form-label">Carrera</label>
+            <select name="carrera" id="carrera" class="form-select" required>
+                <option value="">Selecciona una carrera</option>
+                {% for carrera in carreras %}
+                <option value="{{ carrera.id }}">{{ carrera.nombre }}</option>
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">
+                Por favor, selecciona una carrera.
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="cv" class="form-label">Subir CV (PDF)</label>
+            <input type="file" name="cv" id="cv" class="form-control" accept="application/pdf">
+            <div class="form-text">Sube tu CV en formato PDF.</div>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn-pro btn-border">Registrarse</button>
+        </div>
+    </form>
+</div>
+
+<script src="{% static 'js/registro_estudiante.js' %}"></script>
+
+{% endblock %}

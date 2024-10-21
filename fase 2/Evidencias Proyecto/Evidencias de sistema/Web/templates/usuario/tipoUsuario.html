@@ -1,0 +1,19 @@
+{% extends 'base/base.html' %}
+
+{% block contenido %}
+<div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center img-fondo">
+    <div class="row">
+        <div style="background-color: #7f7adb; padding: 100px; border-radius: 30px;">
+            <h2 style="color: black;">Bienvenid@! ¿Eres estudiante o empresa?</h2>
+            <div class="d-grid gap-2 mb-4 justify-content-center" style="margin: 30px;">
+                <a href="{% url 'registro_estudiante' %}" class="btn-pro btn-estudiante "
+                    style="text-decoration: none;">Soy
+                    Estudiante</a>
+                <a href="{% url 'registro_empresa' %}" class="btn-pro" style="text-decoration: none;">Soy
+                    Empresa</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

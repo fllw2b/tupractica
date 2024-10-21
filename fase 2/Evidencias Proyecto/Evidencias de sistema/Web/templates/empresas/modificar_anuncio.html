@@ -1,0 +1,97 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block contenido %}
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="col-md-8">
+        <h2 class="text-center mb-4">Modificar Anuncio de Práctica</h2>
+        <form method="POST" id="form-anuncio" class="needs-validation" novalidate>
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="titulo" class="form-label">Título del Anuncio</label>
+                <input type="text" name="titulo" id="titulo" class="form-control" value="{{ form.instance.titulo }}" required maxlength="100">
+                <div class="invalid-feedback">
+                    Por favor, ingresa un título para el anuncio.
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="region" class="form-label">Región</label>
+                    <select name="region" id="region-selector" class="form-select" required>
+                        <option value="">Selecciona una región</option>
+                        {% for region in regiones %}
+                        <option value="{{ region.id }}" {% if form.instance.region and form.instance.region.id == region.id %}selected{% endif %}>{{ region.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="invalid-feedback">
+                        Por favor, selecciona una región.
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="comuna" class="form-label">Comuna</label>
+                    <select name="comuna" id="comuna-selector" class="form-select" required>
+                        <option value="">Selecciona una comuna</option>
+                        {% for comuna in comunas %}
+                        <option value="{{ comuna.id }}" {% if form.instance.comuna and form.instance.comuna.id == comuna.id %}selected{% endif %}>{{ comuna.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="invalid-feedback">
+                        Por favor, selecciona una comuna.
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="ubicacion" class="form-label">Ubicación</label>
+                <input type="text" name="ubicacion" id="ubicacion" class="form-control" value="{{ form.instance.ubicacion }}" required maxlength="255">
+                <div class="invalid-feedback">
+                    Por favor, ingresa la ubicación.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="modalidad" class="form-label">Modalidad</label>
+                <select name="modalidad" id="modalidad" class="form-select" required>
+                    <option value="">Selecciona una modalidad</option>
+                    <option value="remoto" {% if form.instance.modalidad == "remoto" %}selected{% endif %}>Remoto</option>
+                    <option value="hibrido" {% if form.instance.modalidad == "hibrido" %}selected{% endif %}>Híbrido</option>
+                    <option value="presencial" {% if form.instance.modalidad == "presencial" %}selected{% endif %}>Presencial</option>
+                </select>
+                <div class="invalid-feedback">
+                    Por favor, selecciona una modalidad.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="descripcion" class="form-label">Descripción</label>
+                <textarea name="descripcion" id="descripcion" class="form-control" maxlength="500" required>{{ form.instance.descripcion }}</textarea>
+                <div class="invalid-feedback">
+                    Por favor, ingresa una descripción.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="requisitos" class="form-label">Requisitos (opcional)</label>
+                <textarea name="requisitos" id="requisitos" class="form-control" maxlength="300">{{ form.instance.requisitos }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="fecha_fin" class="form-label">Fecha Límite para la Postulación</label>
+                <input type="date" name="fecha_fin" id="fecha_fin" class="form-control" value="{{ form.instance.fecha_fin|date:'Y-m-d' }}">
+                <div class="invalid-feedback">
+                    Por favor, ingresa una fecha límite para la postulación.
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn-pro btn-border">Guardar Cambios</button>
+                <a href="{% url 'mis_anuncios' %}" class="btn-pro btn-border" style="text-decoration: none;">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="{% static 'js/registro_estudiante.js' %}"></script>
+
+{% endblock %}

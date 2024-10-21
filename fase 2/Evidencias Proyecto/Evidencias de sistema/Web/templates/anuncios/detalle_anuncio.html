@@ -1,0 +1,27 @@
+{% extends 'base/base.html' %}
+{% block contenido %}
+<div class="container mt-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-body">
+            <h2 class="card-title text-primary font-weight-bold">{{ anuncio.titulo }}</h2>
+            <p class="card-text"><strong>Región:</strong> {{ anuncio.region }}</p>
+            <p class="card-text"><strong>Empresa:</strong> {{ anuncio.empresa.nombre_empresa }}</p>
+            <p class="card-text"><strong>Modalidad:</strong> {{ anuncio.modalidad }}</p>
+            <p class="card-text"><strong>Ubicación:</strong> {{ anuncio.ubicacion }}</p>
+            <p class="card-text"><strong>Descripción:</strong> {{ anuncio.descripcion }}</p>
+            <p class="card-text"><strong>Requisitos:</strong> {{ anuncio.requisitos }}</p>
+            <p class="card-text text-muted" style="font-size: 0.9em;">Publicado el: {{ anuncio.fecha_publicacion|date:"d M Y" }}</p>
+        </div>
+        <div class="card-footer bg-transparent border-top-0 d-flex justify-content-center">
+            {% if user.is_authenticated %}
+                {% if user.es_estudiante %}
+                <a href="{% url 'postular_anuncio' anuncio.id %}" class="btn btn-primary">Postular</a>
+
+                {% endif %}
+            {% endif %}
+            <a href="{% url 'lista_anuncios' %}" class="btn-form">Volver</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
