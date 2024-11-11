@@ -1,0 +1,14 @@
+{% extends 'base/base.html' %}
+{% block contenido %}
+<div class="container mt-5 d-flex flex-column align-items-center">
+    <div class="confirm-box p-4 text-center shadow-sm rounded">
+        <h2 class="mb-3">Confirmar Eliminación</h2>
+        <p class="mb-4">¿Estás seguro de que deseas eliminar el anuncio <strong>"{{ anuncio.titulo }}"</strong>?</p>
+        <form method="post" class="d-flex justify-content-center gap-3">
+            {% csrf_token %}
+            <button type="submit" class="btn-form px-4" style="text-decoration: none;">Eliminar</button>
+            <a href="{% url 'mis_anuncios' %}" class="btn-form px-4">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

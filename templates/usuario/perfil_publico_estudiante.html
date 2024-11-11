@@ -1,0 +1,110 @@
+{% extends 'base/base.html' %}
+{% block contenido %}
+<div class="container mt-5">
+    <div class="card shadow-lg p-4" style="max-width: 700px; margin: auto; border-radius: 15px;">
+        <h2 class="text-center mb-4" style="color: hsl(261, 80%, 48%);">Perfil </h2>
+
+        <div class="d-flex flex-column align-items-center">
+            {% if estudiante.foto %}
+                <img src="{{ estudiante.foto.url }}" alt="Foto de perfil" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+            {% else %}
+                <div class="rounded-circle mb-3" style="width: 150px; height: 150px; background-color: #e9ecef; display: flex; align-items: center; justify-content: center;">
+                    <span style="color: #6c757d;">Sin Foto</span>
+                </div>
+            {% endif %}
+            <h4>{{ estudiante.nombres }} {{ estudiante.apellidos }}</h4>
+            <p class="text-muted">{{ estudiante.carrera }}</p>
+        </div>
+
+        <hr>
+
+        <!-- solo lectura -->
+        <div id="read-only-view" {% if request.method == 'POST' %}style="display: none;"{% endif %}>
+            <p><strong>RUT:</strong> {{ estudiante.rut }}</p>
+            <p><strong>Región:</strong> {{ estudiante.region }}</p>
+            <p><strong>Comuna:</strong> {{ estudiante.comuna }}</p>
+            <p><strong>Teléfono:</strong> {{ estudiante.telefono }}</p>
+            <p><strong>Correo:</strong> {{ estudiante.usuario.email }}</p>
+            <p><strong>CV:</strong>
+                {% if estudiante.cv %}
+                    <a href="{{ estudiante.cv.url }}" target="_blank">Descargar CV</a>
+                {% else %}
+                    No disponible
+                {% endif %}
+            </p>
+
+            <!-- botón pa que el estudiante pueda editar su perfil -->
+            {% if is_owner %}
+                <div class="text-center mt-3">
+                    <a href="#" onclick="toggleEditMode()" class="btn-pro btn-border" style="text-decoration: none;">Modificar datos</a>
+                </div>
+            {% endif %}
+        </div>
+
+        <form id="edit-form" method="POST" enctype="multipart/form-data" style="{% if request.method != 'POST' %}display: none;{% endif %}">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="nombres" class="form-label">Nombres</label>
+                        {{ form.nombres }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="apellidos" class="form-label">Apellidos</label>
+                        {{ form.apellidos }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="rut" class="form-label">RUT</label>
+                        {{ form.rut }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="telefono" class="form-label">Teléfono</label>
+                        {{ form.telefono }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="region" class="form-label">Región</label>
+                        {{ form.region }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="comuna" class="form-label">Comuna</label>
+                        {{ form.comuna }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="carrera" class="form-label">Carrera</label>
+                        {{ form.carrera }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="cv" class="form-label">CV (PDF)</label>
+                {% if estudiante.cv %}
+                    <p><a href="{{ estudiante.cv.url }}" target="_blank">Descargar CV</a></p>
+                {% else %}
+                    <p>No se ha subido un CV.</p>
+                {% endif %}
+                {{ form.cv }}
+            </div>
+
+            <div class="mb-3">
+                <label for="foto" class="form-label">Foto de Perfil</label>
+                {{ form.foto }}
+            </div>
+
+            <div class="text-center mt-3 d-flex justify-content-center">
+                <button type="submit" class="btn-pro btn-border" style="text-decoration: none;">Guardar Cambios</button>
+                <a href="#" onclick="toggleEditMode()" class="btn-pro btn-border mx-2" style="text-decoration: none;">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleEditMode() {
+        document.getElementById('read-only-view').style.display = document.getElementById('read-only-view').style.display === 'none' ? 'block' : 'none';
+        document.getElementById('edit-form').style.display = document.getElementById('edit-form').style.display === 'none' ? 'block' : 'none';
+    }
+</script>
+{% endblock %}

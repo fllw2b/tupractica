@@ -1,15 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from firebase_admin import auth
-from apps.tuPractica.models import Region, Comuna, Carrera, Sector
-from .models import Usuario, Estudiante, Empresa
-import firebase_admin
+from .models import Usuario, Estudiante, Empresa, Region, Comuna, Carrera, Sector
+from django.utils import timezone
 from django.http import JsonResponse
-import re
-
-
-if not firebase_admin._apps:
-    firebase_admin.initialize_app()
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import logout
+from django.db import transaction
+from .models import Estudiante
+from .forms import EstudianteForm
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 
 
 def registro_estudiante(request):
@@ -23,49 +23,41 @@ def registro_estudiante(request):
         nombres = request.POST.get('nombres')
         apellidos = request.POST.get('apellidos')
         rut = request.POST.get('rut')
+        region_id = request.POST.get('region')
+        comuna_id = request.POST.get('comuna')
+        carrera_id = request.POST.get('carrera')
         fecha_nacimiento = request.POST.get('fecha_nacimiento')
         genero = request.POST.get('genero')
         direccion = request.POST.get('direccion')
         telefono = request.POST.get('telefono')
-        region_id = request.POST.get('region')
-        comuna_id = request.POST.get('comuna')
-        carrera_id = request.POST.get('carrera')
-        foto = request.FILES.get('foto')
+        cv = request.FILES.get('cv') 
 
         try:
-            # usuario firebase
-            user = auth.create_user(
-                email=email,
-                password=password
-            )
+            with transaction.atomic():
+                usuario = Usuario.objects.create_user(
+                    email=email,
+                    password=password,
+                    es_estudiante=True,
+                    fecha_registro=timezone.now()
+                )
+                region = Region.objects.get(id=region_id)
+                comuna = Comuna.objects.get(id=comuna_id)
+                carrera = Carrera.objects.get(id=carrera_id)
 
-            # usuario mysql
-            usuario = Usuario.objects.create(
-                uid=user.uid,
-                email=email,
-                es_estudiante=True
-            )
-
-            # región, comuna y carrera
-            region = Region.objects.get(id=region_id)
-            comuna = Comuna.objects.get(id=comuna_id)
-            carrera = Carrera.objects.get(id=carrera_id)
-
-            # se crea en la mysql
-            estudiante = Estudiante.objects.create(
-                usuario=usuario,
-                nombres=nombres,
-                apellidos=apellidos,
-                rut=rut,
-                fecha_nacimiento=fecha_nacimiento,
-                genero=genero,
-                direccion=direccion,
-                telefono=telefono,
-                region=region,
-                comuna=comuna,
-                carrera=carrera,
-                foto=foto
-            )
+                Estudiante.objects.create(
+                    usuario=usuario,
+                    nombres=nombres,
+                    apellidos=apellidos,
+                    rut=rut,
+                    region=region,
+                    comuna=comuna,
+                    carrera=carrera,
+                    fecha_nacimiento=fecha_nacimiento,
+                    genero=genero,
+                    direccion=direccion,
+                    telefono=telefono,
+                    cv=cv 
+                )
 
             messages.success(request, 'Estudiante registrado correctamente.')
             return redirect('login')
@@ -87,51 +79,72 @@ def registro_empresa(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         nombre_empresa = request.POST.get('nombre_empresa')
-        rut_empresa = request.POST.get('rut_empresa')
+        rut = request.POST.get('rut_empresa')
         direccion = request.POST.get('direccion')
         sector_id = request.POST.get('sector')
-        pagina_web = request.POST.get('pagina_web')
-        descripcion = request.POST.get('descripcion')
-        redes_sociales = request.POST.get('redes_sociales')
+        pagina_web = request.POST.get('pagina_web', '')
+        descripcion = request.POST.get('descripcion', '')
+        redes_sociales = request.POST.get('redes_sociales', '')
 
         try:
-            # usuario firebase
-            user = auth.create_user(
-                email=email,
-                password=password
-            )
+            with transaction.atomic():
+                usuario = Usuario.objects.create_user(
+                    email=email,
+                    password=password,
+                    es_estudiante=False,
+                    fecha_registro=timezone.now()
+                )
 
-            # usuario mysql
-            usuario = Usuario.objects.create(
-                uid=user.uid,
-                email=email,
-                es_estudiante=False
-            )
+                sector = Sector.objects.get(id=sector_id)
 
-            # se obtienen los sectores
-            sector = Sector.objects.get(id=sector_id)
-
-            # se  crea en la mysql
-            empresa = Empresa.objects.create(
-                usuario=usuario,
-                nombre_empresa=nombre_empresa,
-                rut=rut_empresa,
-                direccion=direccion,
-                sector=sector,
-                pagina_web=pagina_web,
-                descripcion=descripcion,
-                redes_sociales=redes_sociales
-            )
+                empresa = Empresa.objects.create(
+                    usuario=usuario,
+                    nombre_empresa=nombre_empresa,
+                    rut=rut,
+                    direccion=direccion,
+                    sector=sector,
+                    pagina_web=pagina_web,
+                    descripcion=descripcion,
+                    redes_sociales=redes_sociales
+                )
 
             messages.success(request, 'Empresa registrada correctamente.')
             return redirect('login')
 
+        except Sector.DoesNotExist:
+            messages.error(request, 'Error: El sector especificado no existe.')
         except Exception as e:
+            print(f"Error al registrar empresa: {str(e)}")
             messages.error(request, f'Error al registrar empresa: {str(e)}')
 
     return render(request, 'usuario/registro_empresa.html', {
         'sectores': sectores,
     })
+
+
+def iniciar_sesion(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        usuario = authenticate(request, username=email, password=password)
+
+        if usuario is not None:
+            auth_login(request, usuario)
+            if usuario.es_estudiante:
+                return redirect('home')
+            else:
+                return redirect('home')
+        else:
+            messages.error(
+                request, 'Correo electrónico o contraseña incorrectos.')
+
+    return render(request, 'usuario/login.html')
+
+
+def cerrar_sesion(request):
+    logout(request)
+    return redirect('home')
 
 
 def get_comunas(request, region_id):
@@ -149,6 +162,26 @@ def seleccionar_tipo_usuario(request):
             return redirect('registro_empresa')
     return render(request, 'usuario/tipoUsuario.html')
 
+@login_required
+def perfil_estudiante(request, estudiante_id=None):
+    if estudiante_id is None:
+        estudiante = get_object_or_404(Estudiante, usuario=request.user)
+        is_owner = True
+    else:
+        estudiante = get_object_or_404(Estudiante, id=estudiante_id)
+        is_owner = (request.user == estudiante.usuario)
 
-def login(request):
-    return render(request, 'usuario/login.html')
+    if is_owner and request.method == 'POST':
+        form = EstudianteForm(request.POST, request.FILES, instance=estudiante)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Perfil actualizado correctamente.")
+            return redirect('perfil_estudiante')
+    else:
+        form = EstudianteForm(instance=estudiante)
+
+    return render(request, 'usuario/perfil_publico_estudiante.html', {
+        'estudiante': estudiante,
+        'form': form,
+        'is_owner': is_owner,
+    })

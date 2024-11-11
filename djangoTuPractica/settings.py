@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-
+import os
 from firebase_admin import credentials
 import firebase_admin
 from pathlib import Path
@@ -30,6 +30,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'usuarios.Usuario'
 
 # Application definition
 
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.usuarios',
     'apps.tuPractica',
+    'apps.anuncios',
 ]
 
 
@@ -129,6 +131,9 @@ STATICFILES_DIRS = [
     join(BASE_DIR, 'static')
 ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -138,10 +143,10 @@ FIXTURE_DIRS = [
     join(BASE_DIR, 'fixtures')
 ]
 
-directorio_credenciales = BASE_DIR / 'djangotupractica-55519e0256b7.json'
+# directorio_credenciales = BASE_DIR / 'djangotupractica-55519e0256b7.json'
 
-cred = credentials.Certificate(str(directorio_credenciales))
-firebase_admin.initialize_app(cred)
+# cred = credentials.Certificate(str(directorio_credenciales))
+# firebase_admin.initialize_app(cred)
 
 # LOGIN_URL = '/'
 

@@ -1,0 +1,30 @@
+{% extends 'base/base.html' %}
+{% block contenido %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4 " style="color: hsl(261, 80%, 48%);">Mis Postulaciones</h2>
+    {% if postulaciones %}
+        <div class="row">
+            {% for postulacion in postulaciones %}
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-lg h-100 " style="border-radius: 15px;  padding: 20px; border-color: hsl(261, 80%, 48%);">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-center mb-3" style="font-weight: bold; color: hsl(261, 80%, 48%);">{{ postulacion.anuncio.titulo }}</h5>
+                        <p><strong>Ubicación:</strong> {{ postulacion.anuncio.ubicacion }}</p>
+                        <p><strong>Modalidad:</strong> {{ postulacion.anuncio.modalidad|capfirst }}</p>
+                        <p><strong>Descripción:</strong> {{ postulacion.anuncio.descripcion|truncatewords:15 }}</p>
+                        <hr style="border-color: rgba(255, 255, 255, 0.5);">
+                        <p><strong>Fecha de Postulación:</strong> {{ postulacion.fecha_postulacion|date:"d/m/Y H:i" }}</p>
+                        <p><strong>Fecha Límite:</strong> {{ postulacion.anuncio.fecha_fin|date:"d/m/Y" }}</p>
+                    </div>
+                    <div class="card-footer text-center" style="background: transparent; border-top: none; padding-bottom: 20px;">
+                        <a href="{% url 'detalle_anuncio' postulacion.anuncio.id %}" class="btn-pro btn-border" style="text-decoration: none;">Ver Detalles</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">No has realizado ninguna postulación.</p>
+    {% endif %}
+</div>
+{% endblock %}

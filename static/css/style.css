@@ -1,3 +1,5 @@
+
+
 .btn {
     padding: .45rem 1.5rem .35rem;
 }
@@ -5,34 +7,7 @@
 .texto-navbar {
     color: #ffffff;
     text-align: center;
-}
-
-.btn-login {
-    color: #222;
-    background-color: #8ad3d3;
-    border-color: #7cc;
-    border-radius: 50px;
-}
-
-.btn-registro {
-    color: #ffffff;
-    background-color: #226565;
-    border-color: #226565;
-    border-radius: 50px;
-}
-
-.btn-registro:hover {
-    background-color: #8ad3d3;
-    border-color: #8ad3d3;
-    color: rgb(0, 0, 0);
-    cursor: pointer
-}
-
-.btn-login:hover {
-    background-color: #226565;
-    border-color: #226565;
-    color: #ffffff;
-    cursor: pointer
+    text-shadow: #ffffff;
 }
 
 .fondo-navbar {
@@ -42,7 +17,7 @@
 
 .btn-pro {
     padding: 10px;
-    border-radius: 30px;
+    border-radius: 10px;
     margin: 10px;
     cursor: pointer;
     border: 0;
@@ -54,6 +29,7 @@
     transition: all 0.5s ease;
     color: black !important;
     text-align: center;
+    
 }
 
 .btn-pro:hover {
@@ -61,13 +37,13 @@
     background-color: hsl(261deg 80% 48%);
     color: white !important;
     box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
-
 }
 
 .btn-pro a {
     color: inherit !important;
     /* para cambiar el color del link de los a*/
     text-decoration: none !important;
+
 }
 
 .btn-border {
@@ -79,3 +55,57 @@
     background-size: cover;
     background-position: center;
 }
+
+.card {
+    border-radius: 15px;
+}
+.card-body {
+    padding: 20px;
+}
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    border-radius: 20px;
+}
+
+.btn-footer{
+    color: rgb(255, 255, 255);
+}
+
+.btn-footer:hover{
+    letter-spacing: 3px;
+    background-color: hsl(261deg 80% 48%);
+    color: white !important;
+    box-shadow: rgb(93 24 220) 0px 7px 29px 0px;  
+}
+
+.footer-pro {
+    position:fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+}
+
+.btn-form {
+    font-size: 16px; /* Tamaño de fuente ajustado */
+    width: 100px;
+    height: 40px;
+    border: 1px solid rgb(93, 24, 220);
+    border-radius: 10px;
+    transition: all 0.3s;
+    cursor: pointer;
+    background: white;
+    color: rgb(93, 24, 220);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+}
+
+.btn-form:hover {
+    background: rgb(93, 24, 220);
+    color: white;
+}
+

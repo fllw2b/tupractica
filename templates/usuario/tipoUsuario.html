@@ -2,17 +2,14 @@
 
 {% block contenido %}
 <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center img-fondo">
-    <div class="row">
-        <div style="background-color: #7f7adb; padding: 100px; border-radius: 30px;">
-            <h2 style="color: black;">Bienvenid@! ¿Eres estudiante o empresa?</h2>
-            <div class="d-grid gap-2 mb-4 justify-content-center" style="margin: 30px;">
-                <a href="{% url 'registro_estudiante' %}" class="btn-pro" style="text-decoration: none;">Soy
-                    Estudiante</a>
-                <a href="{% url 'registro_empresa' %}" class="btn-pro" style="text-decoration: none;">Soy
-                    Empresa</a>
-            </div>
+    <div class="card p-5 text-center shadow-lg" style="max-width: 400px; border-radius: 20px; border-color: hsl(261, 60%, 50%);">
+        <h2 class="mb-4" style="color: hsl(261, 60%, 50%); font-weight: bold;">Bienvenid@!</h2>
+        <p class="mb-5" style="font-size: 1.2rem; color: black;">¿Eres estudiante o empresa?</p>
+        
+        <div class="d-grid gap-3">
+            <a href="{% url 'registro_estudiante' %}" class="btn-pro btn-border" style="text-decoration: none;">Soy Estudiante</a>
+            <a href="{% url 'registro_empresa' %}" class="btn-pro btn-border" style="text-decoration: none;">Soy Empresa</a>
         </div>
     </div>
 </div>
-
 {% endblock %}

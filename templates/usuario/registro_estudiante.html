@@ -1,9 +1,10 @@
 {% extends 'base/base.html' %}
+{% load static %}
+
 {% block contenido %}
 <div class="container mt-5">
     <h2 class="text-center mb-4">Registro de Estudiante</h2>
-    <form method="POST" enctype="multipart/form-data" id="form-estudiante" class="needs-validation" novalidate
-        onsubmit="return validarFormulario()">
+    <form method="POST" enctype="multipart/form-data" onsubmit="return validarFormulario()">
         {% csrf_token %}
         <div class="row">
             <div class="col-md-6 mb-3">
@@ -129,92 +130,18 @@
             </div>
         </div>
 
+        <div class="mb-3">
+            <label for="cv" class="form-label">Subir CV (PDF)</label>
+            <input type="file" name="cv" id="cv" class="form-control" accept="application/pdf">
+            <div class="form-text">Sube tu CV en formato PDF.</div>
+        </div>
+
         <div class="text-center">
             <button type="submit" class="btn-pro btn-border">Registrarse</button>
         </div>
     </form>
 </div>
 
-<script>
-
-    function validarRut(rut) {
-        const rutLimpio = rut.replace(/[^0-9kK]/g, '');
-        if (rutLimpio.length < 8 || rutLimpio.length > 9) {
-            return false;
-        }
-        return /^[0-9]{7,8}[0-9kK]$/.test(rutLimpio);
-    }
-
-
-    function validarFormulario() {
-        const nombres = document.getElementById('nombres').value;
-        const apellidos = document.getElementById('apellidos').value;
-        const rut = document.getElementById('rut').value;
-        const telefono = document.getElementById('telefono').value;
-
-        if (nombres.length === 0 || nombres.length > 20) {
-            Swal.fire({
-                title: 'Error',
-                text: 'Los nombres no pueden estar vacíos y deben tener un máximo de 20 caracteres.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-            return false;
-        }
-
-        if (apellidos.length === 0 || apellidos.length > 20) {
-            Swal.fire({
-                title: 'Error',
-                text: 'Los apellidos no pueden estar vacíos y deben tener un máximo de 20 caracteres.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-            return false;
-        }
-
-        if (!validarRut(rut)) {
-            Swal.fire({
-                title: 'RUT inválido',
-                text: 'Por favor ingrese un RUT válido.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-            return false;
-        }
-
-        if (!/^\d{9}$/.test(telefono)) {
-            Swal.fire({
-                title: 'Teléfono inválido',
-                text: 'El número de teléfono debe tener 9 dígitos.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-            return false;
-        }
-
-        return true;
-    }
-    // manejo de regiones y comunas
-    document.getElementById('region-selector').addEventListener('change', function () {
-        var regionId = this.value;
-        if (regionId) {
-            fetch(`/get-comunas/${regionId}/`)
-                .then(response => response.json())
-                .then(data => {
-                    var comunaSelector = document.getElementById('comuna-selector');
-                    comunaSelector.innerHTML = ''; // se limpia la seleccion
-                    data.forEach(function (comuna) {
-                        var option = document.createElement('option');
-                        option.value = comuna.id;
-                        option.text = comuna.nombre;
-                        comunaSelector.appendChild(option);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error al obtener comunas:', error);
-                });
-        }
-    });
-</script>
+<script src="{% static 'js/registro_estudiante.js' %}"></script>
 
 {% endblock %}
