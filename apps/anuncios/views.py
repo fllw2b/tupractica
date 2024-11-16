@@ -49,7 +49,7 @@ def crear_anuncio(request):
         'form': form,
         'regiones': regiones,
         'comunas': comunas,
-        'tags': tags
+        'tags': tags,
     })
 
 
