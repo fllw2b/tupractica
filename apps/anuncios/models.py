@@ -1,5 +1,5 @@
 from django.db import models
-from apps.usuarios.models import Empresa, Estudiante
+from apps.usuarios.models import Empresa, Estudiante, Tag
 from apps.tuPractica.models import Region, Comuna
 
 # Create your models here.
@@ -20,7 +20,7 @@ class AnuncioPractica(models.Model):
         default='remoto'
     )
     descripcion = models.TextField()
-    requisitos = models.TextField(null=True, blank=True)
+    requisitos = models.ManyToManyField(Tag, related_name='anuncios_practica', blank=True)
     fecha_publicacion = models.DateTimeField(auto_now_add=True, editable=False)
     fecha_fin = models.DateField(null=True, blank=True)
 

@@ -1,8 +1,12 @@
 {% extends 'base/base.html' %}
+{% load static %}
+
 {% block contenido %}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
 <div class="container mt-5">
     <div class="card shadow-lg p-4" style="max-width: 700px; margin: auto; border-radius: 15px;">
-        <h2 class="text-center mb-4" style="color: hsl(261, 80%, 48%);">Perfil </h2>
 
         <div class="d-flex flex-column align-items-center">
             {% if estudiante.foto %}
@@ -12,7 +16,7 @@
                     <span style="color: #6c757d;">Sin Foto</span>
                 </div>
             {% endif %}
-            <h4>{{ estudiante.nombres }} {{ estudiante.apellidos }}</h4>
+            <h4 class="font-weight-bold">{{ estudiante.nombres }} {{ estudiante.apellidos }}</h4>
             <p class="text-muted">{{ estudiante.carrera }}</p>
         </div>
 
@@ -32,10 +36,19 @@
                     No disponible
                 {% endif %}
             </p>
+            <p><strong>Habilidades:</strong>
+                {% if estudiante.habilidades.all %}
+                    {% for habilidad in estudiante.habilidades.all %}
+                        <span class="badge" style="background-color: hsl(261, 80%, 48%);">{{ habilidad.nombre }}</span>
+                    {% empty %}
+                        No se han agregado habilidades.
+                    {% endfor %}
+                {% endif %}
+            </p>
 
-            <!-- botón pa que el estudiante pueda editar su perfil -->
+            <!-- botón para que el estudiante pueda editar su perfil -->
             {% if is_owner %}
-                <div class="text-center mt-3">
+                <div class="text-center mt-3 mt-5">
                     <a href="#" onclick="toggleEditMode()" class="btn-pro btn-border" style="text-decoration: none;">Modificar datos</a>
                 </div>
             {% endif %}
@@ -93,18 +106,34 @@
                 {{ form.foto }}
             </div>
 
+            <div class="mb-3">
+                <label for="habilidades" class="form-label">Habilidades (selecciona hasta 10)</label>
+                {{ form.habilidades }}
+            </div>
+
             <div class="text-center mt-3 d-flex justify-content-center">
-                <button type="submit" class="btn-pro btn-border" style="text-decoration: none;">Guardar Cambios</button>
+                <button type="submit" class="btn-pro btn-fill btn-border" style="text-decoration: none;">Guardar Cambios</button>
                 <a href="#" onclick="toggleEditMode()" class="btn-pro btn-border mx-2" style="text-decoration: none;">Cancelar</a>
             </div>
         </form>
     </div>
 </div>
 
+
+
 <script>
     function toggleEditMode() {
         document.getElementById('read-only-view').style.display = document.getElementById('read-only-view').style.display === 'none' ? 'block' : 'none';
         document.getElementById('edit-form').style.display = document.getElementById('edit-form').style.display === 'none' ? 'block' : 'none';
     }
+    $(document).ready(function() {
+        // select2 para q seleccione maximo 10 tags
+        $('.select2-habilidades').select2({
+            maximumSelectionLength: 10,
+            placeholder: 'Selecciona hasta 10 habilidades',
+            allowClear: true,
+            width: '100%'
+        });
+    });
 </script>
 {% endblock %}

@@ -180,8 +180,9 @@ def perfil_estudiante(request, estudiante_id=None):
     else:
         form = EstudianteForm(instance=estudiante)
 
-    return render(request, 'usuario/perfil_publico_estudiante.html', {
+    context = {
         'estudiante': estudiante,
         'form': form,
         'is_owner': is_owner,
-    })
+    }
+    return render(request, 'usuario/perfil_publico_estudiante.html', context)

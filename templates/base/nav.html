@@ -11,40 +11,45 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item ">
-                            <a class="nav-link texto-navbar" href="/">Inicio</a>
+                    <a class="nav-link texto-navbar" href="/">Inicio</a>
                 </li>
                 <li class="nav-item" >
-                            <a class="nav-link texto-navbar" href="{% url 'listar_anuncios' %}">Anuncios</a>
+                    <a class="nav-link texto-navbar" href="{% url 'listar_anuncios' %}">Anuncios</a>
                 </li>
             </ul>
             <div class="d-flex">
                 {% if user.is_authenticated %}
                 <button class="btn-pro"><a href="{% url 'cerrar_sesion' %}" style="text-decoration: none;">
                         Cerrar Sesión </a>
+                </button>
                     {% if user.es_estudiante %}
                     <button class="btn-pro"><a href="{% url 'historial_postulaciones' %}"
                             style="text-decoration: none;">
                             Mis Postulaciones </a>
-                            <button class="btn-pro"><a href="{% url 'perfil_estudiante' %}" style="text-decoration: none;">Perfil</a></button>
+                    </button>
+                    <button class="btn-pro"><a href="{% url 'perfil_estudiante' %}" style="text-decoration: none;">Perfil</a></button>
+
                         {% else %}
                         <button class="btn-pro"><a href="{% url 'crear_anuncio' %}" style="text-decoration: none;">
                                 Crear Anuncios </a>
-                            <button class="btn-pro"><a href="{% url 'mis_anuncios' %}" style="text-decoration: none;">
-                                    Mis Anuncios </a>
-                                <button class="btn-pro"><a href="{% url 'postulaciones_empresa' %}"
-                                        style="text-decoration: none;">
-                                        Postulaciones </a>
-                                    {% endif %}
-                                    {% else %}
-                                </button>
-                                <button class="btn-pro"><a href="{% url 'login' %}" style="text-decoration: none;">
-                                        Ingresar</a>
-                                </button>
-                                <button class="btn-pro"><a href="{% url 'seleccionar_tipo_usuario' %}"
-                                        style="text-decoration: none;">
-                                        Registrarse</a>
-                                </button>
-                                {% endif %}
+                        </button>
+                        <button class="btn-pro"><a href="{% url 'mis_anuncios' %}" style="text-decoration: none;">
+                                Mis Anuncios </a>
+                        </button>
+                        <button class="btn-pro"><a href="{% url 'postulaciones_empresa' %}"
+                                style="text-decoration: none;">
+                                Postulaciones </a>
+                        </button>
+                    {% endif %}
+                {% else %}
+                <button class="btn-pro"><a href="{% url 'login' %}" style="text-decoration: none;">
+                        Ingresar</a>
+                </button>
+                <button class="btn-pro"><a href="{% url 'seleccionar_tipo_usuario' %}"
+                        style="text-decoration: none;">
+                        Registrarse</a>
+                </button>
+                {% endif %}
             </div>
 
         </div>

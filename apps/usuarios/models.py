@@ -1,11 +1,8 @@
 from django.db import models
 from apps.tuPractica.models import Region, Comuna, Carrera, Sector
 
-
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from django.db import models
 from django.utils import timezone
-
 
 class UsuarioManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -31,6 +28,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     fecha_registro = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
 
     objects = UsuarioManager()
 
@@ -61,6 +59,8 @@ class Estudiante(models.Model):
     foto = models.ImageField(
         upload_to='fotos_estudiantes/', null=True, blank=True) 
     cv = models.FileField(upload_to='media/cvs/', null=True, blank=True)
+    habilidades = models.ManyToManyField('Tag', related_name='estudiantes', blank=True, limit_choices_to=10)
+
     def __str__(self):
         return f"{self.nombres} {self.apellidos}"
 
@@ -78,3 +78,9 @@ class Empresa(models.Model):
 
     def __str__(self):
         return self.nombre_empresa
+
+class Tag(models.Model):
+    nombre = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.nombre

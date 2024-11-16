@@ -1,0 +1,35 @@
+{% extends 'base/base.html' %}
+{% block contenido %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4" style="color: hsl(261, 80%, 48%);">Anuncios Recomendados para Ti</h2>
+
+    {% if recomendaciones %}
+        <div class="row justify-content-center">
+            {% for item in recomendaciones %}
+                <div class="col-md-8 col-lg-6 mb-4">
+                    <div class="card shadow-lg h-100 border-0">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title" style="color: blueviolet; font-weight: bold;">{{ item.anuncio.titulo }}</h5>
+                            <p class="card-text"><strong>Región:</strong> {{ item.anuncio.region.nombre }}</p>
+                            <p class="card-text"><strong>Empresa:</strong> {{ item.anuncio.empresa.nombre_empresa }}</p>
+                            <p class="card-text"><strong>Modalidad:</strong> {{ item.anuncio.modalidad }}</p>
+                            <p class="card-text text-muted" style="font-size: 0.9em;">Publicado el: {{ item.anuncio.fecha_publicacion|date:"d M Y" }}</p>
+                            <p class="card-text">
+                                <strong>Porcentaje de Coincidencia:</strong> 
+                                <span style="color: {% if item.porcentaje_coincidencia > 50 %}green{% else %}orange{% endif %}; font-weight: bold;">
+                                    {{ item.porcentaje_coincidencia }}%
+                                </span>
+                            </p>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0 d-flex justify-content-end">
+                            <a href="{% url 'detalle_anuncio' item.anuncio.id %}" class="btn-pro btn-border" style="text-decoration: none;">Ver Detalles</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">No hay recomendaciones disponibles para ti en este momento.</p>
+    {% endif %}
+</div>
+{% endblock %}

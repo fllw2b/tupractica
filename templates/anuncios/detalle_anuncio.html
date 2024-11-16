@@ -1,37 +1,49 @@
 {% extends 'base/base.html' %}
 {% block contenido %}
-<div class="container mt-5 d-flex justify-content-center">
-    <div class="card shadow-lg border-0" style="border-radius: 15px; width: 70%; max-width: 800px;">
-        <div class="card-body px-5 py-4">
-            <h2 class="card-title text-center" style="color: hsl(261, 80%, 48%); font-weight: bold;">
-                {{ anuncio.titulo }}
-            </h2>
-            <hr style="border-top: 2px solid rgba(0, 0, 0, 0.1);">
+<div class="container mt-5">
+    <div class="card shadow-lg border-0" style="border-radius: 15px;">
+        <div class="card-body">
+            <div class="text-center mb-4">
+                <h2 class="mb-4" style="color: #5A20CB; font-weight: bold;">{{ anuncio.titulo }}</h2>
+                <p class="text-muted" style="font-size: 1.1em;">Publicado por <strong>{{ anuncio.empresa.nombre_empresa }}</strong></p>
+            </div>
+
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <p><strong>Región:</strong> {{ anuncio.region }}</p>
-                    <p><strong>Empresa:</strong> {{ anuncio.empresa.nombre_empresa }}</p>
-                    <p><strong>Modalidad:</strong> {{ anuncio.modalidad|capfirst }}</p>
+                    <p><strong><i class="fas fa-map-marker-alt"></i> Ubicación:</strong> {{ anuncio.ubicacion }}</p>
+                    <p><strong><i class="fas fa-globe"></i> Región:</strong> {{ anuncio.region.nombre }}</p>
+                    <p><strong><i class="fas fa-city"></i> Comuna:</strong> {{ anuncio.comuna.nombre }}</p>
                 </div>
                 <div class="col-md-6">
-                    <p><strong>Comuna:</strong> {{ anuncio.comuna }}</p>
-                    <p><strong>Ubicación:</strong> {{  anuncio.ubicacion|default:"No especificados" }}</p>
+                    <p><strong><i class="fas fa-briefcase"></i> Modalidad:</strong> {{ anuncio.get_modalidad_display }}</p>
+                    <p><strong><i class="fas fa-calendar-alt"></i> Fecha de Publicación:</strong> {{ anuncio.fecha_publicacion|date:"d M Y" }}</p>
+                    <p><strong><i class="fas fa-calendar-times"></i> Fecha Límite:</strong> {{ anuncio.fecha_fin|date:"d M Y" }}</p>
                 </div>
             </div>
+
             <div class="mb-4">
-                <h5 style="font-weight: bold; color: hsl(261, 80%, 48%);">Descripción</h5>
-                <p>{{ anuncio.descripcion|default:"No especificada" }}</p>
-                <h5 style="font-weight: bold; color: hsl(261, 80%, 48%);">Requisitos</h5>
-                <p>{{ anuncio.requisitos|default:"No especificada" }}</p>
+                <h5 class="mb-3" style="font-weight: bold; color: #5A20CB;">Descripción</h5>
+                <p>{{ anuncio.descripcion }}</p>
             </div>
-            <p class="text-muted text-end" style="font-size: 0.9em;">Publicado el: {{ anuncio.fecha_publicacion|date:"d M Y" }}</p>
+
+            <div class="mb-4">
+                <h5 class="mb-3" style="font-weight: bold; color: hsl(261, 80%, 48%);">Requisitos</h5>
+                {% if anuncio.requisitos.exists %}
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for requisito in anuncio.requisitos.all %}
+                            <span class="badge bg-gradient" style="background: hsl(261, 80%, 48%); font-size: 1em;">{{ requisito.nombre }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No especificados</p>
+                {% endif %}
+            </div>
         </div>
-        <div class="card-footer bg-transparent border-top-0 d-flex justify-content-center gap-3 py-3">
-            {% if user.is_authenticated and user.es_estudiante %}
-                <a href="{% url 'postular_anuncio' anuncio.id %}" class="btn-form">Postular</a>
-            {% endif %}
-            <a href="{% url 'lista_anuncios' %}" class="btn-form">Volver</a>
         </div>
     </div>
 </div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% endblock %}

@@ -11,4 +11,8 @@ urlpatterns = [
     path('postular/<int:anuncio_id>/', views.postular_anuncio, name='postular_anuncio'),
     path('historial-postulaciones/', views.historial_postulaciones, name='historial_postulaciones'),
     path('postulaciones-empresa/', views.postulaciones_empresa, name='postulaciones_empresa'),
+    path('recomendaciones/', views.recomendaciones_estudiante, name='recomendaciones_estudiante'),
+    path('detalle_ajax/<int:anuncio_id>/', views.detalle_anuncio_ajax, name='detalle_anuncio_ajax'),
+    path('eliminar-postulacion/<int:postulacion_id>/', views.eliminar_postulacion, name='eliminar_postulacion'),
+   
 ]

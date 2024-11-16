@@ -1,89 +1,101 @@
-<!-- templates/anuncios/lista_anuncios.html -->
-
 {% extends 'base/base.html' %}
 {% load static %}
 
 {% block contenido %}
 <div class="container mt-5">
-    <h2 class="text-center mb-4" style="color: #7f4df3; font-weight: bold;">Anuncios de Práctica</h2>
-
-    <!-- Formulario de búsqueda y filtrado -->
-    <div class="card shadow-sm p-4 mb-5" style="border-radius: 15px;">
+    <!-- Filtros -->
+    <div class="card shadow-sm p-4 mb-4" style="border-radius: 15px;">
         <form method="GET" action="">
             <div class="row g-3 align-items-center">
-                <div class="col-md-4">
-                    <input type="text" name="busqueda" class="form-control shadow-sm" placeholder="Buscar por título" value="{{ busqueda }}">
+                <div class="col-md-3">
+                    <input type="text" name="busqueda" class="form-control shadow-sm" placeholder="Buscar por título" value="{{ request.GET.busqueda }}">
                 </div>
                 <div class="col-md-3">
                     <select name="region" class="form-select shadow-sm">
                         <option value="">Todas las regiones</option>
-                        <option value="Región Metropolitana de Santiago" {% if region == "Región Metropolitana de Santiago" %}selected{% endif %}>Región Metropolitana de Santiago</option>
-                        <option value="Región de Antofagasta" {% if region == "Región de Antofagasta" %}selected{% endif %}>Región de Antofagasta</option>
-                        <option value="Región de Coquimbo" {% if region == "Región de Coquimbo" %}selected{% endif %}>Región de Coquimbo</option>
+                        <option value="Región de Arica y Parinacota" {% if request.GET.region == "Región de Arica y Parinacota" %}selected{% endif %}>Región de Arica y Parinacota</option>
+                        <option value="Región de Tarapacá" {% if request.GET.region == "Región de Tarapacá" %}selected{% endif %}>Región de Tarapacá</option>
+                        <option value="Región de Antofagasta" {% if request.GET.region == "Región de Antofagasta" %}selected{% endif %}>Región de Antofagasta</option>
+                        <option value="Región de Atacama" {% if request.GET.region == "Región de Atacama" %}selected{% endif %}>Región de Atacama</option>
+                        <option value="Región de Coquimbo" {% if request.GET.region == "Región de Coquimbo" %}selected{% endif %}>Región de Coquimbo</option>
+                        <option value="Región de Valparaíso" {% if request.GET.region == "Región de Valparaíso" %}selected{% endif %}>Región de Valparaíso</option>
+                        <option value="Región Metropolitana de Santiago" {% if request.GET.region == "Región Metropolitana de Santiago" %}selected{% endif %}>Región Metropolitana de Santiago</option>
+                        <!-- Añadir el resto de las regiones aquí -->
                     </select>
                 </div>
                 <div class="col-md-3">
                     <select name="modalidad" class="form-select shadow-sm">
                         <option value="">Todas las modalidades</option>
-                        <option value="Remoto" {% if modalidad == "Remoto" %}selected{% endif %}>Remoto</option>
-                        <option value="Presencial" {% if modalidad == "Presencial" %}selected{% endif %}>Presencial</option>
-                        <option value="Híbrido" {% if modalidad == "Híbrido" %}selected{% endif %}>Híbrido</option>
+                        <option value="Remoto" {% if request.GET.modalidad == "Remoto" %}selected{% endif %}>Remoto</option>
+                        <option value="Presencial" {% if request.GET.modalidad == "Presencial" %}selected{% endif %}>Presencial</option>
+                        <option value="Híbrido" {% if request.GET.modalidad == "Híbrido" %}selected{% endif %}>Híbrido</option>
                     </select>
                 </div>
-                <div class="col-md-2 d-flex align-items-center justify-content-center">
+                <div class="col-md-2">
                     <button type="submit" class="btn-pro btn-border btn-fill w-100">Buscar</button>
                 </div>
             </div>
         </form>
     </div>
 
-    <!-- Lista de anuncios -->
-    <div class="row justify-content-center">
-        {% for anuncio in anuncios %}
-            <div class="col-md-8 col-lg-6 mb-4">
-                <div class="card shadow-lg h-100 border-0" style="border-radius: 15px;">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title" style="color:blueviolet; font-weight: bold;">{{ anuncio.titulo }}</h5>
-                        <p class="card-text"><strong>Región:</strong> {{ anuncio.region }}</p>
-                        <p class="card-text"><strong>Empresa:</strong> {{ anuncio.empresa }}</p>
-                        <p class="card-text"><strong>Carrera:</strong> {{ anuncio.carrera }}</p>
-                        <p class="card-text"><strong>Modalidad:</strong> {{ anuncio.modalidad }}</p>
-                        <p class="card-text text-muted" style="font-size: 0.9em;">Publicado el: {{ anuncio.fecha_publicacion|date:"d M Y" }}</p>
-                    </div>
-                    <div class="card-footer bg-transparent border-top-0 d-flex justify-content-end">
-                        <a href="{% url 'detalle_anuncio' anuncio.id %}" class="btn-pro btn-border" style="text-decoration: none;">Ver Detalles</a>
-                    </div>
+    <div class="row">
+        <!-- lista de anuncios -->
+        <div class="col-md-4">
+            <div class="list-group">
+                {% for item in recomendaciones %}
+                <a href="#" class="list-group-item list-group-item-action anuncio-item fondo-anuncio" data-id="{{ item.anuncio.id }}">
+                    <h5 class="mb-1">{{ item.anuncio.titulo }}</h5>
+
+                    <p class="mb-1"><strong>Empresa:</strong> {{ item.anuncio.empresa }}</p>
+                    {% if user.is_authenticated and user.es_estudiante %}
+                        <p class="card-text mb-1">
+                            <strong>Compatibilidad con tu perfil:</strong> 
+                            <span style="color: 
+                                {% if item.porcentaje_coincidencia > 70 %}
+                                    green
+                                {% elif item.porcentaje_coincidencia > 40 %}
+                                    yellow
+                                {% else %}
+                                    orange
+                                {% endif %}; font-weight: bold;">
+                                {{ item.porcentaje_coincidencia }}%
+                            </span>
+                        </p>
+                    {% endif %}
+                    
+                    <small class="mt-1 d-block">{{ item.anuncio.region }}</small>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- detalle anuncio -->
+        <div class="col-md-8">
+            <div id="detalle-anuncio" class="card shadow-lg border-0" style="border-radius: 15px;">
+                <div class="card-body">
+                    {% if detalle_anuncio %}
+                        <h5 class="card-title">{{ detalle_anuncio.titulo }}</h5>
+                        <p><strong>Empresa:</strong> {{ detalle_anuncio.empresa.nombre_empresa }}</p>
+                        <p><strong>Ubicación:</strong> {{ detalle_anuncio.ubicacion }}</p>
+                        <p><strong>Modalidad:</strong> {{ detalle_anuncio.modalidad }}</p>
+                        <p><strong>Descripción:</strong> {{ detalle_anuncio.descripcion }}</p>
+
+                        <!-- Mostrar si ya postuló -->
+                        {% if item.ya_postulo %}
+                            <div class="alert alert-success" role="alert">
+                                Ya has postulado a este anuncio.
+                            </div>
+                        {% else %}
+                            <a href="{% url 'postular_anuncio' detalle_anuncio.id %}" class="btn btn-primary">Postular</a>
+                        {% endif %}
+                    {% else %}
+                        <p class="text-center">Selecciona un anuncio para ver los detalles.</p>
+                    {% endif %}
                 </div>
             </div>
-        {% empty %}
-            <p class="text-center">No hay anuncios disponibles en este momento.</p>
-        {% endfor %}
-    </div>
-
-    <!-- Paginación -->
-    <div class="row justify-content-center mt-4">
-        <nav aria-label="Page navigation">
-            <ul class="pagination">
-                {% if anuncios.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?{% if request.GET.region %}region={{ request.GET.region }}&{% endif %}{% if request.GET.carrera %}carrera={{ request.GET.carrera }}&{% endif %}{% if request.GET.modalidad %}modalidad={{ request.GET.modalidad }}&{% endif %}page={{ anuncios.previous_page_number }}" aria-label="Anterior">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                {% endif %}
-                <li class="page-item disabled">
-                    <span class="page-link">Página {{ anuncios.number }} de {{ anuncios.paginator.num_pages }}</span>
-                </li>
-                {% if anuncios.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?{% if request.GET.region %}region={{ request.GET.region }}&{% endif %}{% if request.GET.carrera %}carrera={{ request.GET.carrera }}&{% endif %}{% if request.GET.modalidad %}modalidad={{ request.GET.modalidad }}&{% endif %}page={{ anuncios.next_page_number }}" aria-label="Siguiente">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
+        </div>
     </div>
 </div>
 
+<script src="{% static 'js/anuncios.js' %}"></script>
 {% endblock %}
