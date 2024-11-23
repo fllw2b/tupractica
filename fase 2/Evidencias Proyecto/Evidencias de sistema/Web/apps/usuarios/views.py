@@ -6,6 +6,10 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth import logout
 from django.db import transaction
+from .models import Estudiante
+from .forms import EstudianteForm
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 
 
 def registro_estudiante(request):
@@ -26,11 +30,10 @@ def registro_estudiante(request):
         genero = request.POST.get('genero')
         direccion = request.POST.get('direccion')
         telefono = request.POST.get('telefono')
-        cv = request.FILES.get('cv')  # Obtener el archivo del CV
+        cv = request.FILES.get('cv') 
 
         try:
             with transaction.atomic():
-                # Crear el usuario en la base de datos
                 usuario = Usuario.objects.create_user(
                     email=email,
                     password=password,
@@ -41,7 +44,6 @@ def registro_estudiante(request):
                 comuna = Comuna.objects.get(id=comuna_id)
                 carrera = Carrera.objects.get(id=carrera_id)
 
-                # Crear el estudiante en la base de datos y guardar el CV
                 Estudiante.objects.create(
                     usuario=usuario,
                     nombres=nombres,
@@ -54,7 +56,7 @@ def registro_estudiante(request):
                     genero=genero,
                     direccion=direccion,
                     telefono=telefono,
-                    cv=cv  # Almacenar el archivo del CV
+                    cv=cv 
                 )
 
             messages.success(request, 'Estudiante registrado correctamente.')
@@ -159,3 +161,28 @@ def seleccionar_tipo_usuario(request):
         elif tipo_usuario == 'empresa':
             return redirect('registro_empresa')
     return render(request, 'usuario/tipoUsuario.html')
+
+@login_required
+def perfil_estudiante(request, estudiante_id=None):
+    if estudiante_id is None:
+        estudiante = get_object_or_404(Estudiante, usuario=request.user)
+        is_owner = True
+    else:
+        estudiante = get_object_or_404(Estudiante, id=estudiante_id)
+        is_owner = (request.user == estudiante.usuario)
+
+    if is_owner and request.method == 'POST':
+        form = EstudianteForm(request.POST, request.FILES, instance=estudiante)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Perfil actualizado correctamente.")
+            return redirect('perfil_estudiante')
+    else:
+        form = EstudianteForm(instance=estudiante)
+
+    context = {
+        'estudiante': estudiante,
+        'form': form,
+        'is_owner': is_owner,
+    }
+    return render(request, 'usuario/perfil_publico_estudiante.html', context)

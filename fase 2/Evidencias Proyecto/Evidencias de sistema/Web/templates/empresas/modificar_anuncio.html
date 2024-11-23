@@ -1,9 +1,12 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block contenido %}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
 <div class="container mt-5 d-flex justify-content-center">
     <div class="col-md-8">
-        <h2 class="text-center mb-4">Modificar Anuncio de Práctica</h2>
+        <h2 class="text-center mb-4"style="color: hsl(261, 80%, 48%);">MODIFICAR ANUNCIO</h2>
         <form method="POST" id="form-anuncio" class="needs-validation" novalidate>
             {% csrf_token %}
 
@@ -72,8 +75,15 @@
             </div>
 
             <div class="mb-3">
-                <label for="requisitos" class="form-label">Requisitos (opcional)</label>
-                <textarea name="requisitos" id="requisitos" class="form-control" maxlength="300">{{ form.instance.requisitos }}</textarea>
+                <label for="requisitos" class="form-label">Requisitos (selecciona hasta 10 habilidades)</label>
+                <select name="requisitos" id="requisitos" class="form-control select2-requisitos" multiple="multiple" data-placeholder="Selecciona hasta 10 habilidades">
+                    {% for tag in tags %}
+                    <option value="{{ tag.id }}" {% if tag in form.instance.requisitos.all %}selected{% endif %}>{{ tag.nombre }}</option>
+                    {% endfor %}
+                </select>
+                <div class="invalid-feedback">
+                    Por favor, selecciona las habilidades requeridas para el anuncio.
+                </div>
             </div>
 
             <div class="mb-3">
@@ -92,6 +102,20 @@
     </div>
 </div>
 
+<!-- Añadir el JS de jQuery y Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script src="{% static 'js/registro_estudiante.js' %}"></script>
 
+<script>
+    $(document).ready(function() {
+        // Aplicar Select2 al campo de requisitos
+        $('.select2-requisitos').select2({
+            maximumSelectionLength: 10,
+            placeholder: 'Selecciona hasta 10 habilidades',
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>
 {% endblock %}

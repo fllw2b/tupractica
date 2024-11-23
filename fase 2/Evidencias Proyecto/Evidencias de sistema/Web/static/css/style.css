@@ -7,6 +7,7 @@
 .texto-navbar {
     color: #ffffff;
     text-align: center;
+    text-shadow: #ffffff;
 }
 
 .fondo-navbar {
@@ -108,7 +109,24 @@
     color: white;
 }
 
+.anuncio-item {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
 
+.anuncio-item.active {
+    background-color: hsl(261deg 80% 48%) !important; 
+    border-color: hsl(261deg 80% 48%) !important; 
+    color: hsl(0, 0%, 100%) !important;
+}
 
+/* Transición para el detalle del anuncio */
+.detalle-anuncio {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
 
-
+.detalle-anuncio.show {
+    opacity: 1;
+    transform: translateY(0);
+}

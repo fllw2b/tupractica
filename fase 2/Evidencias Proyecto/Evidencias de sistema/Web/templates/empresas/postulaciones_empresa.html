@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% block contenido %}
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Postulaciones a Mis Anuncios</h2>
+    <h2 class="text-center mb-4" style="color: hsl(261, 80%, 48%);">POSTULACIONES</h2>
     {% if anuncios %}
         {% for anuncio in anuncios %}
         <div class="card mb-4 shadow-sm">
@@ -25,6 +25,7 @@
                                     <th>Teléfono</th>
                                     <th>CV</th>
                                     <th>Fecha de Postulación</th>
+                                    <th>Perfil</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -42,6 +43,7 @@
                                         {% endif %}
                                     </td>
                                     <td>{{ postulacion.fecha_postulacion|date:"d/m/Y H:i" }}</td>
+                                    <td><a href="{% url 'perfil_publico_estudiante' postulacion.estudiante.id %}">Ver Perfil</a></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

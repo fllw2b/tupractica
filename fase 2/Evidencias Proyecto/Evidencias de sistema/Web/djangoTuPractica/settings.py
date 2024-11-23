@@ -11,8 +11,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
-from firebase_admin import credentials
-import firebase_admin
+# from firebase_admin import credentials
+# import firebase_admin
 from pathlib import Path
 from os.path import join
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-fml-x2zvw3!eh#yp+v(fnwui@zg!7es+*uwzz^xhzn*xpv2(84
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
 
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'whitenoise.runserver_nostatic',
     'apps.usuarios',
     'apps.tuPractica',
     'apps.anuncios',
@@ -49,12 +50,13 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',    
 ]
 
 ROOT_URLCONF = 'djangoTuPractica.urls'
@@ -81,16 +83,23 @@ WSGI_APPLICATION = 'djangoTuPractica.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
+CSRF_TRUSTED_ORIGINS = ['https://deploytry-production.up.railway.app']
+if not DEBUG:
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tupractica',
-        'USER': 'root',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'NAME': os.getenv('MYSQLDATABASE','tupractica'),
+        'USER': os.getenv('MYSQLUSER','root'),
+        'PASSWORD': os.getenv('MYSQLPASSWORD','1234'),
+        'HOST': os.getenv('MYSQLHOST','localhost'),
+        'PORT': os.getenv('MYSQLPORT', '3306'),  # Railway suele usar el puerto estándar de MySQL
     }
 }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -131,6 +140,14 @@ STATICFILES_DIRS = [
     join(BASE_DIR, 'static')
 ]
 
+STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+
+
+staticfiles="whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
+
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -142,6 +159,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 FIXTURE_DIRS = [
     join(BASE_DIR, 'fixtures')
 ]
+
+
+
+
 
 # directorio_credenciales = BASE_DIR / 'djangotupractica-55519e0256b7.json'
 

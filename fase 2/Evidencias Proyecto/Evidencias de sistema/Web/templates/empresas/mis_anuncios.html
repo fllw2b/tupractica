@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% block contenido %}
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Mis Anuncios de Práctica</h2>
+    <h2 class="text-center mb-4" style="color: hsl(261, 80%, 48%);">MIS ANUNCIOS</h2>
     <table class="table table-bordered table-hover">
         <thead class="thead-dark">
             <tr>
@@ -23,6 +23,7 @@
                 <td>{{ anuncio.fecha_publicacion|date:"d/m/Y" }}</td>
                 <td>{{ anuncio.fecha_fin|date:"d/m/Y" }}</td>
                 <td class="text-center d-flex justify-content-center">
+                    <a href="{% url 'detalle_anuncio' anuncio.id %}" class="btn-form mx-1" style="text-decoration: none;">Ver </a>
                     <a href="{% url 'modificar_anuncio' anuncio.id %}" class="btn-form mx-1" style="text-decoration: none;">Modificar</a>
                     <a href="{% url 'eliminar_anuncio' anuncio.id %}" class="btn-form mx-1" style="text-decoration: none;">Eliminar</a>
                 </td>

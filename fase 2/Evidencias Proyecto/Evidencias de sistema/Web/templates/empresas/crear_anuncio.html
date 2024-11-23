@@ -1,9 +1,12 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block contenido %}
+<!-- Añadir el CSS de Select2 -->
+
+
 <div class="container mt-5 d-flex justify-content-center">
     <div class="col-md-8">
-        <h2 class="text-center mb-4">Crear Anuncio de Práctica</h2>
+        <h2 class="text-center mb-4" style="color: hsl(261, 80%, 48%);">CREAR ANUNCIO</h2>
         <form method="POST" id="form-anuncio" class="needs-validation" novalidate>
             {% csrf_token %}
 
@@ -28,7 +31,7 @@
                         Por favor, selecciona una región.
                     </div>
                 </div>
-
+    
                 <div class="col-md-6 mb-3">
                     <label for="comuna" class="form-label">Comuna</label>
                     <select name="comuna" id="comuna-selector" class="form-select" required>
@@ -39,6 +42,7 @@
                     </div>
                 </div>
             </div>
+        
             <div class="mb-3">
                 <label for="ubicacion" class="form-label">Ubicación</label>
                 <input type="text" name="ubicacion" id="ubicacion" class="form-control" required maxlength="255">
@@ -69,8 +73,15 @@
             </div>
 
             <div class="mb-3">
-                <label for="requisitos" class="form-label">Requisitos (opcional)</label>
-                <textarea name="requisitos" id="requisitos" class="form-control" maxlength="300"></textarea>
+                <label for="requisitos" class="form-label">Requisitos (selecciona hasta 10 habilidades)</label>
+                <select name="requisitos" id="requisitos" class="form-control select2-requisitos" multiple="multiple" data-placeholder="Selecciona hasta 10 habilidades">
+                    {% for tag in tags %}
+                    <option value="{{ tag.id }}">{{ tag.nombre }}</option>
+                    {% endfor %}
+                </select>
+                <div class="invalid-feedback">
+                    Por favor, selecciona las habilidades requeridas para el anuncio.
+                </div>
             </div>
 
             <div class="mb-3">
@@ -88,6 +99,19 @@
     </div>
 </div>
 
+<!-- Añadir el JS de jQuery y Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script src="{% static 'js/registro_estudiante.js' %}"></script>
-
+<script>
+    $(document).ready(function() {
+        // Aplicar Select2 al campo de requisitos
+        $('.select2-requisitos').select2({
+            maximumSelectionLength: 10,
+            placeholder: 'Selecciona hasta 10 habilidades',
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>
 {% endblock %}

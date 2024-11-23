@@ -1,0 +1,101 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <!-- Filtros -->
+    <div class="card shadow-sm p-4 mb-4" style="border-radius: 15px;">
+        <form method="GET" action="">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-3">
+                    <input type="text" name="busqueda" class="form-control shadow-sm" placeholder="Buscar por título" value="{{ request.GET.busqueda }}">
+                </div>
+                <div class="col-md-3">
+                    <select name="region" class="form-select shadow-sm">
+                        <option value="">Todas las regiones</option>
+                        <option value="Región de Arica y Parinacota" {% if request.GET.region == "Región de Arica y Parinacota" %}selected{% endif %}>Región de Arica y Parinacota</option>
+                        <option value="Región de Tarapacá" {% if request.GET.region == "Región de Tarapacá" %}selected{% endif %}>Región de Tarapacá</option>
+                        <option value="Región de Antofagasta" {% if request.GET.region == "Región de Antofagasta" %}selected{% endif %}>Región de Antofagasta</option>
+                        <option value="Región de Atacama" {% if request.GET.region == "Región de Atacama" %}selected{% endif %}>Región de Atacama</option>
+                        <option value="Región de Coquimbo" {% if request.GET.region == "Región de Coquimbo" %}selected{% endif %}>Región de Coquimbo</option>
+                        <option value="Región de Valparaíso" {% if request.GET.region == "Región de Valparaíso" %}selected{% endif %}>Región de Valparaíso</option>
+                        <option value="Región Metropolitana de Santiago" {% if request.GET.region == "Región Metropolitana de Santiago" %}selected{% endif %}>Región Metropolitana de Santiago</option>
+                        <!-- Añadir el resto de las regiones aquí -->
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="modalidad" class="form-select shadow-sm">
+                        <option value="">Todas las modalidades</option>
+                        <option value="Remoto" {% if request.GET.modalidad == "Remoto" %}selected{% endif %}>Remoto</option>
+                        <option value="Presencial" {% if request.GET.modalidad == "Presencial" %}selected{% endif %}>Presencial</option>
+                        <option value="Híbrido" {% if request.GET.modalidad == "Híbrido" %}selected{% endif %}>Híbrido</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn-pro btn-border btn-fill w-100">Buscar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row">
+        <!-- lista de anuncios -->
+        <div class="col-md-4">
+            <div class="list-group">
+                {% for item in recomendaciones %}
+                <a href="#" class="list-group-item list-group-item-action anuncio-item fondo-anuncio" data-id="{{ item.anuncio.id }}">
+                    <h5 class="mb-1">{{ item.anuncio.titulo }}</h5>
+
+                    <p class="mb-1"><strong>Empresa:</strong> {{ item.anuncio.empresa }}</p>
+                    {% if user.is_authenticated and user.es_estudiante %}
+                        <p class="card-text mb-1">
+                            <strong>Compatibilidad con tu perfil:</strong> 
+                            <span style="color: 
+                                {% if item.porcentaje_coincidencia > 70 %}
+                                    green
+                                {% elif item.porcentaje_coincidencia > 40 %}
+                                    yellow
+                                {% else %}
+                                    orange
+                                {% endif %}; font-weight: bold;">
+                                {{ item.porcentaje_coincidencia }}%
+                            </span>
+                        </p>
+                    {% endif %}
+                    
+                    <small class="mt-1 d-block">{{ item.anuncio.region }}</small>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- detalle anuncio -->
+        <div class="col-md-8">
+            <div id="detalle-anuncio" class="card shadow-lg border-0" style="border-radius: 15px;">
+                <div class="card-body">
+                    {% if detalle_anuncio %}
+                        <h5 class="card-title">{{ detalle_anuncio.titulo }}</h5>
+                        <p><strong>Empresa:</strong> {{ detalle_anuncio.empresa.nombre_empresa }}</p>
+                        <p><strong>Ubicación:</strong> {{ detalle_anuncio.ubicacion }}</p>
+                        <p><strong>Modalidad:</strong> {{ detalle_anuncio.modalidad }}</p>
+                        <p><strong>Descripción:</strong> {{ detalle_anuncio.descripcion }}</p>
+
+                        <!-- Mostrar si ya postuló -->
+                        {% if item.ya_postulo %}
+                            <div class="alert alert-success" role="alert">
+                                Ya has postulado a este anuncio.
+                            </div>
+                        {% else %}
+                            <a href="{% url 'postular_anuncio' detalle_anuncio.id %}" class="btn btn-primary">Postular</a>
+                        {% endif %}
+                    {% else %}
+                        <p class="text-center">Selecciona un anuncio para ver los detalles.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/anuncios.js' %}"></script>
+{% endblock %}
