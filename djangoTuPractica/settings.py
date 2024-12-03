@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'apps.tuPractica',
     'apps.anuncios',
     'rest_framework',
+    'corsheaders',
 ]
 
 
@@ -57,7 +58,8 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',    
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'djangoTuPractica.urls'
@@ -143,10 +145,9 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
 
+CORS_ALLOW_ALL_ORIGINS = True
 
 staticfiles="whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-
 
 
 MEDIA_URL = '/media/'
