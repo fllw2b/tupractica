@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'apps.usuarios',
     'apps.tuPractica',
     'apps.anuncios',
+    'rest_framework',
 ]
 
 
@@ -161,8 +162,16 @@ FIXTURE_DIRS = [
 ]
 
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
 
-
+APPEND_SLASH=False
 
 # directorio_credenciales = BASE_DIR / 'djangotupractica-55519e0256b7.json'
 
