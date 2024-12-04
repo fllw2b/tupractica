@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Anuncios de Práctica</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let anuncio of anuncios" (click)="verDetalleAnuncio(anuncio.id)">
+      <ion-label>
+        <h2>{{ anuncio.titulo }}</h2>
+        <p>{{ anuncio.descripcion | slice:0:100 }}...</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

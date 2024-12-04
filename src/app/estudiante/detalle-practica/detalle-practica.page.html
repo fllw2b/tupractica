@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/practicas"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ anuncio?.titulo }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngIf="anuncio">
+    <ion-card-header>
+      <ion-card-title>{{ anuncio.titulo }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Empresa:</strong> {{ anuncio.empresa.nombre_empresa }}</p>
+      <p><strong>Ubicación:</strong> {{ anuncio.ubicacion }}</p>
+      <p><strong>Modalidad:</strong> {{ anuncio.modalidad }}</p>
+      <p><strong>Descripción:</strong> {{ anuncio.descripcion }}</p>
+      <p><strong>Requisitos:</strong></p>
+      <ul>
+        <li *ngFor="let requisito of anuncio.requisitos">{{ requisito.nombre }}</li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

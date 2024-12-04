@@ -1,0 +1,13 @@
+ion-menu {
+  --background: #f4f4f4;
+  ion-header {
+    --background: #3880ff;
+    --color: white;
+  }
+  ion-item {
+    --color: #333;
+    ion-icon {
+      --color: #3880ff;
+    }
+  }
+}
