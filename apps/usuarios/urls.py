@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .api_views.api.estudiante_views import ListPracticasAPIView, CreatePostulacionAPIView, EstudianteDetailView, UpdateEstudianteAPIView, HistorialPostulacionesAPIView, DeletePostulacionAPIView, DetallePracticaAPIView
+from .api_views.api.estudiante_views import ListPracticasAPIView, CreatePostulacionAPIView, EstudianteDetailView, UpdateEstudianteAPIView, HistorialPostulacionesAPIView, DeletePostulacionAPIView, DetallePracticaAPIView, ListCarrerasAPIView, ListComunasByRegionAPIView, ListRegionesAPIView
 from .api_views.api.estudiante_views import RegistroEstudianteAPIView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
@@ -29,6 +29,9 @@ urlpatterns = [
      path('api/postulaciones/', HistorialPostulacionesAPIView.as_view(), name='historial_postulaciones'),
      path('api/postulacion/<int:postulacion_id>/', DeletePostulacionAPIView.as_view(), name='delete_postulacion'),
      path('api/practica/<int:practica_id>/', DetallePracticaAPIView.as_view(), name='detalle_practica'),
+     path('api/regiones/', ListRegionesAPIView.as_view(), name='list_regiones'),
+     path('api/get-comunas/<int:region_id>/', ListComunasByRegionAPIView.as_view(), name='list_comunas'),
+     path('api/carreras/', ListCarrerasAPIView.as_view(), name='list_carreras'),
 
 ]
 

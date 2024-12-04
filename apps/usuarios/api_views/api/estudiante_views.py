@@ -133,3 +133,24 @@ class DetallePracticaAPIView(APIView):
             return Response(serializer.data, status=200)
         except AnuncioPractica.DoesNotExist:
             return Response({"error": "La práctica especificada no existe."}, status=404)
+
+class ListRegionesAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        regiones = Region.objects.all().values('id', 'nombre')
+        return Response(list(regiones))
+    
+class ListComunasByRegionAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, region_id):
+        comunas = Comuna.objects.filter(region_id=region_id).values('id', 'nombre')
+        return Response(list(comunas))
+
+class ListCarrerasAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        carreras = Carrera.objects.all().values('id', 'nombre')
+        return Response(list(carreras))
