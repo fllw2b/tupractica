@@ -1,0 +1,95 @@
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #5A20CB;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+            line-height: 1.6;
+            color: #333333;
+        }
+        .footer {
+            background-color: #f1f1f1;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+            color: #555555;
+        }
+        .button {
+            display: inline-block;
+            background-color: #5A20CB;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background-color: #4e18b2;
+        }
+        .estado-aprobado {
+            color: green;
+            font-weight: bold;
+        }
+        .estado-rechazado {
+            color: red;
+            font-weight: bold;
+        }
+        .estado-revision {
+            color: orange;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>TuPráctica</h1>
+        </div>
+        <div class="content">
+            <p>Hola, {{ estudiante.nombres }}:</p>
+
+            <p>Queremos informarte sobre el estado de tu postulación al anuncio <strong>{{ anuncio.titulo }}</strong>.</p>
+
+            {% if estado == "Aprobado" %}
+            <p class="estado-aprobado">
+                ¡Felicidades! La empresa <strong>{{ anuncio.empresa.nombre_empresa }}</strong> 
+                ha aprobado tu postulación. Pronto se pondrán en contacto contigo para continuar con el proceso.
+            </p>
+            <p>Te invitamos a estar atento a tus correos para los próximos pasos. Si tienes alguna pregunta, no dudes en contactarnos.</p>
+            {% elif estado == "Rechazado" %}
+            <p class="estado-rechazado">
+                Lamentamos informarte que la empresa <strong>{{ anuncio.empresa.nombre_empresa }}</strong> 
+                ha decidido no continuar con tu postulación en este momento.
+            </p>
+            <p>No te desanimes, aún tienes muchas oportunidades. Revisa más anuncios en nuestra plataforma y continúa buscando la práctica ideal para ti.</p>
+            {% elif estado == "En revisión" %}
+            <p>
+                Tu postulación al anuncio <strong>"{{ anuncio.titulo }}"</strong> fue recibida con éxito. 
+                La empresa <strong>{{ anuncio.empresa.nombre_empresa }}</strong> está revisando tu perfil.
+            </p>
+            <p>Te notificaremos cualquier cambio en el estado de tu postulación. ¡Te deseamos mucho éxito!</p>
+            {% endif %}
+        </div>
+        <div class="footer">
+            &copy; {{ year }} TuPráctica. Todos los derechos reservados.
+        </div>
+    </div>
+</body>

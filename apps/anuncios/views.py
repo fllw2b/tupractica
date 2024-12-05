@@ -9,6 +9,9 @@ from apps.usuarios.models import Tag, Estudiante, Empresa, Usuario
 from django.utils import timezone
 from django.http import JsonResponse
 
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+
 @login_required
 def crear_anuncio(request):
     regiones = Region.objects.all()
@@ -101,14 +104,14 @@ def eliminar_anuncio(request, anuncio_id):
         return render(request, 'empresas/confirmar_eliminar.html', {'anuncio': anuncio})
 
 
-@login_required
-def mis_anuncios(request):
-    if request.user.is_authenticated and hasattr(request.user, 'empresa'):
-        empresa = request.user.empresa
-        anuncios = AnuncioPractica.objects.filter(empresa=empresa)
-        return render(request, 'empresas/mis_anuncios.html', {'anuncios': anuncios})
-    else:
-        return redirect('login')
+# @login_required
+# def mis_anuncios2(request):
+#     if request.user.is_authenticated and hasattr(request.user, 'empresa'):
+#         empresa = request.user.empresa
+#         anuncios = AnuncioPractica.objects.filter(empresa=empresa)
+#         return render(request, 'empresas/mis_anuncios.html', {'anuncios': anuncios})
+#     else:
+#         return redirect('login')
 
 def listar_anuncios(request):
     anuncios = AnuncioPractica.objects.all()
@@ -116,7 +119,6 @@ def listar_anuncios(request):
     region = request.GET.get('region', '')
     modalidad = request.GET.get('modalidad', '')
 
-    # Aplicar los filtros
     if busqueda:
         anuncios = anuncios.filter(titulo__icontains=busqueda)
     
@@ -128,13 +130,13 @@ def listar_anuncios(request):
 
     recomendaciones = []
 
-    # Verificar si el usuario es estudiante para calcular el porcentaje de coincidencia y si ya postuló
+    # vemos si el user es estudiante y si ya postulo al anuncio
     if hasattr(request.user, 'estudiante'):
         estudiante = request.user.estudiante
         habilidades_estudiante = set(estudiante.habilidades.all())
 
         for anuncio in anuncios:
-            # Calcular porcentaje de coincidencia
+            # calculamos %
             requisitos_anuncio = set(anuncio.requisitos.all())
             habilidades_comunes = habilidades_estudiante.intersection(requisitos_anuncio)
             total_requisitos = len(requisitos_anuncio)
@@ -143,7 +145,7 @@ def listar_anuncios(request):
             else:
                 porcentaje_coincidencia = 0
 
-            # Verificar si ya postuló
+            # vemos si ya postulo
             ya_postulo = Postulacion.objects.filter(estudiante=estudiante, anuncio=anuncio).exists()
 
             recomendaciones.append({
@@ -152,10 +154,10 @@ def listar_anuncios(request):
                 'ya_postulo': ya_postulo
             })
 
-        # Ordenar por porcentaje de coincidencia
+        # ordenamos por % de mayor a menor
         recomendaciones.sort(key=lambda x: x['porcentaje_coincidencia'], reverse=True)
     else:
-        # Si no es estudiante, mostrar los anuncios sin el porcentaje
+        # si no es estudiante, mostrar los anuncios sin el porcentaje
         for anuncio in anuncios:
             recomendaciones.append({
                 'anuncio': anuncio,
@@ -183,8 +185,13 @@ def postular_anuncio(request, anuncio_id):
     if Postulacion.objects.filter(estudiante=estudiante, anuncio=anuncio).exists():
         messages.info(request, "Ya has postulado a este anuncio.")
     else:
+        # Crear la postulación
         Postulacion.objects.create(estudiante=estudiante, anuncio=anuncio)
-        messages.success(request, "Postulación realizada exitosamente.")
+
+        # Enviar correo de confirmación al estudiante
+        enviar_notificacion_postulacion(estudiante, anuncio, 'En revisión')
+
+        messages.success(request, "Postulación realizada exitosamente. Se ha enviado un correo de confirmación.")
 
     return redirect('listar_anuncios')
 
@@ -199,14 +206,82 @@ def historial_postulaciones(request):
     return render(request, 'estudiantes/historial_postulaciones.html', {'postulaciones': postulaciones})
 
 @login_required
-def postulaciones_empresa(request):
+def mis_anuncios(request):
     if not hasattr(request.user, 'empresa'):
-        messages.error(request, "Solo las empresas pueden acceder a esta sección.")
-        return redirect('lista_anuncios')
+        messages.error(request, "No tienes permiso para acceder a esta página.")
+        return redirect('home')
 
-    anuncios = AnuncioPractica.objects.filter(empresa=request.user.empresa).prefetch_related('postulantes__estudiante__usuario')
-    
-    return render(request, 'empresas/postulaciones_empresa.html', {'anuncios': anuncios})
+    empresa = request.user.empresa
+    anuncios = AnuncioPractica.objects.filter(empresa=empresa)
+
+    # Filtros
+    busqueda = request.GET.get('busqueda', '')
+    modalidad = request.GET.get('modalidad', '')
+    region_id = request.GET.get('region', '')
+
+    if busqueda:
+        anuncios = anuncios.filter(titulo__icontains=busqueda)
+
+    if modalidad:
+        anuncios = anuncios.filter(modalidad=modalidad)
+
+    if region_id:
+        anuncios = anuncios.filter(region_id=region_id)
+
+    regiones = Region.objects.all()
+
+    return render(request, 'empresas/mis_anuncios.html', {
+        'anuncios': anuncios,
+        'regiones': regiones,
+    })
+
+
+@login_required
+def postulantes(request, anuncio_id):
+    anuncio = get_object_or_404(AnuncioPractica, id=anuncio_id)
+
+    # Obtener todos los postulantes del anuncio
+    postulantes = Postulacion.objects.filter(anuncio=anuncio)
+
+    # Filtros
+    carrera = request.GET.get('carrera', '')
+    region_id = request.GET.get('region', '')
+    cv = request.GET.get('cv', '')
+    estado = request.GET.get('estado', '')
+
+    if carrera:
+        postulantes = postulantes.filter(estudiante__carrera__icontains=carrera)
+
+    if region_id:
+        postulantes = postulantes.filter(estudiante__region__id=region_id)
+
+    if cv:
+        if cv == '1':
+            postulantes = postulantes.filter(estudiante__cv__isnull=False)
+        elif cv == '0':
+            postulantes = postulantes.filter(estudiante__cv__isnull=True)
+
+    if estado:
+        postulantes = postulantes.filter(estado=estado)
+
+    # Calcular el porcentaje de compatibilidad
+    for postulacion in postulantes:
+        requisitos_anuncio = set(anuncio.requisitos.all())
+        habilidades_estudiante = set(postulacion.estudiante.habilidades.all())
+        coincidencia = len(requisitos_anuncio.intersection(habilidades_estudiante))
+        total_requisitos = len(requisitos_anuncio)
+        postulacion.compatibilidad = (
+            int((coincidencia / total_requisitos) * 100) if total_requisitos > 0 else 0
+        )
+
+    # Obtener todas las regiones para el filtro
+    regiones = Region.objects.all()
+
+    return render(request, 'empresas/postulantes.html', {
+        'anuncio': anuncio,
+        'postulantes': postulantes,
+        'regiones': regiones,
+    })
 
 @login_required
 def recomendaciones_estudiante(request):
@@ -285,3 +360,43 @@ def eliminar_postulacion(request, postulacion_id):
             messages.error(request, "Ocurrió un error al intentar eliminar la postulación.")
             print(e)  # imprimimos el error
     return redirect('historial_postulaciones')
+
+@login_required
+def cambiar_estado_postulacion(request, postulacion_id, estado):
+    if not hasattr(request.user, 'empresa'):
+        messages.error(request, "No tienes permiso para realizar esta acción.")
+        return redirect('home')
+
+    postulacion = get_object_or_404(Postulacion, id=postulacion_id, anuncio__empresa=request.user.empresa)
+
+    if estado not in ['Aprobado', 'Rechazado']:
+        messages.error(request, "Estado inválido.")
+        return redirect('postulantes', anuncio_id=postulacion.anuncio.id)  
+
+    postulacion.estado = estado
+    postulacion.save()
+
+    # llamamos a la funcion q hicimos directamente en el modelo
+    postulacion.enviar_correo_estado()
+
+    messages.success(request, f"Postulación marcada como '{estado}'. Se notificó al estudiante.")
+    return redirect('postulantes', anuncio_id=postulacion.anuncio.id)
+
+def enviar_notificacion_postulacion(estudiante, anuncio, estado):
+    subject = "Estado de tu postulación"
+    from_email = "tupractica27@gmail.com"
+    to_email = estudiante.usuario.email
+
+    # renderizamos el html con los datos
+    html_content = render_to_string('anuncios/notificacion_postulacion.html', {
+        'estudiante': estudiante,
+        'anuncio': anuncio,
+        'estado': estado,
+        'url_postulaciones': 'http://tupractica.com/postulaciones',
+        'year': 2024,
+    })
+
+    # creamos y enviamos el correo
+    email = EmailMultiAlternatives(subject, "", from_email, [to_email])
+    email.attach_alternative(html_content, "text/html")
+    email.send()

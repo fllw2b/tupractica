@@ -12,6 +12,13 @@
                         <p><strong>Empresa:</strong> {{ postulacion.anuncio.empresa.nombre_empresa }}</p>
                         <p><strong>Modalidad:</strong> {{ postulacion.anuncio.modalidad|capfirst }}</p>
                         <p class="text-muted"><strong>Fecha de Postulación:</strong> {{ postulacion.fecha_postulacion|date:"d/m/Y H:i" }}</p>
+                        <td>
+                            <span class="badge {% if postulacion.estado == 'Aprobado' %}bg-success
+                                              {% elif postulacion.estado == 'Rechazado' %}bg-danger
+                                              {% else %}bg-secondary{% endif %}">
+                                {{ postulacion.estado }}
+                            </span>
+                        </td>
                     </div>
                     <form method="POST" action="{% url 'eliminar_postulacion' postulacion.id %}" class="text-center mb-3">
                         {% csrf_token %}

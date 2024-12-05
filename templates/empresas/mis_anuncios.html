@@ -1,46 +1,75 @@
 {% extends 'base/base.html' %}
+
 {% block contenido %}
 <div class="container mt-5 mb-5">
-    <h2 class="text-center mb-4" style="color: hsl(261, 80%, 48%);">MIS ANUNCIOS</h2>
-    <table class="table table-bordered table-hover mb-5">
-        <thead class="thead-dark">
-            <tr>
-                <th>Título</th>
-                <th>Ubicación</th>
-                <th>Modalidad</th>
-                <th>Fecha de Publicación</th>
-                <th>Fecha Límite</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if anuncios %}
-            {% for anuncio in anuncios %}
-            <tr>
-                <td>{{ anuncio.titulo }}</td>
-                <td>{{ anuncio.ubicacion }}</td>
-                <td>{{ anuncio.get_modalidad_display }}</td>
-                <td>{{ anuncio.fecha_publicacion|date:"d/m/Y" }}</td>
-                <td>{{ anuncio.fecha_fin|date:"d/m/Y" }}</td>
-                <td class="text-center d-flex justify-content-center">
-                    <a href="{% url 'detalle_anuncio' anuncio.id %}" class="btn-form mx-1" style="text-decoration: none;">Ver </a>
-                    <a href="{% url 'modificar_anuncio' anuncio.id %}" class="btn-form mx-1" style="text-decoration: none;">Modificar</a>
-                    <a href="{% url 'eliminar_anuncio' anuncio.id %}" class="btn-form mx-1" style="text-decoration: none;">Eliminar</a>
-                </td>
-            </tr>
-            {% endfor %}
-            {% else %}
-            <tr>
-                <td colspan="6" class="text-center">No has publicado ningún anuncio aún.</td>
-            </tr>
-            {% endif %}
-        </tbody>
-    </table>
-    <div class="text-center">
-        <a href="{% url 'crear_anuncio' %}" class="btn-pro btn-border" style="text-decoration: none;">Crear Nuevo Anuncio</a>
-    </div>
-</div>
+    <h2 class="text-center mb-4" style="color: hsl(261, 80%, 48%); font-weight: bold;">MIS ANUNCIOS</h2>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Filtros -->
+    <div class="card shadow-sm p-4 mb-4" style="border-radius: 15px;">
+        <form method="GET" action="{% url 'mis_anuncios' %}">
+            <div class="row g-3 align-items-center">
+                <!-- Búsqueda -->
+                <div class="col-md-4">
+                    <input type="text" name="busqueda" class="form-control shadow-sm" placeholder="Buscar por título..." value="{{ request.GET.busqueda }}">
+                </div>
+                
+                <!-- Modalidad -->
+                <div class="col-md-3">
+                    <select name="modalidad" class="form-select shadow-sm">
+                        <option value="">Todas las modalidades</option>
+                        <option value="remoto" {% if request.GET.modalidad == "remoto" %}selected{% endif %}>Remoto</option>
+                        <option value="hibrido" {% if request.GET.modalidad == "hibrido" %}selected{% endif %}>Híbrido</option>
+                        <option value="presencial" {% if request.GET.modalidad == "presencial" %}selected{% endif %}>Presencial</option>
+                    </select>
+                </div>
+
+                <!-- Región -->
+                <div class="col-md-3">
+                    <select name="region" class="form-select shadow-sm">
+                        <option value="">Todas las regiones</option>
+                        {% for region in regiones %}
+                        <option value="{{ region.id }}" {% if request.GET.region == region.id|stringformat:"s" %}selected{% endif %}>
+                            {{ region.nombre }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Botón Filtrar -->
+                <div class="col-md-2">
+                    <button type="submit" class="btn-pro btn-border w-100">Filtrar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Lista de Anuncios -->
+    {% if anuncios %}
+        <div class="row">
+            {% for anuncio in anuncios %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-sm" style="border-radius: 15px; cursor: pointer;" onclick="location.href='{% url 'detalle_anuncio' anuncio.id %}'">
+                    <div class="card-header text-white" style="background: linear-gradient(90deg, hsl(261, 80%, 48%), #6fa0f5); text-align: center;">
+                        <h5 class="mb-0" style="font-weight: bold;">{{ anuncio.titulo }}</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <p><strong>Modalidad:</strong> {{ anuncio.get_modalidad_display }}</p>
+                        <p><strong>Región:</strong> {{ anuncio.region.nombre }}</p>
+                        <p><strong>Total Postulantes:</strong> 
+                            <span class="badge" style="font-size: 1.1em; background-color: hsl(261, 80%, 48%);">{{ anuncio.postulantes.count }}</span>
+                        </p>
+                        <div class="d-flex justify-content-center mt-3">
+                            <a href="{% url 'modificar_anuncio' anuncio.id %}" class="btn btn-outline-warning mx-1" style="border-radius: 20px;">Modificar</a>
+                            <a href="{% url 'eliminar_anuncio' anuncio.id %}" class="btn btn-outline-danger mx-1" style="border-radius: 20px;">Eliminar</a>
+                        </div>
+                        <a href="{% url 'postulantes' anuncio.id %}" class="btn btn-pro btn-border mt-3" style="border-radius: 20px;">Ver Postulantes</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center text-muted">No tienes anuncios publicados.</p>
+    {% endif %}
+</div>
 {% endblock %}

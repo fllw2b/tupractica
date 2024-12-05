@@ -1,0 +1,15 @@
+<div>
+    <h4>{{ estudiante.nombres }} {{ estudiante.apellidos }}</h4>
+    <p><strong>Carrera:</strong> {{ estudiante.carrera }}</p>
+    <p><strong>Correo:</strong> {{ estudiante.usuario.email }}</p>
+    <p><strong>Teléfono:</strong> {{ estudiante.telefono }}</p>
+
+    {% if estudiante.cv %}
+        <p><strong>CV:</strong> <a href="{{ estudiante.cv.url }}" target="_blank">Ver CV</a></p>
+    {% else %}
+        <p><strong>CV:</strong> No disponible</p>
+    {% endif %}
+
+    <p><strong>Descripción Personal:</strong></p>
+    <p>{{ estudiante.descripcion_personal|default:"Sin descripción disponible" }}</p>
+</div>

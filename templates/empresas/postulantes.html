@@ -1,0 +1,152 @@
+{% extends 'base/base.html' %}
+
+{% block contenido %}
+<div class="container mt-5 mb-5">
+    <h2 class="text-center mb-4 titulo-seccion">POSTULANTES PARA "{{ anuncio.titulo }}"</h2>
+    <p class="text-center text-muted">Total de postulantes: {{ postulantes.count }}</p>
+
+    <!-- Filtros -->
+    <div class="card shadow-sm p-4 mb-4">
+        <form method="GET" action="">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <select name="region" class="form-select">
+                        <option value="">Todas las regiones</option>
+                        {% for region in regiones %}
+                        <option value="{{ region.id }}" {% if request.GET.region == region.id|stringformat:"s" %}selected{% endif %}>
+                            {{ region.nombre }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select name="cv" class="form-select">
+                        <option value="">Con o sin CV</option>
+                        <option value="1" {% if request.GET.cv == "1" %}selected{% endif %}>Con CV</option>
+                        <option value="0" {% if request.GET.cv == "0" %}selected{% endif %}>Sin CV</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select name="estado" class="form-select">
+                        <option value="">Todos los estados</option>
+                        <option value="En revisión" {% if request.GET.estado == "En revisión" %}selected{% endif %}>En revisión</option>
+                        <option value="Aprobado" {% if request.GET.estado == "Aprobado" %}selected{% endif %}>Aprobado</option>
+                        <option value="Rechazado" {% if request.GET.estado == "Rechazado" %}selected{% endif %}>Rechazado</option>
+                    </select>
+                </div>
+                <div class="col-md-12 text-center mt-3">
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Tabla de Postulantes -->
+    {% if postulantes.exists %}
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Carrera</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>CV</th>
+                    <th>Compatibilidad</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for postulacion in postulantes %}
+                <tr>
+                    <td>{{ postulacion.estudiante.nombres }} {{ postulacion.estudiante.apellidos }}</td>
+                    <td>{{ postulacion.estudiante.carrera }}</td>
+                    <td>{{ postulacion.estudiante.usuario.email }}</td>
+                    <td>{{ postulacion.estudiante.telefono }}</td>
+                    <td>
+                        {% if postulacion.estudiante.cv %}
+                        <a href="{{ postulacion.estudiante.cv.url }}" target="_blank" class="btn btn-outline-primary btn-sm">Ver CV</a>
+                        {% else %}
+                        <span class="text-muted">No disponible</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge {% if postulacion.compatibilidad > 70 %}bg-success{% elif postulacion.compatibilidad >= 40 %}bg-warning{% else %}bg-danger{% endif %}">
+                            {{ postulacion.compatibilidad }}%
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge {% if postulacion.estado == 'Aprobado' %}bg-success{% elif postulacion.estado == 'Rechazado' %}bg-danger{% else %}bg-secondary{% endif %}">
+                            {{ postulacion.estado }}
+                        </span>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detallePostulante{{ postulacion.id }}">Ver Perfil</button>
+                        <button class="btn btn-success btn-sm" onclick="cambiarEstado('{{ postulacion.id }}', 'Aprobado')">Aprobar</button>
+                        <button class="btn btn-danger btn-sm" onclick="cambiarEstado('{{ postulacion.id }}', 'Rechazado')">Rechazar</button>
+                    </td>
+                </tr>
+
+ <!-- Modal -->
+ <div class="modal fade" id="detallePostulante{{ postulacion.id }}" tabindex="-1" aria-labelledby="detallePostulanteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detallePostulanteLabel">Perfil de {{ postulacion.estudiante.nombres }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    {% if postulacion.estudiante.foto %}
+                    <img src="{{ postulacion.estudiante.foto.url }}" alt="Foto de perfil" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                    <div class="rounded-circle mb-3" style="width: 150px; height: 150px; background-color: #e9ecef; display: flex; align-items: center; justify-content: center;">
+                        <span style="color: #6c757d;">Sin Foto</span>
+                    </div>
+                    {% endif %}
+                    <h4 class="font-weight-bold">{{ postulacion.estudiante.nombres }} {{ postulacion.estudiante.apellidos }}</h4>
+                    <p class="text-muted">{{ postulacion.estudiante.carrera }}</p>
+                </div>
+                <hr>
+                <p><strong>RUT:</strong> {{ postulacion.estudiante.rut }}</p>
+                <p><strong>Región:</strong> {{ postulacion.estudiante.region }}</p>
+                <p><strong>Comuna:</strong> {{ postulacion.estudiante.comuna }}</p>
+                <p><strong>Teléfono:</strong> {{ postulacion.estudiante.telefono }}</p>
+                <p><strong>Correo:</strong> {{ postulacion.estudiante.usuario.email }}</p>
+                <p><strong>CV:</strong>
+                    {% if postulacion.estudiante.cv %}
+                    <a href="{{ postulacion.estudiante.cv.url }}" target="_blank">Descargar CV</a>
+                    {% else %}
+                    No disponible
+                    {% endif %}
+                </p>
+                <p><strong>Habilidades:</strong>
+                    {% if postulacion.estudiante.habilidades.all %}
+                    {% for habilidad in postulacion.estudiante.habilidades.all %}
+                    <span class="badge" style="background-color: #6a11cb;">{{ habilidad.nombre }}</span>
+                    {% empty %}
+                    No se han agregado habilidades.
+                    {% endfor %}
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% else %}
+<p class="text-center text-muted">No hay postulantes para este anuncio.</p>
+{% endif %}
+
+<script>
+function cambiarEstado(postulacionId, estado) {
+    if (confirm(`¿Estás seguro de marcar esta postulación como "${estado}"?`)) {
+        window.location.href = `/anuncios/postulaciones/cambiar_estado/${postulacionId}/${estado}/`;
+    }
+}
+</script>
+{% endblock %}
