@@ -1,23 +1,23 @@
 {% extends 'base/base.html' %}
 {% block contenido %}
-<div class="container mt-5">
-    <h2 class="text-center mb-4" style="color: hsl(261, 80%, 48%);">POSTULACIONES</h2>
+<div class="container mt-5 mb-5">
+    <h2 class="text-center mb-4" style="color: hsl(261, 80%, 48%); font-weight: bold;">Postulaciones</h2>
     {% if anuncios %}
         {% for anuncio in anuncios %}
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header text-white fondo-navbar">
-                <h5 class="mb-0 text-center">{{ anuncio.titulo }}</h5>
+        <div class="card mb-4 shadow-sm" style="border-radius: 15px; overflow: hidden;">
+            <div class="card-header text-white" style="background: linear-gradient(90deg, hsl(261, 80%, 48%), hsl(261, 60%, 68%)); text-align: center;">
+                <h5 class="mb-0" style="font-weight: bold;">{{ anuncio.titulo }}</h5>
             </div>
             <div class="card-body">
                 <p><strong>Ubicación:</strong> {{ anuncio.ubicacion }}</p>
                 <p><strong>Modalidad:</strong> {{ anuncio.modalidad|capfirst }}</p>
                 <p><strong>Descripción:</strong> {{ anuncio.descripcion|truncatewords:30 }}</p>
                 
-                <h6 class="mt-4">Postulantes:</h6>
+                <h6 class="mt-4" style="color: hsl(261, 80%, 48%); font-weight: bold;">Postulantes:</h6>
                 {% if anuncio.postulantes.exists %}
                     <div class="table-responsive">
-                        <table class="table table-bordered table-sm">
-                            <thead>
+                        <table class="table table-hover table-striped" style="border-radius: 10px; overflow: hidden;">
+                            <thead style="background-color: hsl(261, 80%, 48%); color: white; text-align: center;">
                                 <tr>
                                     <th>Nombre</th>
                                     <th>Carrera</th>
@@ -30,33 +30,35 @@
                             </thead>
                             <tbody>
                                 {% for postulacion in anuncio.postulantes.all %}
-                                <tr>
+                                <tr style="text-align: center;">
                                     <td>{{ postulacion.estudiante.nombres }} {{ postulacion.estudiante.apellidos }}</td>
                                     <td>{{ postulacion.estudiante.carrera }}</td>
                                     <td>{{ postulacion.estudiante.usuario.email }}</td>
                                     <td>{{ postulacion.estudiante.telefono }}</td>
                                     <td>
                                         {% if postulacion.estudiante.cv %}
-                                        <a href="{{ postulacion.estudiante.cv.url }}" target="_blank">Ver CV</a>
+                                        <a href="{{ postulacion.estudiante.cv.url }}" target="_blank" style="color: hsl(261, 80%, 48%); text-decoration: underline;">Ver CV</a>
                                         {% else %}
-                                            <span>No disponible</span>
+                                            <span class="text-muted">No disponible</span>
                                         {% endif %}
                                     </td>
                                     <td>{{ postulacion.fecha_postulacion|date:"d/m/Y H:i" }}</td>
-                                    <td><a href="{% url 'perfil_publico_estudiante' postulacion.estudiante.id %}">Ver Perfil</a></td>
+                                    <td>
+                                        <a href="{% url 'perfil_publico_estudiante' postulacion.estudiante.id %}" style="color: hsl(261, 80%, 48%); text-decoration: underline;">Ver Perfil</a>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
                 {% else %}
-                    <p>No hay postulantes para este anuncio.</p>
+                    <p class="text-muted">No hay postulantes para este anuncio.</p>
                 {% endif %}
             </div>
         </div>
         {% endfor %}
     {% else %}
-        <p class="text-center">No tienes anuncios publicados.</p>
+        <p class="text-center text-muted">No tienes anuncios publicados.</p>
     {% endif %}
 </div>
 {% endblock %}

@@ -1,59 +1,39 @@
 {% block navbar %}
-<nav class="navbar navbar-expand-lg navbar-light fondo-navbar">
+<nav class="navbar navbar-expand-lg fondo-navbar">
     <div class="container-fluid">
-        <a class="navbar-brand" style="color: white; font-weight: bold; font-style: italic;" href="/">TuPráctica</a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand logo" href="/">TuPráctica</a>
+        <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Botones "Inicio" y "Anuncios" -->
             <ul class="navbar-nav me-auto">
-                <li class="nav-item ">
-                    <a class="nav-link texto-navbar" href="/">Inicio</a>
+                <li class="nav-item">
+                    <a class="nav-link btn-menu" href="/">Inicio</a>
                 </li>
-                <li class="nav-item" >
-                    <a class="nav-link texto-navbar" href="{% url 'listar_anuncios' %}">Anuncios</a>
+                <li class="nav-item">
+                    <a class="nav-link btn-menu" href="{% url 'listar_anuncios' %}">Anuncios</a>
                 </li>
             </ul>
-            <div class="d-flex">
+            <!-- Botones de autenticación -->
+            <div class="d-flex flex-column flex-lg-row auth-buttons">
                 {% if user.is_authenticated %}
-                <button class="btn-pro"><a href="{% url 'cerrar_sesion' %}" style="text-decoration: none;">
-                        Cerrar Sesión </a>
-                </button>
                     {% if user.es_estudiante %}
-                    <button class="btn-pro"><a href="{% url 'historial_postulaciones' %}"
-                            style="text-decoration: none;">
-                            Mis Postulaciones </a>
-                    </button>
-                    <button class="btn-pro"><a href="{% url 'perfil_estudiante' %}" style="text-decoration: none;">Perfil</a></button>
-
-                        {% else %}
-                        <button class="btn-pro"><a href="{% url 'crear_anuncio' %}" style="text-decoration: none;">
-                                Crear Anuncios </a>
-                        </button>
-                        <button class="btn-pro"><a href="{% url 'mis_anuncios' %}" style="text-decoration: none;">
-                                Mis Anuncios </a>
-                        </button>
-                        <button class="btn-pro"><a href="{% url 'postulaciones_empresa' %}"
-                                style="text-decoration: none;">
-                                Postulaciones </a>
-                        </button>
+                        <a href="{% url 'historial_postulaciones' %}" class="btn-pro">Mis Postulaciones</a>
+                        <a href="{% url 'perfil_estudiante' %}" class="btn-pro">Perfil</a>
+                    {% else %}
+                        <a href="{% url 'perfil_empresa' %}" class="btn-pro">Mi Perfil</a>
+                        <a href="{% url 'crear_anuncio' %}" class="btn-pro">Crear Anuncios</a>
+                        <a href="{% url 'mis_anuncios' %}" class="btn-pro">Mis Anuncios</a>
+                        <a href="{% url 'postulaciones_empresa' %}" class="btn-pro">Postulaciones</a>
                     {% endif %}
+                    <a href="{% url 'cerrar_sesion' %}" class="btn-pro cerrar-sesion">Cerrar Sesión</a>
                 {% else %}
-                <button class="btn-pro"><a href="{% url 'login' %}" style="text-decoration: none;">
-                        Ingresar</a>
-                </button>
-                <button class="btn-pro"><a href="{% url 'seleccionar_tipo_usuario' %}"
-                        style="text-decoration: none;">
-                        Registrarse</a>
-                </button>
+                    <a href="{% url 'login' %}" class="btn-pro">Ingresar</a>
+                    <a href="{% url 'seleccionar_tipo_usuario' %}" class="btn-pro">Registrarse</a>
                 {% endif %}
             </div>
-
         </div>
     </div>
 </nav>
-
 {% endblock navbar %}

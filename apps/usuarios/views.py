@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Usuario, Estudiante, Empresa, Region, Comuna, Carrera, Sector
+from .models import Usuario, Estudiante, Empresa, Region, Comuna, Carrera, Tag, Sector
 from django.utils import timezone
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth import logout
 from django.db import transaction
-from .models import Estudiante
-from .forms import EstudianteForm
+from ..anuncios.models import AnuncioPractica
+from .forms import EstudianteForm, EmpresaForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 
@@ -16,6 +16,7 @@ def registro_estudiante(request):
     regiones = Region.objects.all()
     comunas = Comuna.objects.all()
     carreras = Carrera.objects.all()
+    habilidades = Tag.objects.all()  # Obtener todas las habilidades
 
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -30,21 +31,27 @@ def registro_estudiante(request):
         genero = request.POST.get('genero')
         direccion = request.POST.get('direccion')
         telefono = request.POST.get('telefono')
-        cv = request.FILES.get('cv') 
+        cv = request.FILES.get('cv')
+        foto = request.FILES.get('foto')  # Obtener la foto de perfil (opcional)
+        habilidades_seleccionadas = request.POST.getlist('habilidades')  # Obtener las habilidades seleccionadas
 
         try:
             with transaction.atomic():
+                # Crear el usuario
                 usuario = Usuario.objects.create_user(
                     email=email,
                     password=password,
                     es_estudiante=True,
                     fecha_registro=timezone.now()
                 )
+
+                # Obtener los objetos relacionados
                 region = Region.objects.get(id=region_id)
                 comuna = Comuna.objects.get(id=comuna_id)
                 carrera = Carrera.objects.get(id=carrera_id)
 
-                Estudiante.objects.create(
+                # Crear el estudiante
+                estudiante = Estudiante.objects.create(
                     usuario=usuario,
                     nombres=nombres,
                     apellidos=apellidos,
@@ -56,8 +63,14 @@ def registro_estudiante(request):
                     genero=genero,
                     direccion=direccion,
                     telefono=telefono,
-                    cv=cv 
+                    cv=cv,
+                    foto=foto
                 )
+
+                # Agregar las habilidades seleccionadas al estudiante
+                for habilidad_id in habilidades_seleccionadas:
+                    habilidad = Tag.objects.get(id=habilidad_id)
+                    estudiante.habilidades.add(habilidad)
 
             messages.success(request, 'Estudiante registrado correctamente.')
             return redirect('login')
@@ -69,7 +82,9 @@ def registro_estudiante(request):
         'regiones': regiones,
         'comunas': comunas,
         'carreras': carreras,
+        'habilidades': habilidades,  # Pasar habilidades al contexto
     })
+
 
 
 def registro_empresa(request):
@@ -85,6 +100,7 @@ def registro_empresa(request):
         pagina_web = request.POST.get('pagina_web', '')
         descripcion = request.POST.get('descripcion', '')
         redes_sociales = request.POST.get('redes_sociales', '')
+        logo = request.FILES.get('logo')  
 
         try:
             with transaction.atomic():
@@ -97,7 +113,7 @@ def registro_empresa(request):
 
                 sector = Sector.objects.get(id=sector_id)
 
-                empresa = Empresa.objects.create(
+                Empresa.objects.create(
                     usuario=usuario,
                     nombre_empresa=nombre_empresa,
                     rut=rut,
@@ -105,7 +121,8 @@ def registro_empresa(request):
                     sector=sector,
                     pagina_web=pagina_web,
                     descripcion=descripcion,
-                    redes_sociales=redes_sociales
+                    redes_sociales=redes_sociales,
+                    logo=logo
                 )
 
             messages.success(request, 'Empresa registrada correctamente.')
@@ -114,7 +131,6 @@ def registro_empresa(request):
         except Sector.DoesNotExist:
             messages.error(request, 'Error: El sector especificado no existe.')
         except Exception as e:
-            print(f"Error al registrar empresa: {str(e)}")
             messages.error(request, f'Error al registrar empresa: {str(e)}')
 
     return render(request, 'usuario/registro_empresa.html', {
@@ -186,3 +202,69 @@ def perfil_estudiante(request, estudiante_id=None):
         'is_owner': is_owner,
     }
     return render(request, 'usuario/perfil_publico_estudiante.html', context)
+
+@login_required
+def perfil_empresa(request):
+    # verificamos q sea una empresa y no estudiante
+    if not hasattr(request.user, 'empresa'):
+        messages.error(request, 'No tienes un perfil de empresa.')
+        return redirect('home')
+
+    empresa = request.user.empresa
+
+    if request.method == 'POST':
+        form = EmpresaForm(request.POST, request.FILES, instance=empresa)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Perfil actualizado correctamente.')
+            return redirect('perfil_empresa')
+        else:
+            messages.error(request, 'Por favor, corrige los errores del formulario.')
+    else:
+        form = EmpresaForm(instance=empresa)
+
+    # obtenemos los anuncios
+    anuncios = AnuncioPractica.objects.filter(empresa=empresa).order_by('-fecha_publicacion')
+
+    return render(request, 'empresas/perfil_empresa.html', {
+        'empresa': empresa,
+        'form': form,
+        'anuncios': anuncios,
+    })
+
+def perfil_publico_empresa(request, empresa_id):
+    # Obtiene la empresa o lanza un 404 si no existe
+    empresa = get_object_or_404(Empresa, id=empresa_id)
+
+    # Filtra los anuncios de la empresa (sin el campo 'estado', ya que no existe)
+    anuncios = AnuncioPractica.objects.filter(empresa=empresa).order_by('-fecha_publicacion')
+
+    return render(request, 'usuario/perfil_publico_empresa.html', {
+        'empresa': empresa,
+        'anuncios': anuncios
+    })
+
+
+@login_required
+def editar_perfil_empresa(request):
+    if not hasattr(request.user, 'empresa'):
+        messages.error(request, 'No tienes un perfil de empresa.')
+        return redirect('home')
+
+    empresa = request.user.empresa
+
+    if request.method == 'POST':
+        form = EmpresaForm(request.POST, request.FILES, instance=empresa)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Perfil actualizado correctamente.')
+            return redirect('perfil_empresa')
+        else:
+            messages.error(request, 'Por favor, corrige los errores del formulario.')
+    else:
+        form = EmpresaForm(instance=empresa)
+
+    return render(request, 'empresas/editar_perfil_empresa.html', {
+        'empresa': empresa,
+        'form': form,
+    })

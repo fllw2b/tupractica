@@ -50,14 +50,19 @@
                     {% if user.is_authenticated and user.es_estudiante %}
                         <p class="card-text mb-1">
                             <strong>Compatibilidad con tu perfil:</strong> 
-                            <span style="color: 
+                            <span style="color: white;
+                                background-color:  
                                 {% if item.porcentaje_coincidencia > 70 %}
-                                    green
-                                {% elif item.porcentaje_coincidencia > 40 %}
-                                    yellow
+                                    #28a745
+                                {% elif item.porcentaje_coincidencia >= 39 %}
+                                 #ffc107
                                 {% else %}
-                                    orange
-                                {% endif %}; font-weight: bold;">
+                                #dc3545
+                                {% endif %};
+                                font-size: 0.9em;
+                                font-weight: bold;
+                                padding: 0.2em 0.4em;
+                                border-radius: 5px;">
                                 {{ item.porcentaje_coincidencia }}%
                             </span>
                         </p>
@@ -80,7 +85,7 @@
                         <p><strong>Modalidad:</strong> {{ detalle_anuncio.modalidad }}</p>
                         <p><strong>Descripción:</strong> {{ detalle_anuncio.descripcion }}</p>
 
-                        <!-- Mostrar si ya postuló -->
+                        <!-- por si el estudiante ya postuló -->
                         {% if item.ya_postulo %}
                             <div class="alert alert-success" role="alert">
                                 Ya has postulado a este anuncio.

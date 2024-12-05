@@ -1,19 +1,58 @@
-
-
-.btn {
-    padding: .45rem 1.5rem .35rem;
+.navbar-nav {
+    justify-content: center;
+    gap: 15px;
 }
 
-.texto-navbar {
-    color: #ffffff;
+.btn-menu {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: white;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
     text-align: center;
-    text-shadow: #ffffff;
+}
+
+.btn-menu:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: white;
+    color: #fff;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.3);
 }
 
 .fondo-navbar {
-    background: #ffffff;
-    background: linear-gradient(to right, hsl(261deg 80% 48%), #ffffff)
+    background: linear-gradient(90deg, #6a11cb 0%, #6fa0f5 100%);
+    padding: 15px 20px;
 }
+
+.navbar-brand {
+    font-size: 1.5rem;
+    color: white;
+    font-weight: bold;
+}
+
+.navbar-brand:hover {
+    color: white;
+}
+
+.navbar-toggler {
+    border: none;
+}
+
+/*resposive */
+@media (max-width: 768px) {
+    .navbar-nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .auth-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+
 
 .btn-pro {
     padding: 10px;
@@ -29,6 +68,7 @@
     transition: all 0.5s ease;
     color: black !important;
     text-align: center;
+    text-decoration: none !important;
     
 }
 
@@ -41,7 +81,6 @@
 
 .btn-pro a {
     color: inherit !important;
-    /* para cambiar el color del link de los a*/
     text-decoration: none !important;
 
 }
@@ -51,7 +90,7 @@
 }
 
 .img-fondo {
-    background-image: url('/static/img/home/background.jpg');
+    background-image: url('https://admision.udp.cl/cms/wp-content/uploads/2022/08/Ingenieria-en-Administracion-de-Empresas-Mencion-Gestion-Empresarial.jpeg');
     background-size: cover;
     background-position: center;
 }
@@ -88,7 +127,7 @@
 }
 
 .btn-form {
-    font-size: 16px; /* Tamaño de fuente ajustado */
+    font-size: 16px;
     width: 100px;
     height: 40px;
     border: 1px solid rgb(93, 24, 220);
@@ -118,3 +157,205 @@
     border-color: hsl(261deg 80% 48%) !important; 
     color: hsl(0, 0%, 100%) !important;
 }
+
+/* HOME */
+
+.hero {
+    background: linear-gradient(to right, #6a11cb, #6fa0f5);
+    color: white;
+}
+
+.hero h1 {
+    font-weight: bold;
+}
+
+.hero p {
+    font-size: 1.2rem;
+}
+
+.hero .btn {
+    padding: 10px 20px;
+    border-radius: 20px;
+}
+
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.card i {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+/* CAROUSEL */
+.custom-carousel {
+    max-width: 100%;
+    height: auto;
+}
+
+.carousel-item img {
+    object-fit: cover;
+    height: 600px; /* alto de la imagen en el pc */
+    width: 100%;
+}
+
+.carousel-caption {
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 15px 20px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 80%;
+}
+
+.carousel-caption h2 {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.carousel-caption p {
+    font-size: 1rem;
+}
+
+/* responsive */
+@media (max-width: 768px) {
+    .carousel-item img {
+        height: 250px; /* altura para celular */
+    }
+
+    .carousel-caption h2 {
+        font-size: 1.5rem;
+    }
+
+    .carousel-caption p {
+        font-size: 0.9rem;
+    }
+}
+
+/* mis postulaciones */
+.titulo-seccion {
+    color: hsl(261, 80%, 48%);
+    font-weight: bold;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+}
+
+.tarjeta-postulacion {
+    border-radius: 15px;
+    border: 1px solid hsl(261, 80%, 48%);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.tarjeta-postulacion:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+.titulo-card a {
+    color: hsl(261, 80%, 48%);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.titulo-card a:hover {
+    text-decoration: underline;
+}
+
+/* ventana modal (mis postulaciones) */
+.modal-detalles {
+    border-radius: 15px;
+    border: 1px solid hsl(261, 80%, 48%);
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.modal-header {
+    background: hsl(261, 80%, 48%);
+    color: white;
+    border-bottom: none;
+    padding: 15px 20px;
+    text-align: center;
+
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 0;
+    text-align: center;
+}
+
+.modal-body {
+    padding: 20px;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* requisitos (tags) */
+.badge-requisito {
+    background-color: hsl(261, 80%, 48%);
+    font-size: 0.85rem;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 15px;
+    font-weight: bold;
+    display: inline-block;
+    text-transform: capitalize;
+    transition: all 0.3s ease-in-out;
+}
+
+.badge-requisito:hover {
+    background-color: hsl(261, 90%, 40%);
+    transform: scale(1.1);
+}
+
+.modal-backdrop.show {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-body hr {
+    border-color: rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+}
+
+
+.btn-eliminar {
+    background-color: white;
+    border: 2px solid hsl(0, 75%, 60%);
+    color: hsl(0, 75%, 60%);
+    font-size: 0.9rem;
+    padding: 8px 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-eliminar:hover {
+    background-color: hsl(0, 75%, 60%);
+    color: white;
+}
+
+.tarjeta-postulacion .card-title {
+    color: hsl(261, 80%, 48%) !important;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.tarjeta-postulacion .card-title:hover {
+    color: hsl(261, 90%, 40%) !important;
+}
+

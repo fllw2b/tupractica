@@ -126,13 +126,13 @@ class DeletePostulacionAPIView(APIView):
 class DetallePracticaAPIView(APIView):
     permission_classes = [AllowAny]
 
-    def get(self, request, practica_id):
+    def get(self, request, pk):
         try:
-            practica = AnuncioPractica.objects.get(id=practica_id)
+            practica = AnuncioPractica.objects.get(pk=pk)
             serializer = AnuncioPracticaSerializer(practica)
             return Response(serializer.data, status=200)
         except AnuncioPractica.DoesNotExist:
-            return Response({"error": "La práctica especificada no existe."}, status=404)
+            return Response({"error": "El anuncio no existe."}, status=404)
 
 class ListRegionesAPIView(APIView):
     permission_classes = [AllowAny]

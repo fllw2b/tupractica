@@ -1,0 +1,59 @@
+{% extends 'base/base.html' %}
+
+{% block contenido %}
+<div class="container mt-5 mb-5">
+    <h2 class="text-center mb-4" style="color: hsl(261, 80%, 48%); font-weight: bold;">EDITAR PERFIL</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="nombre_empresa" class="form-label">Nombre de la Empresa</label>
+                {{ form.nombre_empresa }}
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label for="rut" class="form-label">RUT de la Empresa</label>
+                {{ form.rut }}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="direccion" class="form-label">Dirección</label>
+            {{ form.direccion }}
+        </div>
+
+        <div class="mb-3">
+            <label for="sector" class="form-label">Sector</label>
+            {{ form.sector }}
+        </div>
+
+        <div class="mb-3">
+            <label for="pagina_web" class="form-label">Página Web (opcional)</label>
+            <input type="url" name="pagina_web" id="pagina_web" class="form-control" placeholder="https://www.ejemplo.com">
+            <div class="form-text">Por favor, incluye "http://" o "https://" al inicio de la URL.</div>
+        </div>
+        
+
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción de la Empresa (opcional)</label>
+            {{ form.descripcion }}
+        </div>
+
+        <div class="mb-3">
+            <label for="redes_sociales" class="form-label">Redes Sociales (opcional)</label>
+            {{ form.redes_sociales }}
+        </div>
+
+        <div class="mb-3">
+            <label for="logo" class="form-label">Logo de la Empresa (opcional)</label>
+            {{ form.logo }}
+        </div>
+
+        <div class="d-flex justify-content-center mt-4">
+            <button type="submit" class="btn-pro btn-border">Guardar Cambios</button>
+            <a href="{% url 'perfil_empresa' %}" class="btn-pro btn-border mx-2">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

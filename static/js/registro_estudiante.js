@@ -46,10 +46,10 @@ function validarFormulario() {
             icon: 'error',
             confirmButtonText: 'OK'
         });
-        return false; // Evitar envío del formulario
+        return false; // no enviamos el form
     }
 
-    return true; // Permitir envío del formulario si todo está bien
+    return true; // enviamos el form
 }
 
 document.getElementById('region-selector').addEventListener('change', function () {

@@ -249,7 +249,29 @@ def recomendaciones_estudiante(request):
 
 def detalle_anuncio_ajax(request, anuncio_id):
     anuncio = get_object_or_404(AnuncioPractica, id=anuncio_id)
-    return render(request, 'anuncios/detalle_anuncio_ajax.html', {'anuncio': anuncio})
+    porcentaje_coincidencia = None
+    habilidades_estudiante = []
+
+    # verificamos q sea estudiante
+    if hasattr(request.user, 'estudiante'):
+        habilidades_estudiante = list(request.user.estudiante.habilidades.all())
+        estudiante = request.user.estudiante
+        habilidades_estudiante = set(estudiante.habilidades.all())
+        requisitos_anuncio = set(anuncio.requisitos.all())
+        habilidades_comunes = habilidades_estudiante.intersection(requisitos_anuncio)
+        total_requisitos = len(requisitos_anuncio)
+
+        if total_requisitos > 0:
+            porcentaje_coincidencia = int((len(habilidades_comunes) / total_requisitos) * 100)
+        else:
+            porcentaje_coincidencia = 0
+
+    return render(request, 'anuncios/detalle_anuncio_ajax.html', {
+        'anuncio': anuncio,
+        'porcentaje_coincidencia': porcentaje_coincidencia,
+        'habilidades_estudiante': habilidades_estudiante,
+    })
+
 
 @login_required
 def eliminar_postulacion(request, postulacion_id):
