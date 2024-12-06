@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Empresa
+from ..models import Empresa, Region, Carrera, Comuna
 
 class EmpresaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,3 +9,4 @@ class EmpresaSerializer(serializers.ModelSerializer):
             'pagina_web', 'descripcion', 'redes_sociales'
         ]
         depth = 1 
+

@@ -240,10 +240,10 @@ def mis_anuncios(request):
 def postulantes(request, anuncio_id):
     anuncio = get_object_or_404(AnuncioPractica, id=anuncio_id)
 
-    # Obtener todos los postulantes del anuncio
+    # obtenemos todos los q postularon al anuncio
     postulantes = Postulacion.objects.filter(anuncio=anuncio)
 
-    # Filtros
+    # filtros
     carrera = request.GET.get('carrera', '')
     region_id = request.GET.get('region', '')
     cv = request.GET.get('cv', '')
@@ -264,7 +264,7 @@ def postulantes(request, anuncio_id):
     if estado:
         postulantes = postulantes.filter(estado=estado)
 
-    # Calcular el porcentaje de compatibilidad
+    # calculamos el % de compatibilidad
     for postulacion in postulantes:
         requisitos_anuncio = set(anuncio.requisitos.all())
         habilidades_estudiante = set(postulacion.estudiante.habilidades.all())
@@ -274,7 +274,7 @@ def postulantes(request, anuncio_id):
             int((coincidencia / total_requisitos) * 100) if total_requisitos > 0 else 0
         )
 
-    # Obtener todas las regiones para el filtro
+    # las regiones
     regiones = Region.objects.all()
 
     return render(request, 'empresas/postulantes.html', {
@@ -355,9 +355,9 @@ def eliminar_postulacion(request, postulacion_id):
             print(f"Intentando eliminar la postulación con ID: {postulacion_id}")
             postulacion = get_object_or_404(Postulacion, id=postulacion_id, estudiante=request.user.estudiante)
             postulacion.delete()
-            messages.success(request, "Postulación eliminada exitosamente.")
+            messages.success(request, "Postulación cancelada exitosamente.")
         except Exception as e:
-            messages.error(request, "Ocurrió un error al intentar eliminar la postulación.")
+            messages.error(request, "Ocurrió un error al intentar cancelar la postulación.")
             print(e)  # imprimimos el error
     return redirect('historial_postulaciones')
 

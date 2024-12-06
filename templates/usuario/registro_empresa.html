@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% block contenido %}
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Registro de Empresa</h2>
+    <h2 class="text-center mb-4" style="color: hsl(261, 80%, 48%);">REGISTRO DE EMPRESA</h2>
     <form method="POST" id="form-empresa" class="needs-validation" novalidate
         onsubmit="return validarFormularioEmpresa()">
         {% csrf_token %}
@@ -65,7 +65,8 @@
 
         <div class="mb-3">
             <label for="pagina_web" class="form-label">Página web (opcional)</label>
-            <input type="url" name="pagina_web" id="pagina_web" class="form-control">
+            <input type="url" name="pagina_web" id="pagina_web" class="form-control" placeholder="https://www.empresa.com">
+            <div class="form-text">Por favor, incluye "http://" o "https://" al inicio de la URL.</div>
         </div>
 
         <div class="mb-3">

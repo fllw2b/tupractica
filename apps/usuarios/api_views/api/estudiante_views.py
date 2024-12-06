@@ -3,11 +3,12 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
 from django.db import transaction
-from ...models import Usuario, Estudiante, Region, Comuna, Carrera
+from ...models import Usuario, Estudiante, Region, Comuna, Carrera, Tag
 from ....anuncios.models import AnuncioPractica, Postulacion
 from ...serializers.estudiante_serializer import EstudianteSerializer
 from ....anuncios.serializers.anuncio_serializers import AnuncioPracticaSerializer
 from ....anuncios.serializers.postulacion_serializers import PostulacionSerializer
+from ...serializers.tag_serializer import TagSerializer
 
 # registro estudiante
 class RegistroEstudianteAPIView(APIView):
@@ -53,10 +54,12 @@ class EstudianteDetailView(APIView):
     def get(self, request):
         try:
             estudiante = request.user.estudiante
+            print(estudiante)  # Imprime los datos del estudiante en el servidor
             serializer = EstudianteSerializer(estudiante)
-            return Response(serializer.data)
+            return Response(serializer.data, status=200)
         except Estudiante.DoesNotExist:
             return Response({'error': 'No se encontró el perfil del estudiante.'}, status=404)
+
 
 class ListPracticasAPIView(APIView):
     permission_classes = [AllowAny]
@@ -74,9 +77,17 @@ class UpdateEstudianteAPIView(APIView):
         estudiante = request.user.estudiante
         serializer = EstudianteSerializer(estudiante, data=request.data, partial=True)
         if serializer.is_valid():
+            if 'region_id' in request.data:
+                estudiante.region = Region.objects.get(id=request.data['region_id'])
+            if 'comuna_id' in request.data:
+                estudiante.comuna = Comuna.objects.get(id=request.data['comuna_id'])
+            estudiante.save()
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 #  postular a un anuncio
 class CreatePostulacionAPIView(APIView):
@@ -154,3 +165,38 @@ class ListCarrerasAPIView(APIView):
     def get(self, request):
         carreras = Carrera.objects.all().values('id', 'nombre')
         return Response(list(carreras))
+
+class TagListView(APIView):
+    def get(self, request):
+        tags = Tag.objects.all()
+        serializer = TagSerializer(tags, many=True)
+        return Response(serializer.data)
+    
+class UpdateHabilidadesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        estudiante = Estudiante.objects.get(usuario=request.user)
+        habilidades_ids = request.data.get('habilidades', [])
+        habilidades = Tag.objects.filter(id__in=habilidades_ids)
+        estudiante.habilidades.set(habilidades)
+        estudiante.save()
+        return Response({'message': 'Habilidades actualizadas correctamente.'})
+    
+class AnuncioPracticasMatchView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        estudiante = Estudiante.objects.get(usuario=request.user)
+        habilidades = estudiante.habilidades.all()  # Tags seleccionados por el estudiante
+        practicas = AnuncioPractica.objects.filter(requisitos__in=habilidades).distinct()  # Prácticas con match
+        serializer = AnuncioPracticaSerializer(practicas, many=True)
+        return Response(serializer.data)
+    
+class VerificarPostulacionView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, anuncio_id):
+        estudiante = Estudiante.objects.get(usuario=request.user)
+        postulado = Postulacion.objects.filter(estudiante=estudiante, anuncio_id=anuncio_id).exists()
+        return Response({"postulado": postulado})

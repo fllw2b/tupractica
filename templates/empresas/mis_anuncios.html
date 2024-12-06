@@ -8,12 +8,10 @@
     <div class="card shadow-sm p-4 mb-4" style="border-radius: 15px;">
         <form method="GET" action="{% url 'mis_anuncios' %}">
             <div class="row g-3 align-items-center">
-                <!-- Búsqueda -->
                 <div class="col-md-4">
                     <input type="text" name="busqueda" class="form-control shadow-sm" placeholder="Buscar por título..." value="{{ request.GET.busqueda }}">
                 </div>
                 
-                <!-- Modalidad -->
                 <div class="col-md-3">
                     <select name="modalidad" class="form-select shadow-sm">
                         <option value="">Todas las modalidades</option>
@@ -23,7 +21,6 @@
                     </select>
                 </div>
 
-                <!-- Región -->
                 <div class="col-md-3">
                     <select name="region" class="form-select shadow-sm">
                         <option value="">Todas las regiones</option>
@@ -35,7 +32,6 @@
                     </select>
                 </div>
 
-                <!-- Botón Filtrar -->
                 <div class="col-md-2">
                     <button type="submit" class="btn-pro btn-border w-100">Filtrar</button>
                 </div>
@@ -59,8 +55,8 @@
                             <span class="badge" style="font-size: 1.1em; background-color: hsl(261, 80%, 48%);">{{ anuncio.postulantes.count }}</span>
                         </p>
                         <div class="d-flex justify-content-center mt-3">
-                            <a href="{% url 'modificar_anuncio' anuncio.id %}" class="btn btn-outline-warning mx-1" style="border-radius: 20px;">Modificar</a>
-                            <a href="{% url 'eliminar_anuncio' anuncio.id %}" class="btn btn-outline-danger mx-1" style="border-radius: 20px;">Eliminar</a>
+                            <a href="{% url 'modificar_anuncio' anuncio.id %}" class="btn btn-warning mx-1" style="border-radius: 20px;">Modificar</a>
+                            <a href="{% url 'eliminar_anuncio' anuncio.id %}" class="btn btn-danger mx-1" style="border-radius: 20px;">Eliminar</a>
                         </div>
                         <a href="{% url 'postulantes' anuncio.id %}" class="btn btn-pro btn-border mt-3" style="border-radius: 20px;">Ver Postulantes</a>
                     </div>

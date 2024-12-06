@@ -43,7 +43,7 @@ class Postulacion(models.Model):
     estado = models.CharField(max_length=20, choices=ESTADOS_POSTULACION, default='En revisión')
 
     def enviar_correo_estado(self):
-        # Plantilla HTML
+        # se llama al html
         html_content = render_to_string('anuncios/notificacion_postulacion.html', {
             'estudiante': self.estudiante,
             'anuncio': self.anuncio,
@@ -52,7 +52,7 @@ class Postulacion(models.Model):
             'year': 2024,
         })
 
-        # Configuración del correo
+        # configuracion del correo
         asunto = f"Estado de tu postulación a {self.anuncio.titulo}"
         email = EmailMultiAlternatives(
             subject=asunto,

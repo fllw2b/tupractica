@@ -35,7 +35,7 @@
                     </select>
                 </div>
                 <div class="col-md-12 text-center mt-3">
-                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                    <button type="submit" class="btn btn-pro btn-border">Filtrar</button>
                 </div>
             </div>
         </form>
@@ -66,7 +66,7 @@
                     <td>{{ postulacion.estudiante.telefono }}</td>
                     <td>
                         {% if postulacion.estudiante.cv %}
-                        <a href="{{ postulacion.estudiante.cv.url }}" target="_blank" class="btn btn-outline-primary btn-sm">Ver CV</a>
+                        <a href="{{ postulacion.estudiante.cv.url }}" target="_blank" class="btn btn-dark btn-sm" style="border-radius: 5px;">Ver CV</a>
                         {% else %}
                         <span class="text-muted">No disponible</span>
                         {% endif %}
@@ -82,7 +82,7 @@
                         </span>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detallePostulante{{ postulacion.id }}">Ver Perfil</button>
+                        <button type="button" class="btn btn-dark btn-sm" style="border-radius: 5px;"  data-bs-toggle="modal" data-bs-target="#detallePostulante{{ postulacion.id }}">Ver Perfil</button>
                         <button class="btn btn-success btn-sm" onclick="cambiarEstado('{{ postulacion.id }}', 'Aprobado')">Aprobar</button>
                         <button class="btn btn-danger btn-sm" onclick="cambiarEstado('{{ postulacion.id }}', 'Rechazado')">Rechazar</button>
                     </td>

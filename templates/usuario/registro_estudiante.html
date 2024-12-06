@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block contenido %}
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
     <h2 class="text-center mb-4" style="color: hsl(261, 60%, 50%);;">REGISTRO DE ESTUDIANTE</h2>
     <form method="POST" enctype="multipart/form-data" onsubmit="return validarFormulario()">
         {% csrf_token %}
@@ -73,7 +73,7 @@
 
         <div class="mb-3">
             <label for="direccion" class="form-label">Dirección</label>
-            <input type="text" name="direccion" id="direccion" class="form-control" required maxlength="50">
+            <input type="text" name="direccion" id="direccion" class="form-control" required maxlength="50"  placeholder="correo@ejemplo.com">
             <div class="invalid-feedback">
                 La dirección no puede estar vacía y debe tener máximo 50 caracteres.
             </div>
@@ -81,7 +81,7 @@
 
         <div class="mb-3">
             <label for="telefono" class="form-label">Número de Teléfono</label>
-            <input type="tel" name="telefono" id="telefono" class="form-control" required pattern="[0-9]{9}">
+            <input type="tel" name="telefono" id="telefono" class="form-control" required pattern="[0-9]{9}" placeholder="9 12345678">
             <div class="invalid-feedback">
                 Por favor, ingresa un número de teléfono válido (solo 9 dígitos).
             </div>
