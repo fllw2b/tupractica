@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-practicas',
@@ -9,25 +9,63 @@ import { ApiService } from '../../services/api.service';
 })
 export class PracticasPage implements OnInit {
   anuncios: any[] = [];
+  anunciosFiltrados: any[] = [];
+  textoFiltro: string = '';
+  modalidadFiltro: string = '';
+  regionFiltro: string = '';
+  regiones: any[] = [];
 
-  constructor(private apiService: ApiService, private router: Router) {}
+  constructor(
+    private apiService: ApiService,
+    private router: Router // Agregar el Router al constructor
+  ) {}
 
   ngOnInit() {
-    this.loadAnuncios();
+    this.cargarRegiones();
+    this.cargarAnuncios();
   }
 
-  loadAnuncios() {
-    this.apiService.getAnuncios().subscribe(
+  cargarRegiones() {
+    this.apiService.getRegiones().subscribe(
       (res) => {
-        this.anuncios = res;
+        this.regiones = res; // asignamos las regiones
       },
       (err) => {
-        console.error('Error al cargar anuncios:', err);
+        console.error('Error al cargar las regiones:', err);
       }
     );
   }
 
-  verDetalleAnuncio(anuncioId: number) {
-    this.router.navigate([`/detalle-practica`, anuncioId]);
+  cargarAnuncios() {
+    this.apiService.getAnuncios().subscribe(
+      (res) => {
+        console.log('Anuncios cargados:', res); // vemos en la consola pa ver q funcione
+        this.anuncios = res;
+        this.anunciosFiltrados = [...this.anuncios];
+      },
+      (err) => {
+        console.error('Error al cargar los anuncios:', err);
+      }
+    );
+  }
+
+
+  aplicarFiltros() {
+    this.anunciosFiltrados = this.anuncios.filter((anuncio) => {
+      const coincideTexto =
+        this.textoFiltro === '' ||
+        anuncio.titulo.toLowerCase().includes(this.textoFiltro.toLowerCase()) ||
+        anuncio.descripcion.toLowerCase().includes(this.textoFiltro.toLowerCase());
+      const coincideModalidad =
+        this.modalidadFiltro === '' || anuncio.modalidad === this.modalidadFiltro;
+      const coincideRegion =
+        this.regionFiltro === '' || anuncio.region === this.regionFiltro;
+
+      return coincideTexto && coincideModalidad && coincideRegion;
+    });
+  }
+
+  verDetalleAnuncio(id: number) {
+    this.router.navigate([`/detalle-practica/${id}`]);
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-postulaciones',
@@ -9,7 +10,11 @@ import { ApiService } from '../../services/api.service';
 export class PostulacionesPage implements OnInit {
   postulaciones: any[] = [];
 
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private apiService: ApiService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.loadPostulaciones();
@@ -18,14 +23,19 @@ export class PostulacionesPage implements OnInit {
   loadPostulaciones() {
     this.apiService.getPostulaciones().subscribe(
       (res) => {
+        console.log('Postulaciones cargadas:', res);
         this.postulaciones = res;
-        console.log('Postulaciones cargadas:', this.postulaciones);
       },
       (err) => {
         console.error('Error al cargar postulaciones:', err);
+        if (err.status === 401) {
+          alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+          this.router.navigate(['/login']); // Redirige al login si el token no es válido
+        }
       }
     );
   }
+
 
   cancelarPostulacion(postulacionId: number) {
     this.apiService.deletePostulacion(postulacionId).subscribe(

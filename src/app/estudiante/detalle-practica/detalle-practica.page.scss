@@ -1,0 +1,38 @@
+.detalle-anuncio-page {
+  --background: var(--ion-color-light); /* Fondo claro para la página */
+  padding: 20px;
+}
+
+.detalle-card {
+  margin: 15px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.titulo {
+  font-weight: bold;
+  font-size: 20px;
+  color: var(--ion-color-tertiary); /* Título en morado */
+}
+
+.descripcion {
+  margin-top: 10px;
+  line-height: 1.6;
+  color: var(--ion-color-dark);
+}
+
+ul {
+  padding-left: 20px;
+}
+
+ul li {
+  margin-bottom: 5px;
+  color: var(--ion-color-dark);
+}
+
+.postular-btn {
+  margin: 20px 15px 0;
+  font-size: 16px;
+  --background: var(--ion-color-tertiary); /* Fondo morado */
+  --color: white; /* Texto blanco */
+}

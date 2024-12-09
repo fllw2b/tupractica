@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-buttons slot="start">
+      <ion-back-button color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title style="color: white;">Editar Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="card-title">Información Personal</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-icon name="person-outline" slot="start"></ion-icon>
+        <ion-input [(ngModel)]="perfil.nombres"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Apellido</ion-label>
+        <ion-icon name="person-outline" slot="start"></ion-icon>
+        <ion-input [(ngModel)]="perfil.apellidos"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Teléfono</ion-label>
+        <ion-icon name="call-outline" slot="start"></ion-icon>
+        <ion-input type="tel" [(ngModel)]="perfil.telefono"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Dirección</ion-label>
+        <ion-icon name="home-outline" slot="start"></ion-icon>
+        <ion-input [(ngModel)]="perfil.direccion"></ion-input>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="card-title">Ubicación</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Región</ion-label>
+        <ion-icon name="earth-outline" slot="start"></ion-icon>
+        <ion-select [(ngModel)]="perfil.region_id" (ionChange)="cargarComunas(perfil.region_id)">
+          <ion-select-option *ngFor="let region of regiones" [value]="region.id">
+            {{ region.nombre }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Comuna</ion-label>
+        <ion-icon name="location-outline" slot="start"></ion-icon>
+        <ion-select [(ngModel)]="perfil.comuna_id">
+          <ion-select-option *ngFor="let comuna of comunas" [value]="comuna.id">
+            {{ comuna.nombre }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button expand="block" color="tertiary" (click)="guardarCambios()" class="guardar-btn">
+    <ion-icon name="save-outline" slot="start"></ion-icon>
+    Guardar Cambios
+  </ion-button>
+</ion-content>

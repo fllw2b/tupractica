@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AnuncioDetallePage } from './detalle-practica.page';
+import { DetallePracticaPage } from './detalle-practica.page'; // Asegúrate de que esto sea correcto
 
 const routes: Routes = [
   {
     path: '',
-    component: AnuncioDetallePage
-  }
+    component: DetallePracticaPage, // Este debe coincidir con el nombre exportado
+  },
 ];
 
 @NgModule({

@@ -133,4 +133,21 @@ export class RegisterPage implements OnInit {
   navigateToLogin() {
     this.router.navigate(['/login']);
   }
+
+  uploadFile(type: string): void {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = type === 'foto' ? 'image/*' : '.pdf,.doc,.docx';
+    input.onchange = (event: any) => {
+      const file = event.target.files[0];
+      if (type === 'foto') {
+        this.foto = file;
+      } else if (type === 'cv') {
+        this.cv = file;
+      }
+      console.log(`${type} seleccionado:`, file);
+    };
+    input.click();
+  }
+
 }

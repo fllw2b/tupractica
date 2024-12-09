@@ -1,23 +1,31 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Iniciar Sesión</ion-title>
+  <ion-toolbar color="tertiary">
+    <ion-title style="color: white; text-align: center;">Iniciar Sesión</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-item>
-    <ion-label position="floating">Correo Electrónico</ion-label>
-    <ion-input type="email" [(ngModel)]="email"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Contraseña</ion-label>
-    <ion-input type="password" [(ngModel)]="password"></ion-input>
-  </ion-item>
-  <ion-button expand="full" (click)="login()">Iniciar Sesión</ion-button>
+<ion-content class="login-page">
+  <!-- Logo o título de la app -->
+  <div class="app-header">
+    <img style="width: 80%; height: 80%; margin-top: 100px;" src="assets/tupractica.png" alt="TuPráctica Logo"  />
+  </div>
 
-  <!-- Botón para registrarse -->
-  <div style="text-align: center; margin-top: 20px;">
+  <!-- Formulario de inicio de sesión -->
+  <div class="login-form">
+    <ion-item>
+      <ion-label position="floating">Correo Electrónico</ion-label>
+      <ion-input type="email" [(ngModel)]="email"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+    <ion-button expand="block" (click)="login()">Iniciar Sesión</ion-button>
+  </div>
+
+  <!-- Registro -->
+  <div class="register-link">
     <p>¿No tienes una cuenta?</p>
-    <ion-button fill="clear" color="primary" (click)="navigateToRegister()">Regístrate</ion-button>
+    <ion-button fill="clear" (click)="navigateToRegister()">Regístrate</ion-button>
   </div>
 </ion-content>

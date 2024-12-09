@@ -1,0 +1,53 @@
+.registro-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: var(--ion-color-tertiary); /* Fondo morado */
+  color: white;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.app-logo {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 10px;
+}
+
+.app-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 500px;
+  background: white; /* Fondo blanco para el formulario */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.upload-container {
+  margin-top: 20px;
+}
+
+.text-center {
+  text-align: center;
+  margin-top: 20px;
+  color: white;
+}
+
+.text-center p {
+  margin: 0;
+  font-size: 14px;
+}
+
+ion-button {
+  margin-top: 15px;
+}

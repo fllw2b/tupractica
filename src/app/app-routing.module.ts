@@ -25,6 +25,10 @@ const routes: Routes = [
     loadChildren: () => import('./estudiante/postulaciones/postulaciones.module').then( m => m.PostulacionesPageModule)
   },
   { path: 'detalle-practica/:id', loadChildren: () => import('./estudiante/detalle-practica/detalle-practica.module').then(m => m.DetallePracticaPageModule) },
+  {
+    path: 'editar-perfil',
+    loadChildren: () => import('./estudiante/editar-perfil/editar-perfil.module').then( m => m.EditarPerfilPageModule)
+  },
 ];
 
 @NgModule({
