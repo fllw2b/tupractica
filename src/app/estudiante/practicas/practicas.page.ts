@@ -17,7 +17,7 @@ export class PracticasPage implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private router: Router // Agregar el Router al constructor
+    private router: Router
   ) {}
 
   ngOnInit() {

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-register',
@@ -23,14 +24,16 @@ export class RegisterPage implements OnInit {
   foto: File | null = null;
   cv: File | null = null;
 
-  // Listas dinámicas para regiones, comunas y carreras
+  // listas dinámicas para regiones, comunas y carreras
   regiones: any[] = [];
   comunas: any[] = [];
   carreras: any[] = [];
 
   maxFechaNacimiento: string = '';
 
-  constructor(private apiService: ApiService, private router: Router) {}
+  constructor(private apiService: ApiService,
+    private router: Router,
+    private menuCtrl: MenuController) {}
 
   ngOnInit() {
     this.setMaxFechaNacimiento();
@@ -41,10 +44,10 @@ export class RegisterPage implements OnInit {
   setMaxFechaNacimiento() {
     const hoy = new Date();
     const hace18Anios = new Date(hoy.getFullYear() - 18, hoy.getMonth(), hoy.getDate());
-    this.maxFechaNacimiento = hace18Anios.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+    this.maxFechaNacimiento = hace18Anios.toISOString().split('T')[0];
   }
 
-  // Cargar regiones desde la API
+  // cargamos las regiones de la api
   loadRegiones() {
     this.apiService.getRegiones().subscribe(
       (res) => {
@@ -56,7 +59,15 @@ export class RegisterPage implements OnInit {
     );
   }
 
-  // Cargar carreras desde la API
+  ionViewWillEnter() {
+    this.menuCtrl.enable(false);
+  }
+
+  ionViewWillLeave() {
+    this.menuCtrl.enable(true);
+  }
+
+  // cargamos las carreras de la api
   loadCarreras() {
     this.apiService.getCarreras().subscribe(
       (res) => {
@@ -68,7 +79,7 @@ export class RegisterPage implements OnInit {
     );
   }
 
-  // Cargar comunas cuando se selecciona una región
+  // cargamos las comunas de la api
   onRegionChange() {
     if (this.region_id) {
       this.apiService.getComunas(this.region_id).subscribe(
@@ -82,7 +93,6 @@ export class RegisterPage implements OnInit {
     }
   }
 
-  // Manejar los cambios de archivos para la foto y el CV
   onFileChange(event: any, type: string) {
     const file = event.target.files[0];
     if (type === 'foto') {
@@ -104,7 +114,7 @@ export class RegisterPage implements OnInit {
     formData.append('region_id', this.region_id?.toString() || '');
     formData.append('comuna_id', this.comuna_id?.toString() || '');
     formData.append('carrera_id', this.carrera_id?.toString() || '');
-    formData.append('fecha_nacimiento', fechaFormateada); // Usar fecha formateada
+    formData.append('fecha_nacimiento', fechaFormateada);
     formData.append('genero', this.genero);
     formData.append('direccion', this.direccion);
     formData.append('telefono', this.telefono);
@@ -129,7 +139,6 @@ export class RegisterPage implements OnInit {
     );
   }
 
-  // Redirigir al login
   navigateToLogin() {
     this.router.navigate(['/login']);
   }

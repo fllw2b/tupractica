@@ -17,14 +17,13 @@ export class LoginPage {
     private menuCtrl: MenuController) {}
 
   ionViewWillEnter() {
-    // Deshabilita el menú al entrar en la página de login
     this.menuCtrl.enable(false);
   }
 
   ionViewWillLeave() {
-    // Habilita el menú al salir de la página de login
     this.menuCtrl.enable(true);
   }
+
   login() {
     if (!this.email || !this.password) {
       console.error('Por favor, completa todos los campos.');

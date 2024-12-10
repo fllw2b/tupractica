@@ -7,12 +7,11 @@
 <ion-content class="registro-page">
   <ion-card class="form-card">
     <ion-card-header>
-      <ion-card-title>Completa tus datos</ion-card-title>
+      <ion-card-title style="text-align: center;">Completa tus datos</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
       <form (ngSubmit)="register()">
-        <!-- Inputs de registro -->
         <ion-item>
           <ion-label position="floating">Correo Electrónico</ion-label>
           <ion-input type="email" [(ngModel)]="email" name="email" required></ion-input>
@@ -34,7 +33,6 @@
           <ion-input [(ngModel)]="rut" name="rut" required></ion-input>
         </ion-item>
 
-        <!-- Dropdowns -->
         <ion-item>
           <ion-label>Región</ion-label>
           <ion-select [(ngModel)]="region_id" name="region_id" (ionChange)="onRegionChange()" required>
@@ -59,10 +57,9 @@
             </ion-select-option>
           </ion-select>
         </ion-item>
-
-        <!-- Fecha de nacimiento -->
+        <ion-label>Fecha de Nacimiento</ion-label>
         <ion-item>
-          <ion-label>Fecha de Nacimiento</ion-label>
+
           <ion-datetime
             display-format="YYYY-MM-DD"
             picker-format="YYYY-MM-DD"
@@ -73,7 +70,6 @@
           </ion-datetime>
         </ion-item>
 
-        <!-- Género -->
         <ion-item>
           <ion-label>Género</ion-label>
           <ion-radio-group [(ngModel)]="genero" name="genero">
@@ -92,7 +88,6 @@
           </ion-radio-group>
         </ion-item>
 
-        <!-- Dirección y teléfono -->
         <ion-item>
           <ion-label position="floating">Dirección</ion-label>
           <ion-input [(ngModel)]="direccion" name="direccion" required></ion-input>
@@ -102,23 +97,22 @@
           <ion-input type="tel" [(ngModel)]="telefono" name="telefono" required></ion-input>
         </ion-item>
 
-        <!-- Subir foto -->
+
         <div class="upload-container">
           <ion-label>Foto de Perfil</ion-label>
-          <ion-button color="tertiary" expand="block" (click)="uploadFile('foto')">Seleccionar Foto</ion-button>
+          <ion-button color="medium" expand="block" (click)="uploadFile('foto')">Seleccionar Foto</ion-button>
         </div>
 
-        <!-- Subir CV -->
         <div class="upload-container">
           <ion-label>Currículum Vitae</ion-label>
-          <ion-button color="tertiary" expand="block" (click)="uploadFile('cv')">Seleccionar CV</ion-button>
+          <ion-button color="medium" expand="block" (click)="uploadFile('cv')">Seleccionar CV</ion-button>
         </div>
 
-        <!-- Botón de Registro -->
+
         <ion-button expand="block" type="submit" color="tertiary">Registrarse</ion-button>
       </form>
 
-      <!-- Botón para ir al Login -->
+
       <div class="text-center">
         <p style="color: black;">¿Ya tienes una cuenta?</p>
         <ion-button fill="clear" (click)="navigateToLogin()">Inicia Sesión</ion-button>

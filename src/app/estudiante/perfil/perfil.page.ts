@@ -33,7 +33,7 @@ export class PerfilPage implements OnInit {
 
   verCV(cvUrl: string) {
     if (cvUrl) {
-      window.open(cvUrl, '_blank'); // Abre el CV en una nueva pestaña
+      window.open(cvUrl, '_blank');
     } else {
       alert('No se ha subido un CV.');
     }
@@ -42,7 +42,7 @@ export class PerfilPage implements OnInit {
   cargarDatosIniciales() {
     this.apiService.getPerfil().subscribe(
       (perfil) => {
-        console.log('Datos del perfil:', perfil); // Muestra los datos en consola
+        console.log('Datos del perfil:', perfil);
         this.perfil = perfil;
       },
       (err) => {

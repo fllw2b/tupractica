@@ -21,17 +21,14 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Suscribirse al estado de autenticación
     this.authService.isAuthenticated$.subscribe({
       next: (isAuthenticated: boolean) => {
         this.isLoggedIn = isAuthenticated;
         this.updateMenuOptions();
-        this.cdRef.detectChanges(); // Forzar la detección de cambios
+        this.cdRef.detectChanges();
       },
       error: (err) => console.error('Error al suscribirse al estado de autenticación:', err),
     });
-
-    // Verificar estado inicial
     this.isLoggedIn = this.authService.getAuthState();
     this.updateMenuOptions();
   }
@@ -58,16 +55,16 @@ export class AppComponent implements OnInit {
 
   navigateTo(path: string) {
     this.router.navigate([path]).then(() => {
-      this.menuCtrl.close(); // Cerrar el menú después de redirigir
+      this.menuCtrl.close();
     });
   }
 
   logout() {
-    this.authService.logout(); // Llama al método logout del servicio
+    this.authService.logout();
     this.isLoggedIn = false;
     this.updateMenuOptions();
     this.router.navigate(['/login']).then(() => {
-      this.menuCtrl.close(); // Cierra el menú después de cerrar sesión
+      this.menuCtrl.close();
     });
   }
 }

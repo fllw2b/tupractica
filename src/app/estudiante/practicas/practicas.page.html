@@ -8,13 +8,11 @@
 </ion-header>
 
 <ion-content class="anuncios-page">
-  <!-- Filtros -->
   <ion-card class="filtros-card">
     <ion-card-header>
       <ion-card-title style="text-align: center;">Filtros</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <!-- Filtrar por texto -->
       <ion-item>
         <ion-input
           [(ngModel)]="textoFiltro"
@@ -23,7 +21,6 @@
         ></ion-input>
       </ion-item>
 
-      <!-- Filtrar por modalidad -->
       <ion-item>
         <ion-label>Modalidad</ion-label>
         <ion-select [(ngModel)]="modalidadFiltro" (ionChange)="aplicarFiltros()">
@@ -34,7 +31,6 @@
         </ion-select>
       </ion-item>
 
-      <!-- Filtrar por región -->
       <ion-item>
         <ion-label>Región</ion-label>
         <ion-select [(ngModel)]="regionFiltro" (ionChange)="aplicarFiltros()">
@@ -47,7 +43,6 @@
     </ion-card-content>
   </ion-card>
 
-  <!-- Lista de anuncios -->
   <ion-list>
     <ion-item
       *ngFor="let anuncio of anunciosFiltrados"

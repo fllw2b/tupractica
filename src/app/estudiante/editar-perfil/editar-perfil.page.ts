@@ -20,7 +20,7 @@ export class EditarPerfilPage implements OnInit {
   }
 
   cargarDatosIniciales() {
-    // Carga las regiones, comunas y carreras
+    // cargamos reigones, carreras y comunas
     this.apiService.getPerfil().subscribe((perfil) => {
       this.perfil = perfil;
       this.cargarRegiones();
@@ -73,7 +73,7 @@ export class EditarPerfilPage implements OnInit {
   cargarComunas(regionId: string) {
     if (!regionId) return;
 
-    const numericRegionId = parseInt(regionId, 10); // Convierte a número
+    const numericRegionId = parseInt(regionId, 10); // lo pasamos a numero
 
     this.apiService.getComunas(numericRegionId).subscribe(
       (res) => {

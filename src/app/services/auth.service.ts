@@ -7,46 +7,40 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'http://127.0.0.1:8000/api';
+  private baseUrl = 'https://deploytry-production.up.railway.app/api';
 
-  // BehaviorSubject para el estado de autenticación
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.getAuthState());
   public isAuthenticated$: Observable<boolean> = this.isAuthenticatedSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
-  // Método para iniciar sesión
   login(email: string, password: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/login/`, { email, password }).pipe(
       tap((res: any) => {
         if (res.access && res.refresh) {
           localStorage.setItem('access_token', res.access);
           localStorage.setItem('refresh_token', res.refresh);
-          this.isAuthenticatedSubject.next(true); // Actualiza el estado de autenticación
+          this.isAuthenticatedSubject.next(true);
         }
       })
     );
   }
 
-  // Método para cerrar sesión
   logout() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
-    this.isAuthenticatedSubject.next(false); // Actualiza el estado de autenticación
+    this.isAuthenticatedSubject.next(false);
   }
 
-  // Método para verificar si el usuario está autenticado
+
   isAuthenticated(): boolean {
     const token = localStorage.getItem('access_token');
-    return !!token; // Devuelve true si el token existe, false de lo contrario
+    return !!token;
   }
 
-  // Método para registrar un usuario
   register(data: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/registro/estudiante/`, data);
   }
-
-  // Método para refrescar el token de acceso
   refreshToken(): Observable<any> {
     const refresh = localStorage.getItem('refresh_token');
     if (!refresh) {
@@ -56,7 +50,7 @@ export class AuthService {
       tap((res: any) => {
         if (res.access) {
           localStorage.setItem('access_token', res.access);
-          this.isAuthenticatedSubject.next(true); // Actualiza el estado si el token se refrescó
+          this.isAuthenticatedSubject.next(true);
         }
       })
     );

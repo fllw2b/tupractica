@@ -30,7 +30,7 @@ export class PostulacionesPage implements OnInit {
         console.error('Error al cargar postulaciones:', err);
         if (err.status === 401) {
           alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
-          this.router.navigate(['/login']); // Redirige al login si el token no es válido
+          this.router.navigate(['/login']); // redirect al login si el token es valido
         }
       }
     );
