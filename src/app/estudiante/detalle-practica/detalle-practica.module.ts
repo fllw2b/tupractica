@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { DetallePracticaPageRoutingModule } from './detalle-practica-routing.module';
-import { DetallePracticaPage } from './detalle-practica.page'; // Importación correcta
+import { DetallePracticaPage } from './detalle-practica.page';
 
 @NgModule({
   imports: [
@@ -12,6 +12,6 @@ import { DetallePracticaPage } from './detalle-practica.page'; // Importación c
     IonicModule,
     DetallePracticaPageRoutingModule,
   ],
-  declarations: [DetallePracticaPage], // Declaración del componente
+  declarations: [DetallePracticaPage],
 })
 export class DetallePracticaPageModule {}

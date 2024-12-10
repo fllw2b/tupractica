@@ -43,7 +43,7 @@ export class EditarPerfilPage implements OnInit {
     formData.append('telefono', this.perfil.telefono);
     formData.append('direccion', this.perfil.direccion);
 
-    // Incluye la región y comuna
+    // incluye la región y comuna
     formData.append('region_id', this.perfil.region_id);
     formData.append('comuna_id', this.perfil.comuna_id);
 

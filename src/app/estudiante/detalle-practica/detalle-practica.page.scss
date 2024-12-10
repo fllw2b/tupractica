@@ -1,5 +1,5 @@
 .detalle-anuncio-page {
-  --background: var(--ion-color-light); /* Fondo claro para la página */
+  --background: var(--ion-color-light);
   padding: 20px;
 }
 
@@ -12,7 +12,7 @@
 .titulo {
   font-weight: bold;
   font-size: 20px;
-  color: var(--ion-color-tertiary); /* Título en morado */
+  color: var(--ion-color-tertiary);
 }
 
 .descripcion {
@@ -33,6 +33,6 @@ ul li {
 .postular-btn {
   margin: 20px 15px 0;
   font-size: 16px;
-  --background: var(--ion-color-tertiary); /* Fondo morado */
-  --color: white; /* Texto blanco */
+  --background: var(--ion-color-tertiary);
+  --color: white;
 }

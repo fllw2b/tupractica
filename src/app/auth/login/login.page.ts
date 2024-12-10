@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -11,8 +12,19 @@ export class LoginPage {
   email: string = '';
   password: string = '';
 
-  constructor(private apiService: ApiService, private router: Router) {}
+  constructor(private apiService: ApiService,
+    private router: Router,
+    private menuCtrl: MenuController) {}
 
+  ionViewWillEnter() {
+    // Deshabilita el menú al entrar en la página de login
+    this.menuCtrl.enable(false);
+  }
+
+  ionViewWillLeave() {
+    // Habilita el menú al salir de la página de login
+    this.menuCtrl.enable(true);
+  }
   login() {
     if (!this.email || !this.password) {
       console.error('Por favor, completa todos los campos.');
@@ -31,8 +43,6 @@ export class LoginPage {
       }
     );
   }
-
-  // Navegar a la página de registro
   navigateToRegister() {
     this.router.navigate(['/register']);
   }

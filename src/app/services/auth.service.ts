@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'https://deploytry-production.up.railway.app/api';
+  private baseUrl = 'http://127.0.0.1:8000/api';
 
   // BehaviorSubject para el estado de autenticación
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.getAuthState());

@@ -8,7 +8,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ApiService {
-  private baseUrl = 'https://deploytry-production.up.railway.app/api'; // Base URL de tu API
+  private baseUrl = 'http://127.0.0.1:8000/api'; // Base URL de tu API
   private accessToken: string | null = null;
   private refreshToken: string | null = null;
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.getAuthState());
