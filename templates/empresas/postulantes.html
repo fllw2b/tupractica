@@ -58,7 +58,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for postulacion in postulantes %}
+                {% for postulacion in postulantes|dictsort:"fecha_postulacion" %}
                 <tr>
                     <td>{{ postulacion.estudiante.nombres }} {{ postulacion.estudiante.apellidos }}</td>
                     <td>{{ postulacion.estudiante.carrera }}</td>
@@ -83,70 +83,73 @@
                     </td>
                     <td>
                         <button type="button" class="btn btn-dark btn-sm" style="border-radius: 5px;"  data-bs-toggle="modal" data-bs-target="#detallePostulante{{ postulacion.id }}">Ver Perfil</button>
+                        {% if postulacion.estado != "Aprobado" %}
                         <button class="btn btn-success btn-sm" onclick="cambiarEstado('{{ postulacion.id }}', 'Aprobado')">Aprobar</button>
                         <button class="btn btn-danger btn-sm" onclick="cambiarEstado('{{ postulacion.id }}', 'Rechazado')">Rechazar</button>
+                        {% endif %}
                     </td>
                 </tr>
 
- <!-- Modal -->
- <div class="modal fade" id="detallePostulante{{ postulacion.id }}" tabindex="-1" aria-labelledby="detallePostulanteLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="detallePostulanteLabel">Perfil de {{ postulacion.estudiante.nombres }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-            <div class="modal-body">
-                <div class="text-center">
-                    {% if postulacion.estudiante.foto %}
-                    <img src="{{ postulacion.estudiante.foto.url }}" alt="Foto de perfil" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
-                    {% else %}
-                    <div class="rounded-circle mb-3" style="width: 150px; height: 150px; background-color: #e9ecef; display: flex; align-items: center; justify-content: center;">
-                        <span style="color: #6c757d;">Sin Foto</span>
+                <!-- Modal -->
+                <div class="modal fade" id="detallePostulante{{ postulacion.id }}" tabindex="-1" aria-labelledby="detallePostulanteLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="detallePostulanteLabel">Perfil de {{ postulacion.estudiante.nombres }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="text-center">
+                                    {% if postulacion.estudiante.foto %}
+                                    <img src="{{ postulacion.estudiante.foto.url }}" alt="Foto de perfil" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                                    {% else %}
+                                    <div class="rounded-circle mb-3" style="width: 150px; height: 150px; background-color: #e9ecef; display: flex; align-items: center; justify-content: center;">
+                                        <span style="color: #6c757d;">Sin Foto</span>
+                                    </div>
+                                    {% endif %}
+                                    <h4 class="font-weight-bold">{{ postulacion.estudiante.nombres }} {{ postulacion.estudiante.apellidos }}</h4>
+                                    <p class="text-muted">{{ postulacion.estudiante.carrera }}</p>
+                                </div>
+                                <hr>
+                                <p><strong>RUT:</strong> {{ postulacion.estudiante.rut }}</p>
+                                <p><strong>Región:</strong> {{ postulacion.estudiante.region }}</p>
+                                <p><strong>Comuna:</strong> {{ postulacion.estudiante.comuna }}</p>
+                                <p><strong>Teléfono:</strong> {{ postulacion.estudiante.telefono }}</p>
+                                <p><strong>Correo:</strong> {{ postulacion.estudiante.usuario.email }}</p>
+                                <p><strong>CV:</strong>
+                                    {% if postulacion.estudiante.cv %}
+                                    <a href="{{ postulacion.estudiante.cv.url }}" target="_blank">Descargar CV</a>
+                                    {% else %}
+                                    No disponible
+                                    {% endif %}
+                                </p>
+                                <p><strong>Habilidades:</strong>
+                                    {% if postulacion.estudiante.habilidades.all %}
+                                    {% for habilidad in postulacion.estudiante.habilidades.all %}
+                                    <span class="badge" style="background-color: #6a11cb;">{{ habilidad.nombre }}</span>
+                                    {% empty %}
+                                    No se han agregado habilidades.
+                                    {% endfor %}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    {% endif %}
-                    <h4 class="font-weight-bold">{{ postulacion.estudiante.nombres }} {{ postulacion.estudiante.apellidos }}</h4>
-                    <p class="text-muted">{{ postulacion.estudiante.carrera }}</p>
                 </div>
-                <hr>
-                <p><strong>RUT:</strong> {{ postulacion.estudiante.rut }}</p>
-                <p><strong>Región:</strong> {{ postulacion.estudiante.region }}</p>
-                <p><strong>Comuna:</strong> {{ postulacion.estudiante.comuna }}</p>
-                <p><strong>Teléfono:</strong> {{ postulacion.estudiante.telefono }}</p>
-                <p><strong>Correo:</strong> {{ postulacion.estudiante.usuario.email }}</p>
-                <p><strong>CV:</strong>
-                    {% if postulacion.estudiante.cv %}
-                    <a href="{{ postulacion.estudiante.cv.url }}" target="_blank">Descargar CV</a>
-                    {% else %}
-                    No disponible
-                    {% endif %}
-                </p>
-                <p><strong>Habilidades:</strong>
-                    {% if postulacion.estudiante.habilidades.all %}
-                    {% for habilidad in postulacion.estudiante.habilidades.all %}
-                    <span class="badge" style="background-color: #6a11cb;">{{ habilidad.nombre }}</span>
-                    {% empty %}
-                    No se han agregado habilidades.
-                    {% endfor %}
-                    {% endif %}
-                </p>
-            </div>
-        </div>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-</div>
-{% endfor %}
-</tbody>
-</table>
-</div>
-{% else %}
-<p class="text-center text-muted">No hay postulantes para este anuncio.</p>
-{% endif %}
+    {% else %}
+    <p class="text-center text-muted">No hay postulantes para este anuncio.</p>
+    {% endif %}
 
-<script>
-function cambiarEstado(postulacionId, estado) {
-    if (confirm(`¿Estás seguro de marcar esta postulación como "${estado}"?`)) {
-        window.location.href = `/anuncios/postulaciones/cambiar_estado/${postulacionId}/${estado}/`;
+    <script>
+    function cambiarEstado(postulacionId, estado) {
+        if (confirm(`¿Estás seguro de marcar esta postulación como "${estado}"?`)) {
+            window.location.href = `/anuncios/postulaciones/cambiar_estado/${postulacionId}/${estado}/`;
+        }
     }
-}
-</script>
+    </script>
+</div>
 {% endblock %}
