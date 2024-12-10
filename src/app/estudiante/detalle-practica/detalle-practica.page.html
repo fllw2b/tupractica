@@ -18,10 +18,10 @@
       <p><strong>Modalidad:</strong> {{ practica.modalidad }}</p>
       <p><strong>Descripción:</strong></p>
       <p class="descripcion">{{ practica.descripcion }}</p>
-      <!-- <p><strong>Requisitos:</strong></p>
+      <p><strong>Requisitos:</strong></p>
       <ul>
-        <li *ngFor="let requisito of practica.requisitos">{{ requisito.nombre }}</li>
-      </ul> -->
+        <li *ngFor="let requisito of practica.requisitos">{{ requisito }}</li>
+      </ul>
     </ion-card-content>
   </ion-card>
 
