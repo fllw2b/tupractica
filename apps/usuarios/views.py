@@ -16,7 +16,7 @@ def registro_estudiante(request):
     regiones = Region.objects.all()
     comunas = Comuna.objects.all()
     carreras = Carrera.objects.all()
-    habilidades = Tag.objects.all()  # Obtener todas las habilidades
+    habilidades = Tag.objects.all() 
 
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -32,12 +32,12 @@ def registro_estudiante(request):
         direccion = request.POST.get('direccion')
         telefono = request.POST.get('telefono')
         cv = request.FILES.get('cv')
-        foto = request.FILES.get('foto')  # Obtener la foto de perfil (opcional)
-        habilidades_seleccionadas = request.POST.getlist('habilidades')  # Obtener las habilidades seleccionadas
+        foto = request.FILES.get('foto')  
+        habilidades_seleccionadas = request.POST.getlist('habilidades') 
 
         try:
             with transaction.atomic():
-                # Crear el usuario
+
                 usuario = Usuario.objects.create_user(
                     email=email,
                     password=password,
@@ -45,12 +45,11 @@ def registro_estudiante(request):
                     fecha_registro=timezone.now()
                 )
 
-                # Obtener los objetos relacionados
+
                 region = Region.objects.get(id=region_id)
                 comuna = Comuna.objects.get(id=comuna_id)
                 carrera = Carrera.objects.get(id=carrera_id)
 
-                # Crear el estudiante
                 estudiante = Estudiante.objects.create(
                     usuario=usuario,
                     nombres=nombres,
@@ -67,22 +66,21 @@ def registro_estudiante(request):
                     foto=foto
                 )
 
-                # Agregar las habilidades seleccionadas al estudiante
                 for habilidad_id in habilidades_seleccionadas:
                     habilidad = Tag.objects.get(id=habilidad_id)
                     estudiante.habilidades.add(habilidad)
 
-            messages.success(request, 'Estudiante registrado correctamente.')
+            messages.success(request, 'Te haz registrado correctamente.')
             return redirect('login')
 
         except Exception as e:
-            messages.error(request, f'Error al registrar estudiante: {str(e)}')
+            messages.error(request, f'Error al registrar, inténtelo más tarde: {str(e)}')
 
     return render(request, 'usuario/registro_estudiante.html', {
         'regiones': regiones,
         'comunas': comunas,
         'carreras': carreras,
-        'habilidades': habilidades,  # Pasar habilidades al contexto
+        'habilidades': habilidades,
     })
 
 
@@ -233,10 +231,10 @@ def perfil_empresa(request):
     })
 
 def perfil_publico_empresa(request, empresa_id):
-    # Obtiene la empresa o lanza un 404 si no existe
+    # obtiene la empresa o lanza un 404 si no existe
     empresa = get_object_or_404(Empresa, id=empresa_id)
 
-    # Filtra los anuncios de la empresa (sin el campo 'estado', ya que no existe)
+    # filtra los anuncios de la empresa
     anuncios = AnuncioPractica.objects.filter(empresa=empresa).order_by('-fecha_publicacion')
 
     return render(request, 'usuario/perfil_publico_empresa.html', {

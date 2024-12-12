@@ -379,7 +379,8 @@ def cambiar_estado_postulacion(request, postulacion_id, estado):
     # llamamos a la funcion q hicimos directamente en el modelo
     postulacion.enviar_correo_estado()
 
-    messages.success(request, f"Postulación marcada como '{estado}'. Se notificó al estudiante.")
+    messages.success(request, "Postulación marcada como "+estado+" Se notificó al estudiante.")
+    
     return redirect('postulantes', anuncio_id=postulacion.anuncio.id)
 
 def enviar_notificacion_postulacion(estudiante, anuncio, estado):
