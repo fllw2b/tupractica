@@ -20,12 +20,10 @@ export class EditarPerfilPage implements OnInit {
   }
 
   cargarDatosIniciales() {
-    // cargamos reigones, carreras y comunas
     this.apiService.getPerfil().subscribe((perfil) => {
       this.perfil = perfil;
       this.cargarRegiones();
       this.cargarCarreras();
-      this.cargarComunas(perfil.region_id);
     });
   }
 
@@ -35,34 +33,40 @@ export class EditarPerfilPage implements OnInit {
     });
   }
 
+guardarCambios() {
+  const formData = new FormData();
+  formData.append('nombres', this.perfil.nombres);
+  formData.append('apellidos', this.perfil.apellidos);
+  formData.append('telefono', this.perfil.telefono);
+  formData.append('direccion', this.perfil.direccion);
 
-  guardarCambios() {
-    const formData = new FormData();
-    formData.append('nombres', this.perfil.nombres);
-    formData.append('apellidos', this.perfil.apellidos);
-    formData.append('telefono', this.perfil.telefono);
-    formData.append('direccion', this.perfil.direccion);
+  formData.append('region_id', this.perfil.region_id || '');
+  formData.append('comuna_id', this.perfil.comuna_id || '');
 
-    // incluye la región y comuna
-    formData.append('region_id', this.perfil.region_id);
-    formData.append('comuna_id', this.perfil.comuna_id);
+  this.apiService.updatePerfil(formData).subscribe(
+    (updatedProfile) => {
 
-    this.apiService.updatePerfil(formData).subscribe(
-      () => {
-        alert('Perfil actualizado con éxito');
-        this.router.navigate(['/perfil']);
-      },
-      (err) => {
-        console.error('Error al actualizar el perfil:', err);
-        alert('Ocurrió un error al guardar los cambios.');
-      }
-    );
-  }
+      this.perfil = updatedProfile;
+
+      alert('Perfil actualizado con éxito');
+      this.router.navigate(['/practicas']);
+    },
+    (err) => {
+      console.error('Error al actualizar el perfil:', err);
+      alert('Ocurrió un error al guardar los cambios.');
+    }
+  );
+}
+
+
 
   cargarRegiones() {
     this.apiService.getRegiones().subscribe(
       (res) => {
         this.regiones = res;
+
+        this.perfil.region_id = this.perfil.region_id || res[0]?.id;
+        this.cargarComunas(this.perfil.region_id);
       },
       (err) => {
         console.error('Error al cargar las regiones:', err);
@@ -73,18 +77,15 @@ export class EditarPerfilPage implements OnInit {
   cargarComunas(regionId: string) {
     if (!regionId) return;
 
-    const numericRegionId = parseInt(regionId, 10); // lo pasamos a numero
-
+    const numericRegionId = parseInt(regionId, 10);
     this.apiService.getComunas(numericRegionId).subscribe(
       (res) => {
         this.comunas = res;
+        this.perfil.comuna_id = this.perfil.comuna_id || res[0]?.id;
       },
       (err) => {
         console.error('Error al cargar las comunas:', err);
       }
     );
   }
-
-
 }
-

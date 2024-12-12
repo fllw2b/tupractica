@@ -113,7 +113,6 @@ export class ApiService {
     return this.http.get(`${this.baseUrl}/practica/${id}/`, { headers });
   }
 
-  // Postular a una práctica
   postularPractica(anuncioId: number, token: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -121,7 +120,6 @@ export class ApiService {
     return this.http.post(`${this.baseUrl}/postulacion/`, { anuncio_id: anuncioId }, { headers });
   }
 
-  // Obtener historial de postulaciones
   getPostulaciones(): Observable<any> {
     const token = localStorage.getItem('access_token');
 
@@ -137,16 +135,16 @@ export class ApiService {
       catchError((error) => {
         if (error.status === 401) {
           return this.refreshAccessToken().pipe(
-            switchMap(() => this.getPostulaciones()) // Reintenta después de renovar el token
+            switchMap(() => this.getPostulaciones())
           );
         }
         return throwError(error);
       })
     );
   }
-  // Eliminar una postulación
+
   deletePostulacion(postulacionId: number): Observable<any> {
-    const token = localStorage.getItem('access_token'); // Obtener el token automáticamente
+    const token = localStorage.getItem('access_token');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
@@ -219,7 +217,12 @@ export class ApiService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
-    return this.http.put(`${this.baseUrl}/estudiante/update/`, data, { headers });
+    return this.http.put(`${this.baseUrl}/estudiante/update/`, data, { headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error al actualizar el perfil:', error);
+        return throwError(error);
+      })
+    );
   }
 
 }
