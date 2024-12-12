@@ -1,49 +1,70 @@
 {% extends 'base/base.html' %}
 {% block contenido %}
-<div class="container mt-5">
-    <h2 class="text-center mb-4" style="color: hsl(261, 80%, 48%); font-weight: bold;">MIS POSTULACIONES</h2>
+<div class="container mt-5 mb-5">
+    <h2 class="text-center mb-4 titulo-seccion">MIS POSTULACIONES</h2>
     {% if postulaciones %}
         <div class="row gy-4">
             {% for postulacion in postulaciones %}
             <div class="col-md-6">
-                <div class="card shadow-lg h-100" style="border-radius: 15px; border: 1px solid hsl(261, 80%, 48%); overflow: hidden;">
+                <div class="card shadow-lg h-100 tarjeta-postulacion" data-bs-toggle="modal" data-bs-target="#detalleAnuncio{{ postulacion.id }}" style="cursor: pointer;">
                     <div class="card-body d-flex flex-column p-4">
-                        <h5 class="card-title text-center mb-3" style="font-weight: bold; color: hsl(261, 80%, 48%);">{{ postulacion.anuncio.titulo }}</h5>
+                        <h5 class="card-title text-center mb-3 titulo-card">{{ postulacion.anuncio.titulo }}</h5>
                         <p><strong>Empresa:</strong> {{ postulacion.anuncio.empresa.nombre_empresa }}</p>
-                        <p><strong>Ubicación:</strong> {{ postulacion.anuncio.ubicacion }}</p>
-                        <p><strong>Región:</strong> {{ postulacion.anuncio.region }}</p>
-                        <p><strong>Comuna:</strong> {{ postulacion.anuncio.comuna }}</p>
                         <p><strong>Modalidad:</strong> {{ postulacion.anuncio.modalidad|capfirst }}</p>
-                        <p><strong>Descripción:</strong> {{ postulacion.anuncio.descripcion }}</p>
-                        <h5 style="font-weight: bold; color: hsl(261, 80%, 48%);">Requisitos</h5>
-                        <div class="mb-3">
+                        <p class="text-muted"><strong>Fecha de Postulación:</strong> {{ postulacion.fecha_postulacion|date:"d/m/Y H:i" }}</p>
+                        <td>
+                            <span class="badge {% if postulacion.estado == 'Aprobado' %}bg-success
+                                              {% elif postulacion.estado == 'Rechazado' %}bg-danger
+                                              {% else %}bg-secondary{% endif %}">
+                                {{ postulacion.estado }}
+                            </span>
+                        </td>
+                    </div>
+                    <form method="POST" action="{% url 'eliminar_postulacion' postulacion.id %}" class="text-center mb-3">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-eliminar">
+                            Cancelar
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+
+            <div class="modal fade" id="detalleAnuncio{{ postulacion.id }}" tabindex="-1" aria-labelledby="detalleAnuncioLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content modal-detalles">
+                        <div class="modal-header">
+                            <h5 class="modal-title titulo-modal" id="detalleAnuncioLabel">{{ postulacion.anuncio.titulo }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Empresa:</strong> {{ postulacion.anuncio.empresa.nombre_empresa }}</p>
+                            <p><strong>Ubicación:</strong> {{ postulacion.anuncio.ubicacion }}</p>
+                            <p><strong>Región:</strong> {{ postulacion.anuncio.region }}</p>
+                            <p><strong>Comuna:</strong> {{ postulacion.anuncio.comuna }}</p>
+                            <p><strong>Modalidad:</strong> {{ postulacion.anuncio.modalidad|capfirst }}</p>
+                            <p><strong>Descripción:</strong> {{ postulacion.anuncio.descripcion }}</p>
+                            <h5 class="titulo-requisitos mt-3">Requisitos</h5>
                             {% if postulacion.anuncio.requisitos %}
-                                <div class="d-flex flex-wrap gap-2">
+                                <div class="d-flex flex-wrap gap-2 mt-2">
                                     {% for requisito in postulacion.anuncio.requisitos.all %}
-                                        <span class="badge" style="background-color: hsl(261, 80%, 48%); font-size: 0.9em;">{{ requisito.nombre }}</span>
+                                        <span class="badge badge-requisito">{{ requisito.nombre }}</span>
                                     {% endfor %}
                                 </div>
                             {% else %}
-                                <p>No especificados</p>
+                                <p>No especificados.</p>
                             {% endif %}
+                            <hr>
+                            <p class="text-muted"><strong>Fecha de Postulación:</strong> {{ postulacion.fecha_postulacion|date:"d/m/Y H:i" }}</p>
                         </div>
-                        <hr style="border-color: rgba(0, 0, 0, 0.1);">
-                        <p class="text-muted"><strong>Fecha de Postulación:</strong> {{ postulacion.fecha_postulacion|date:"d/m/Y H:i" }}</p>
-                        <p class="text-muted"><strong>Fecha Límite:</strong> {{ postulacion.anuncio.fecha_fin|date:"d/m/Y" }}</p>
                     </div>
-                    <form method="POST" action="{% url 'eliminar_postulacion' postulacion.id %}" style="text-align: center; margin-bottom: 30px;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-outline-danger eliminar-postulacion" data-id="{{ postulacion.id }}" style="font-size: 0.9em;">
-                            Eliminar
-                        </button>
-                    </form>
-                    
                 </div>
             </div>
+            
             {% endfor %}
         </div>
     {% else %}
-        <p class="text-center text-muted" style="font-size: 1.1em;">No has realizado ninguna postulación aún.</p>
+        <p class="text-center text-muted mensaje-no-postulaciones">No has realizado ninguna postulación aún.</p>
     {% endif %}
 </div>
 {% endblock %}

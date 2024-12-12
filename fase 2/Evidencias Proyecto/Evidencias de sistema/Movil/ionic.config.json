@@ -1,0 +1,7 @@
+{
+  "name": "TuPractica",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

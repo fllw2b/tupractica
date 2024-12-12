@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-buttons slot="start">
+      <ion-menu-button color="light"></ion-menu-button>
+    </ion-buttons>
+    <ion-title style="color: white;">Mis Postulaciones</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="postulaciones-page">
+
+  <ion-list>
+    <ion-item
+      *ngFor="let postulacion of postulaciones"
+      class="postulacion-item"
+    >
+      <ion-thumbnail slot="start">
+        <img
+          [src]="postulacion.anuncio?.empresa?.logo || 'assets/puntos.png'"
+          alt="Logo Empresa"
+        />
+      </ion-thumbnail>
+
+      <ion-label>
+        <h2 class="titulo">{{ postulacion.anuncio?.titulo }}</h2>
+        <p><strong>Empresa:</strong> {{ postulacion.anuncio?.empresa?.nombre_empresa }}</p>
+        <p><strong>Fecha:</strong> {{ postulacion.fecha_postulacion | date }}</p>
+      </ion-label>
+
+
+      <ion-button
+        fill="solid"
+        color="danger"
+        slot="end"
+        class="cancelar-btn"
+        (click)="cancelarPostulacion(postulacion.id)"
+      >
+        Cancelar
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>

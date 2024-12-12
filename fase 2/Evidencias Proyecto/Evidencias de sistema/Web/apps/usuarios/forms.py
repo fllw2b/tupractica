@@ -37,15 +37,26 @@ class EstudianteForm(forms.ModelForm):
         if habilidades.count() > 10:
             raise forms.ValidationError("Puedes seleccionar hasta un máximo de 10 habilidades.")
         return habilidades
-
-
+    
 class EmpresaForm(forms.ModelForm):
     class Meta:
         model = Empresa
-        fields = ['nombre_empresa', 'rut', 'direccion']
+        fields = ['nombre_empresa', 'rut', 'direccion', 'sector', 'pagina_web', 'descripcion', 'redes_sociales', 'logo']
         widgets = {
             'nombre_empresa': forms.TextInput(attrs={'class': 'form-control'}),
             'rut': forms.TextInput(attrs={'class': 'form-control'}),
             'direccion': forms.TextInput(attrs={'class': 'form-control'}),
+            'sector': forms.Select(attrs={'class': 'form-select'}),
+            'pagina_web': forms.URLInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'redes_sociales': forms.URLInput(attrs={'class': 'form-control'}),
+            'logo': forms.FileInput(attrs={'class': 'form-control'}),
         }
+
+    def clean_pagina_web(self):
+        pagina_web = self.cleaned_data.get('pagina_web')
+        if pagina_web and not pagina_web.startswith(('http://', 'https://')):
+            pagina_web = 'http://' + pagina_web
+        return pagina_web
+
 

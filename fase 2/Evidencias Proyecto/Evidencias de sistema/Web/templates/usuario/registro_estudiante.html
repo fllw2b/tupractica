@@ -2,8 +2,8 @@
 {% load static %}
 
 {% block contenido %}
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Registro de Estudiante</h2>
+<div class="container mt-5 mb-5">
+    <h2 class="text-center mb-4" style="color: hsl(261, 60%, 50%);;">REGISTRO DE ESTUDIANTE</h2>
     <form method="POST" enctype="multipart/form-data" onsubmit="return validarFormulario()">
         {% csrf_token %}
         <div class="row">
@@ -73,7 +73,7 @@
 
         <div class="mb-3">
             <label for="direccion" class="form-label">Dirección</label>
-            <input type="text" name="direccion" id="direccion" class="form-control" required maxlength="50">
+            <input type="text" name="direccion" id="direccion" class="form-control" required maxlength="50"  placeholder="Calle Ejemplo 123">
             <div class="invalid-feedback">
                 La dirección no puede estar vacía y debe tener máximo 50 caracteres.
             </div>
@@ -81,7 +81,7 @@
 
         <div class="mb-3">
             <label for="telefono" class="form-label">Número de Teléfono</label>
-            <input type="tel" name="telefono" id="telefono" class="form-control" required pattern="[0-9]{9}">
+            <input type="tel" name="telefono" id="telefono" class="form-control" required pattern="[0-9]{9}" placeholder="9 12345678">
             <div class="invalid-feedback">
                 Por favor, ingresa un número de teléfono válido (solo 9 dígitos).
             </div>
@@ -129,6 +129,16 @@
                 Por favor, selecciona una carrera.
             </div>
         </div>
+        
+        <div class="mb-3">
+            <label for="habilidades" class="form-label">Habilidades (Selecciona hasta 10)</label>
+            <select name="habilidades" id="habilidades" class="form-select select2-multiple" multiple="multiple" required>
+                {% for habilidad in habilidades %}
+                    <option value="{{ habilidad.id }}">{{ habilidad.nombre }}</option>
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">Por favor, selecciona al menos una habilidad.</div>
+        </div>
 
         <div class="mb-3">
             <label for="cv" class="form-label">Subir CV (PDF)</label>
@@ -143,5 +153,14 @@
 </div>
 
 <script src="{% static 'js/registro_estudiante.js' %}"></script>
-
+<script>
+    // Inicializar select2
+    $(document).ready(function () {
+        $('.select2-multiple').select2({
+            placeholder: "Selecciona tus habilidades",
+            allowClear: true,
+            maximumSelectionLength: 10
+        });
+    });
+</script>
 {% endblock %}

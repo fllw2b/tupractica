@@ -7,13 +7,13 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             const anuncioId = this.dataset.id;
 
-            // Remover clase activa de todos los elementos
+            // quitamos la clase activa de todos
             anuncios.forEach(a => a.classList.remove('active'));
 
-            // Agregar clase activa al elemento seleccionado
+            // agregamos la clase activa al elemento seleccionado
             this.classList.add('active');
 
-            // Realizar la petición AJAX
+            // peticion ajax
             fetch(`/anuncios/detalle_ajax/${anuncioId}/`)
                 .then(response => {
                     if (!response.ok) {

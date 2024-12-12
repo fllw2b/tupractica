@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/practicas" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title style="color: white;">Detalles del Anuncio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="detalle-anuncio-page">
+  <ion-card *ngIf="practica" class="detalle-card">
+    <ion-card-header>
+      <ion-card-title class="titulo">{{ practica.titulo }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Empresa:</strong> {{ practica.empresa.nombre_empresa }}</p>
+      <p><strong>Ubicación:</strong> {{ practica.ubicacion }}</p>
+      <p><strong>Modalidad:</strong> {{ practica.modalidad }}</p>
+      <p><strong>Descripción:</strong></p>
+      <p class="descripcion">{{ practica.descripcion }}</p>
+      <p><strong>Requisitos:</strong></p>
+      <ul>
+        <li *ngFor="let requisito of practica.requisitos">{{ requisito }}</li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button
+    expand="block"
+    [disabled]="postulado"
+    color="tertiary"
+    class="postular-btn"
+    (click)="postular()">
+    {{ postulado ? 'Ya has postulado' : 'Postular' }}
+  </ion-button>
+</ion-content>

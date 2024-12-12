@@ -1,0 +1,64 @@
+{% extends 'base/base.html' %}
+
+{% block contenido %}
+<div class="container mt-5 mb-5">
+    <div class="card shadow-lg p-4" style="border-radius: 15px;">
+        <div class="d-flex flex-column align-items-center mb-4">
+            {% if empresa.logo %}
+                <img src="{{ empresa.logo.url }}" alt="Logo de la empresa" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+            {% else %}
+                <div class="rounded-circle mb-3 d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; background-color: #e9ecef;">
+                    <span style="color: #6c757d;">Sin Logo</span>
+                </div>
+            {% endif %}
+            <h2 style="color: hsl(261, 80%, 48%); font-weight: bold;">{{ empresa.nombre_empresa }}</h2>
+            <p class="text-muted" style="font-size: 1.2rem;">{{ empresa.sector.nombre }}</p>
+        </div>
+
+        <hr>
+
+        <div class="mb-3">
+            <p><strong>RUT:</strong> {{ empresa.rut }}</p>
+            <p><strong>Dirección:</strong> {{ empresa.direccion }}</p>
+        </div>
+
+        <div class="mb-3">
+            <p><strong>Página Web:</strong> 
+                {% if empresa.pagina_web %}
+                    <a href="{{ empresa.pagina_web }}" target="_blank" style="color: hsl(261, 80%, 48%); text-decoration: underline;">{{ empresa.pagina_web }}</a>
+                {% else %}
+                    <span class="text-muted">No disponible</span>
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="mb-3">
+            <p><strong>Descripción:</strong></p>
+            <p>
+                {% if empresa.descripcion %}
+                    {{ empresa.descripcion }}
+                {% else %}
+                    <span class="text-muted">No proporcionada</span>
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="mb-3">
+            <p><strong>Redes Sociales:</strong> 
+                {% if empresa.redes_sociales %}
+                    <a href="{{ empresa.redes_sociales }}" target="_blank" style="color: hsl(261, 80%, 48%); text-decoration: underline;">Enlace</a>
+                {% else %}
+                    <span class="text-muted">No disponible</span>
+                {% endif %}
+            </p>
+        </div>
+
+        <hr>
+
+        <div class="text-center mt-3">
+            <a href="{% url 'editar_perfil_empresa' %}" class="btn-pro btn-border">Editar Perfil</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

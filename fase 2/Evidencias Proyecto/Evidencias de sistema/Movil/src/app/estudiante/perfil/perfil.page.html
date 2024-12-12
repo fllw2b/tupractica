@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-buttons slot="start">
+      <ion-menu-button color="light"></ion-menu-button>
+    </ion-buttons>
+    <ion-title style="color: white;">Mi Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="perfil-page">
+  <div class="perfil-foto-container">
+    <img
+      [src]="perfil?.foto || 'assets/puntos.png'"
+      alt=""
+      class="perfil-foto"
+    />
+  </div>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title style="text-align: center;">Información Personal</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Nombre</ion-label>
+        <ion-text>{{ perfil?.nombres }} {{ perfil?.apellidos }}</ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-label>RUT</ion-label>
+        <ion-text>{{ perfil?.rut }}</ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-label>Correo</ion-label>
+        <ion-text>{{ perfil?.usuario?.email }}</ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-label>Teléfono</ion-label>
+        <ion-text>{{ perfil?.telefono }}</ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-label>Dirección</ion-label>
+        <ion-text>{{ perfil?.direccion }}</ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-label>Región</ion-label>
+        <ion-text>{{ perfil?.region?.nombre }}</ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-label>Comuna</ion-label>
+        <ion-text>{{ perfil?.comuna?.nombre }}</ion-text>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title style="text-align: center;">Detalles Académicos</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Carrera</ion-label>
+        <ion-text>{{ perfil?.carrera?.nombre }}</ion-text>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+
+  <!-- Botón para editar perfil -->
+  <ion-button expand="block" color="tertiary" (click)="editarPerfil()">
+    Editar Perfil
+  </ion-button>
+</ion-content>

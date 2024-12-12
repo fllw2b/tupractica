@@ -58,7 +58,7 @@ class Estudiante(models.Model):
     telefono = models.CharField(max_length=20, null=True)
     foto = models.ImageField(
         upload_to='fotos_estudiantes/', null=True, blank=True) 
-    cv = models.FileField(upload_to='media/cvs/', null=True, blank=True)
+    cv = models.FileField(upload_to='cvs/', null=True, blank=True)
     habilidades = models.ManyToManyField('Tag', related_name='estudiantes', blank=True, limit_choices_to=10)
 
     def __str__(self):
@@ -73,11 +73,18 @@ class Empresa(models.Model):
     direccion = models.CharField(max_length=255)
     sector = models.ForeignKey(Sector, on_delete=models.SET_NULL, null=True)
     pagina_web = models.URLField(max_length=255, null=True, blank=True)
-    descripcion = models.TextField(max_length=500, null=True, blank=True)
+    descripcion = models.TextField(
+        max_length=1000, 
+        null=True,
+        blank=True,
+        help_text="Una breve descripción sobre la empresa (máx. 1000 caracteres)."
+    )
     redes_sociales = models.URLField(max_length=255, null=True, blank=True)
+    logo = models.ImageField(upload_to='logos_empresa/', null=True, blank=True) 
 
     def __str__(self):
         return self.nombre_empresa
+
 
 class Tag(models.Model):
     nombre = models.CharField(max_length=50, unique=True)

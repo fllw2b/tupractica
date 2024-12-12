@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-buttons slot="start">
+      <ion-menu-button color="light"></ion-menu-button>
+    </ion-buttons>
+    <ion-title style="color: white;">Anuncios</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="anuncios-page">
+  <ion-card class="filtros-card">
+    <ion-card-header>
+      <ion-card-title style="text-align: center;">Filtros</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-input
+          [(ngModel)]="textoFiltro"
+          (ionChange)="aplicarFiltros()"
+          placeholder="Buscar por título o descripción"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Modalidad</ion-label>
+        <ion-select [(ngModel)]="modalidadFiltro" (ionChange)="aplicarFiltros()">
+          <ion-select-option value="">Todas</ion-select-option>
+          <ion-select-option value="remoto">Remoto</ion-select-option>
+          <ion-select-option value="hibrido">Híbrido</ion-select-option>
+          <ion-select-option value="presencial">Presencial</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Región</ion-label>
+        <ion-select [(ngModel)]="regionFiltro" (ionChange)="aplicarFiltros()">
+          <ion-select-option value="">Todas</ion-select-option>
+          <ion-select-option *ngFor="let region of regiones" [value]="region.id">
+            {{ region.nombre }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list>
+    <ion-item
+      *ngFor="let anuncio of anunciosFiltrados"
+      (click)="verDetalleAnuncio(anuncio.id)"
+      button
+      class="anuncio-item"
+    >
+      <ion-label>
+        <h2 class="anuncio-titulo">{{ anuncio.titulo }}</h2>
+        <p class="anuncio-descripcion">Modalidad: {{ anuncio.modalidad }}</p>
+        <p class="anuncio-region">Región: {{ anuncio.region_nombre  }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

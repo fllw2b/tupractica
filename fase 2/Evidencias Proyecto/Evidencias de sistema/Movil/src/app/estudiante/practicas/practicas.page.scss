@@ -1,0 +1,36 @@
+.anuncios-page {
+  --background: var(--ion-color-light);
+}
+
+.filtros-card {
+  margin: 15px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0,
+  0.1);
+}
+
+.filtros-card ion-card-title {
+  color: var(--ion-color-tertiary);
+  font-weight: bold;
+}
+
+.anuncio-item {
+  border-bottom: 1px solid var(--ion-color-medium);
+  padding: 10px 0;
+}
+
+.anuncio-item ion-thumbnail img {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+}
+
+.anuncio-titulo {
+  font-weight: bold;
+  color: var(--ion-color-tertiary);
+}
+
+.anuncio-descripcion {
+  color: var(--ion-color-medium);
+  font-size: 14px;
+}

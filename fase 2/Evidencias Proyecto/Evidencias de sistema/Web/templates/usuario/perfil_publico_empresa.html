@@ -1,0 +1,88 @@
+{% extends 'base/base.html' %}
+
+{% block contenido %}
+<div class="container mt-5 mb-5">
+    <div class="card shadow-lg p-4" style="border-radius: 15px; background-color: #ffffff;">
+        <!-- Encabezado de la empresa -->
+        <div class="text-center mb-4">
+            <div class="d-flex flex-column align-items-center">
+                {% if empresa.logo %}
+                    <img src="{{ empresa.logo.url }}" alt="Logo de la empresa" class="rounded-circle mb-3 border border-2 shadow-sm" style="width: 150px; height: 150px; object-fit: cover; border-color: hsl(261, 80%, 48%);">
+                {% else %}
+                    <div class="rounded-circle mb-3 d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; background-color: #e9ecef;">
+                        <span style="color: #6c757d; font-size: 1.2em;">Sin Logo</span>
+                    </div>
+                {% endif %}
+            </div>
+            <h2 style="color: hsl(261, 80%, 48%); font-weight: bold;">{{ empresa.nombre_empresa }}</h2>
+            <p class="text-muted" style="font-size: 1.2rem;">{{ empresa.sector.nombre }}</p>
+        </div>
+
+        <hr style="border-top: 2px solid rgba(0, 0, 0, 0.1);">
+
+        <!-- Detalles principales -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <p><strong>RUT:</strong> {{ empresa.rut }}</p>
+                <p><strong>Dirección:</strong> {{ empresa.direccion }}</p>
+                <p><strong>Página Web:</strong> 
+                    {% if empresa.pagina_web %}
+                        <a href="{{ empresa.pagina_web }}" target="_blank" style="color: hsl(261, 80%, 48%); text-decoration: underline;">{{ empresa.pagina_web }}</a>
+                    {% else %}
+                        <span class="text-muted">No disponible</span>
+                    {% endif %}
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Redes Sociales:</strong> 
+                    {% if empresa.redes_sociales %}
+                        <a href="{{ empresa.redes_sociales }}" target="_blank" style="color: hsl(261, 80%, 48%); text-decoration: underline;">Enlace</a>
+                    {% else %}
+                        <span class="text-muted">No disponible</span>
+                    {% endif %}
+                </p>
+                <p><strong>Descripción:</strong></p>
+                <p>
+                    {% if empresa.descripcion %}
+                        {{ empresa.descripcion }}
+                    {% else %}
+                        <span class="text-muted">No proporcionada</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <hr style="border-top: 2px solid rgba(0, 0, 0, 0.1);">
+
+        <!-- Lista de anuncios publicados -->
+        <div class="mt-4">
+            <h4 class="mb-4" style="color: hsl(261, 80%, 48%); font-weight: bold; text-align: center;">Anuncios Publicados</h4>
+            {% if anuncios %}
+                <div class="row g-3">
+                    {% for anuncio in anuncios %}
+                    <div class="col-md-6">
+                        <div class="card shadow-sm h-100" style="border-radius: 10px; background-color: #f8f9fa;">
+                            <div class="card-body">
+                                <h5 class="card-title" style="color: hsl(261, 80%, 48%); font-weight: bold;">{{ anuncio.titulo }}</h5>
+                                <p class="card-text text-muted mb-2">
+                                    <i class="fas fa-calendar-alt"></i> Publicado el: {{ anuncio.fecha_publicacion|date:"d M Y" }}
+                                </p>
+                                <p class="card-text">
+                                    <strong>Modalidad:</strong> {{ anuncio.get_modalidad_display }}
+                                </p>
+                                <!-- Botón centrado -->
+                                <div class="d-flex justify-content-center">
+                                    <a href="{% url 'detalle_anuncio' anuncio.id %}" class="btn-pro btn-border mt-2" style="border-radius: 20px;">Ver Detalle</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted text-center mt-3">Esta empresa no ha publicado ningún anuncio aún.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

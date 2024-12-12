@@ -11,6 +11,7 @@
         TuPráctica
         {% endblock titulo %}
     </title>
+    <link rel="icon" type="image/x-icon" href="../../static/img/home/fav_icon.png">
 
     <!-- SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -37,7 +38,7 @@
         [
             {% for message in messages %}
             {
-                "level": "{% if message.tags == "success" %}success{% elif message.tags == "info" %}info{% elif message.tags == "error" %}error{% else %}info{% endif %}",
+                "level": "{% if message.tags == 'success' %}éxito{% elif message.tags == 'info' %}información{% elif message.tags == 'error' %}error{% else %}información{% endif %}",
                 "message": "{{ message }}"
             }{% if not forloop.last %},{% endif %}
             {% endfor %}

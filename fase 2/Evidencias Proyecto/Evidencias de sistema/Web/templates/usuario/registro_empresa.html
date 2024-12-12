@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% block contenido %}
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Registro de Empresa</h2>
+    <h2 class="text-center mb-4" style="color: hsl(261, 80%, 48%);">REGISTRO DE EMPRESA</h2>
     <form method="POST" id="form-empresa" class="needs-validation" novalidate
         onsubmit="return validarFormularioEmpresa()">
         {% csrf_token %}
@@ -65,7 +65,8 @@
 
         <div class="mb-3">
             <label for="pagina_web" class="form-label">Página web (opcional)</label>
-            <input type="url" name="pagina_web" id="pagina_web" class="form-control">
+            <input type="url" name="pagina_web" id="pagina_web" class="form-control" placeholder="https://www.empresa.com">
+            <div class="form-text">Por favor, incluye "http://" o "https://" al inicio de la URL.</div>
         </div>
 
         <div class="mb-3">
@@ -77,7 +78,13 @@
             <label for="redes_sociales" class="form-label">Redes Sociales (opcional)</label>
             <input type="url" name="redes_sociales" id="redes_sociales" class="form-control">
         </div>
-
+        <div class="mb-3">
+            <label for="logo" class="form-label">Logotipo de la Empresa (opcional)</label>
+            <input type="file" name="logo" id="logo" class="form-control" accept="image/*">
+            <div class="form-text">Sube el logotipo de tu empresa en formato PNG, JPG o JPEG.</div>
+        </div>
+        
+        
         <div class="text-center">
             <button type="submit" class="btn-pro btn-border">Registrarse</button>
         </div>

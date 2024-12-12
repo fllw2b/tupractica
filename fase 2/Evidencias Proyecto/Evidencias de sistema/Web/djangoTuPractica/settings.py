@@ -19,6 +19,7 @@ from os.path import join
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -31,6 +32,16 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
+
+# envio de correo
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'tupractica27@gmail.com'
+EMAIL_HOST_PASSWORD = 'ivux mdpw ccbz itwy'
+
 
 # Application definition
 
@@ -45,6 +56,8 @@ INSTALLED_APPS = [
     'apps.usuarios',
     'apps.tuPractica',
     'apps.anuncios',
+    'rest_framework',
+    'corsheaders',
 ]
 
 
@@ -56,7 +69,8 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',    
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'djangoTuPractica.urls'
@@ -142,10 +156,9 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
 
+CORS_ALLOW_ALL_ORIGINS = True
 
 staticfiles="whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-
 
 
 MEDIA_URL = '/media/'
@@ -161,8 +174,16 @@ FIXTURE_DIRS = [
 ]
 
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
 
-
+APPEND_SLASH=False
 
 # directorio_credenciales = BASE_DIR / 'djangotupractica-55519e0256b7.json'
 

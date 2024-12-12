@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-title style="color: white; text-align: center;"></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="login-page">
+  <div class="app-header">
+    <img style="width: 80%; height: 80%; margin-top: 100px;" src="assets/tupractica.png" alt="TuPráctica Logo"  />
+  </div>
+
+  <div class="login-form">
+    <ion-item>
+      <ion-label position="floating">Correo Electrónico</ion-label>
+      <ion-input type="email" [(ngModel)]="email"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+    <ion-button expand="block" (click)="login()">Iniciar Sesión</ion-button>
+  </div>
+
+  <div class="register-link">
+    <p>¿No tienes una cuenta?</p>
+    <ion-button fill="clear" (click)="navigateToRegister()">Regístrate</ion-button>
+  </div>
+</ion-content>

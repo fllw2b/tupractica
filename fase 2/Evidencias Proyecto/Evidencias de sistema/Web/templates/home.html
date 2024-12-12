@@ -1,65 +1,94 @@
 {% extends 'base/base.html' %}
 {% block contenido %}
-<!-- CAROUSEL  -->
-<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel"  style="max-width: 100%; height: 600px; overflow: hidden;">
-  <div class="carousel-inner"> <!-- BLOQUE PRINCIPAL-->
-
+<!-- CAROUSEL -->
+<div id="carouselExampleControls" class="carousel slide custom-carousel" data-bs-ride="carousel">
+  <div class="carousel-inner">
     <div class="carousel-item active">
       <img src="../static/img/home/carousel 1.jpg" class="d-block w-100" alt="slide1">
+      <div class="carousel-caption d-none d-md-block">
+        <h2>Encuentra tu práctica ideal</h2>
+        <p>Conecta con las mejores empresas y construye tu futuro.</p>
+      </div>
     </div>
-
     <div class="carousel-item">
       <img src="../static/img/home/carousel 2.jpg" class="d-block w-100" alt="slide2">
+      <div class="carousel-caption d-none d-md-block">
+        <h2>Postula fácil y rápido</h2>
+        <p>Encuentra la práctica que se ajuste a tus habilidades.</p>
+      </div>
     </div>
-
     <div class="carousel-item">
-      <img src="../static/img/home/carousel 3.jpg"  class="d-block w-100" alt="slide3">
+      <img src="../static/img/home/carousel 3.jpg" class="d-block w-100" alt="slide3">
+      <div class="carousel-caption d-none d-md-block">
+        <h2>Conecta con empresas destacadas</h2>
+        <p>Desarrolla tu carrera con las mejores oportunidades.</p>
+      </div>
     </div>
   </div>
-
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
+    <span class="visually-hidden">Anterior</span>
   </button>
   <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
+    <span class="visually-hidden">Siguiente</span>
   </button>
 </div>
 
-<!-- INTRO -->
-<section class="w-50 mx-auto text-center pt-5" id="intro">
-  <h1 class="p-3 fs-2 border-top border-3">Por un futuro <span style="color: blueviolet;"> profesional!</span></h1>
+</div>
+
+<section class="hero bg-light text-center py-5">
+  <h1 class="display-4">¡Construye tu futuro profesional!</h1>
+  <p class="lead">Accede a miles de oportunidades en prácticas profesionales.</p>
+  <a href="{% url 'listar_anuncios' %}" class="btn-pro btn-lg mt-3">Explorar Anuncios</a>
 </section>
+
 <!-- SERVICIOS -->
-<section class="container-fluid">
-    <div class="row text-center">
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-lg border-0 h-100">
-                <div class="card-body">
-                    <h5 class="card-title" style="color:blueviolet ;">Fácil y Rápido</h5>
-                    <p class="card-text">Regístrate y postula a prácticas en tan solo unos minutos.</p>
-                </div>
-            </div>
+<section class="container py-5">
+  <h2 class="text-center mb-5" style="color: blueviolet;">Beneficios</h2>
+  <div class="row text-center">
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-lg border-0 h-100">
+        <div class="card-body">
+          <i class="fas fa-clock fa-3x mb-3" style="color:blueviolet;"></i>
+          <h5 class="card-title" style="color:blueviolet;">Fácil y Rápido</h5>
+          <p class="card-text">Regístrate y postula a prácticas en tan solo unos minutos.</p>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-lg border-0 h-100">
-                <div class="card-body">
-                    <h5 class="card-title" style="color:blueviolet ;">Empresas de Prestigio</h5>
-                    <p class="card-text">Accede a oportunidades en empresas destacadas de Chile y el mundo.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-lg border-0 h-100">
-                <div class="card-body">
-                    <h5 class="card-title" style="color:blueviolet ;">Apoyo Personalizado</h5>
-                    <p class="card-text">Nuestro equipo está aquí para ayudarte en cada paso del proceso.</p>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-lg border-0 h-100">
+        <div class="card-body">
+          <i class="fas fa-building fa-3x mb-3" style="color:blueviolet;"></i>
+          <h5 class="card-title" style="color:blueviolet;">Empresas de Prestigio</h5>
+          <p class="card-text">Accede a oportunidades en empresas destacadas de Chile y el mundo.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-lg border-0 h-100">
+        <div class="card-body">
+          <i class="fas fa-user-check fa-3x mb-3" style="color:blueviolet;"></i>
+          <h5 class="card-title" style="color:blueviolet;">Anuncios para ti</h5>
+          <p class="card-text">Postula a anuncios que sean compatibles contigo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-
+<!--why us -->
+<section class="bg-light py-5">
+  <div class="container">
+    <h2 class="text-center mb-4" style="color: blueviolet;">¿Por qué elegirnos?</h2>
+    <div class="row">
+      <div class="col-md-6">
+        <img src="../static/img/home/why us.jpg" class="img-fluid rounded shadow-lg" alt="Why Us">
+      </div>
+      <div class="col-md-6 d-flex align-items-center">
+        <p class="lead">En <strong>TuPráctica</strong>, ofrecemos una plataforma fácil de usar, acceso a las mejores oportunidades y un enfoque personalizado para ayudarte a alcanzar tus metas profesionales.</p>
+      </div>
+    </div>
+  </div>
 </section>
 {% endblock contenido %}
