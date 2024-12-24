@@ -1,7 +1,7 @@
 import os, subprocess
 def ejecutar_comando_en_nueva_ventana(comando):
     try:
-        subprocess.run(f"start cmd /k \"{comando}\"", shell=True) #/k para que no cierre la ventana y c para que cierre
+        subprocess.run(f"start cmd /c \"{comando}\"", shell=True) #/k para que no cierre la ventana y c para que cierre
     except Exception as e:
         print(f"Error al ejecutar el comando: {e}")
 def mostrar_menu():
